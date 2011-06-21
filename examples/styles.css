@@ -1,0 +1,247 @@
+body {
+	background: #f3f3f3;
+	margin: 20px 30px;
+	max-width: 1000px;
+}
+
+body, input, select, textarea {
+	font: 100%/25px Helvetica, sans-serif;
+}
+
+.clear:before, .clear:after { content: ""; display: table; }
+.clear:after { clear: both; }
+.clear{ zoom: 1; }
+
+
+::selection {
+	background: transparent;
+}
+::-moz-selection {
+	background: transparent;
+}
+
+header,
+section {
+	display: block;
+	float: left;
+	margin: 0.5em 1em;
+	padding: 0;
+	width: 250px;
+}
+
+#info {
+	display: block;
+	font-size: 13px;
+	height: 3em;
+	line-height: 16px;
+	list-style: square;
+	overflow-y: auto;
+}
+
+h1 {
+	margin: 0 0 0.25em 0;
+	padding: 0.25em 16px 2px;
+}
+
+label {
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	display: block;
+	margin: 0 0 0.25em 0;
+	padding: 0.25em 16px 2px;
+}
+
+label span {
+	display: block;
+}
+
+.group {
+	padding: 0 0.5em;
+}
+
+.group label {
+	float: left;
+	padding: 0.25em 0.5em 0;
+}
+
+.group label:last-child {
+	margin-right: 0;
+}
+
+input {
+	height: 2em;
+	line-height: 2em;
+	margin: 0 0 1em 0;
+	outline: none;
+	padding: 0;
+}
+
+input::-webkit-input-placeholder { }
+
+input[type=text] {
+	border: 1px solid #bbb;
+	border-spacing: 0;
+	display: block;
+    outline: none;
+	width: 100%;
+	text-indent: 10px;
+}
+
+input[type=number] {
+	border: 1px solid #bbb;
+	display: block;
+	padding-left: 10px;
+	width: 50%;
+}
+
+input[type=range] {
+	display: block;
+	height: auto;
+	margin: 0 0 0.5em 0;
+	width: 100%;
+}
+
+input[type=checkbox],
+input[type=radio] {
+	height: auto;
+	margin: 0 2px 0 0;
+	position: relative;
+	top: -1px;
+	vertical-align: baseline;
+}
+
+select {
+	display: block;
+	margin: 0 0 1em 0;
+    outline: none;
+	width: 100%;
+}
+
+select[multiple=multiple] {
+	border: 1px solid #bbb;
+	display: block;
+	font-size: 14px;
+	height: 100px;
+    outline: none;
+	padding: 10px;
+}
+
+option[selected=selected] {
+	background: #fee;
+}
+
+textarea {
+	border: 1px solid #bbb;
+	border-spacing: 0;
+	display: block;
+	height: 5em;
+	margin: 0 0 14px 0;
+    outline: none;
+	padding: 10px;
+	resize: none;
+	width: 198px;
+}
+
+.slider {
+	background: white;
+	-moz-box-shadow: inset 1px 1px -1px -1px #bbb;
+	-webkit-box-shadow: inset 0 0 1px 1px #bbb;
+	box-shadow: inset 0 0 1px 1px #bbb;
+	cursor: pointer;
+	height: 22px;
+	margin-bottom: 1em;
+	position: relative;
+	width: 100%;
+}
+
+.knob {
+	background: #bbb;
+	cursor: move;
+	height: 18px;
+	left: 2px;
+	position: absolute;
+	top: 2px;
+	width: 18px;
+}
+
+
+
+/* state stuff */
+
+textarea:focus {
+	resize: vertical;
+}
+
+input,
+label,
+select[multiple=multiple],
+textarea {
+    -moz-transition: -moz-box-shadow 0.8s ease-in-out;
+	-webkit-transition: -webkit-box-shadow 0.8s ease-in-out;
+	transition: box-shadow 0.8s ease-in-out;
+}
+
+input:focus,
+select[multiple=multiple]:focus,
+textarea:focus,
+input.updated,
+select[multiple=multiple].updated,
+textarea.updated {
+    -moz-transition: -moz-box-shadow 0.2s ease-in-out;
+	-webkit-transition: -webkit-box-shadow 0.2s ease-in-out;
+	transition: box-shadow 0.2s ease-in-out;
+}
+
+label {
+    -moz-transition: background 0.8s ease-in-out;
+	-webkit-transition: background 0.8s ease-in-out;
+	transition: background 0.8s ease-in-out;
+}
+
+label.updated {
+    -moz-transition: background 0.2s ease-in-out;
+	-webkit-transition: background 0.2s ease-in-out;
+	transition: background 0.2s ease-in-out;
+}
+
+input,
+select[multiple=multiple],
+textarea {
+    -moz-box-shadow: 0 0 10px rgb(255, 255, 255);
+    -webkit-box-shadow: 0 0 10px rgb(255, 255, 255);
+    box-shadow: 0 0 10px rgb(255, 255, 255);
+}
+
+input:focus,
+select[multiple=multiple]:focus,
+textarea:focus {
+    border-color: transparent;
+    -moz-box-shadow: 0 0 10px rgb(0, 166, 222);
+    -webkit-box-shadow: 0 0 10px rgb(0, 166, 222);
+    box-shadow: 0 0 10px rgb(0, 166, 222);
+}
+
+input.locked,
+select[multiple=multiple].locked,
+textarea.locked {
+    border-color: transparent;
+    -moz-box-shadow: 0 0 10px rgb(255, 0, 0);
+    -webkit-box-shadow: 0 0 10px rgb(255, 0, 0);
+    box-shadow: 0 0 10px rgb(255, 0, 0);
+}
+
+input.updated,
+select[multiple=multiple].updated,
+textarea.updated {
+    border-color: transparent;
+    -moz-box-shadow: 0 0 10px rgb(255, 255, 0);
+    -webkit-box-shadow: 0 0 10px rgb(255, 255, 0);
+    box-shadow: 0 0 10px rgb(255, 255, 0);
+}
+
+label.updated {
+	background: rgb(255, 255, 0);
+}
+
+

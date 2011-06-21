@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+<head>
+	<title>Planet Examples</title>
+	<link href="styles.css" rel="stylesheet" type="text/css">
+	
+</head>
+<body>
+	<header>
+		<h1>Planet</h1>
+	</header>
+	
+	<section>
+		<ul id="info"></ul>
+	</section>
+	
+	<section>
+		<div class="group clear small">
+			<label>
+				<input type="checkbox" name="box" value="salt">
+				Salt
+			</label>
+			<label>
+				<input type="checkbox" name="box" value="sugar">
+				Sugar
+			</label>
+			<label>
+				<input type="checkbox" name="box" value="pepper">
+				Pepper
+			</label>
+		</div>
+		
+		<div class="group clear small">
+			<label>
+				<input type="radio" name="spice" value="chili">
+				Chili
+			</label>
+			<label>
+				<input type="radio" name="spice" value="curry">
+				Curry
+			</label>
+			<label>
+				<input type="radio" name="spice" value="wasabi">
+				Wasabi
+			</label>
+		</div>
+	</section>
+	
+	<section>
+		<label>
+			<span>Text</span>
+			<input type="text" name="specials" placeholder="empty">
+		</label>
+	</section>
+	
+	<section>
+		<label>
+			<span>Select</span>
+			<select name="device">
+				<option>Grill</option>
+				<option>Microwave</option>
+				<option>Oven</option>
+				<option>Stove</option>
+			</select>
+		</label>
+	</section>
+		
+	<section>
+		<label>
+			<span>Multiple Select</span>
+			<select name="ingredients" multiple="multiple">
+			<optgroup label="Meat">
+				<option value="beaf">Beaf</option>
+				<option value="chicken">Chicken</option>
+				<option value="fish">Fish</option>
+				<option value="pork">Pork</option>
+			</optgroup>
+			<optgroup label="Vegetable">
+				<option value="corn">Corn</option>
+				<option value="patatos">Patatos</option>
+				<option value="rice">Rice</option>
+				<option value="tofu">Tofu</option>
+			</optgroup>
+		</select>
+		</label>
+	</section>
+	
+	<section>
+		<label>
+			<span>Textarea</span>
+			<textarea name="formula"></textarea>
+		</label>
+	</section>
+	
+	<section>
+		<label>
+			<span>Number</span>
+			<input type="number" name="amount" min="1" max="1000" step="0.1" value="6">
+		</label>
+	</section>
+		
+	<section>
+		<label>
+			<span>Range</span>
+			<input type="range" name="temperature" min="50" max="300" value="100">
+		</label>
+	</section>
+		
+	<section>
+		<label>
+			<span>Slider</span>
+			<div id="slider" class="slider">
+				<div id="knob" class="knob"></div>
+			</div>
+		</label>
+	</section>
+	
+	<script src="http://127.0.0.1:8999/socket.io/socket.io.js"></script>
+	<script src="mootools-core-1.3.2.js"></script>
+	<script src="mootools-more-1.3.2.1.js"></script>
+	<script>
+	
+	
+		if (!this.io) new Element('li[text="Couldnt find server!"]').inject('info');
+			
+		var socket = new io.Socket('127.0.0.1', {
+			port: 8999,
+			connectTimeout: 2500
+		});
+		
+		socket.addListener('connecting', function(transport){
+			new Element('li', {
+				text: 'Connecting with ' + transport
+			}).inject('info');
+		});
+
+		socket.addListener('connect', function(){
+			new Element('li[text="Connected!"]').inject('info');
+		});
+
+		socket.addListener('connect_failed', function(){ 
+			new Element('li[text="Connection failed!"]').inject('info');
+		});
+		
+		
+		
+		var sldr = document.getElement('.slider');
+		sldr.addClass('change');
+
+		(function(){
+			sldr.removeClass('change').addClass('changed');
+		}).delay(100);
+
+
+		document.body.addEvent('focus', function(e){
+			e.preventDefault();
+		});
+
+
+	</script>
+	<script src="slider.js"></script>
+	<script src="input-checkbox.js"></script>
+	<script src="input-radio.js"></script>
+	<script src="select-multiple.js"></script>
+	<script src="focusables.js"></script>
+		
+		
+	<script>
+	
+		
+		socket.connect();
+	</script>
+	
+</body>
+</html>

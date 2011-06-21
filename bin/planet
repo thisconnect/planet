@@ -1,0 +1,30 @@
+#! /usr/bin/env node
+
+var port = 8999,
+	host = '127.0.0.1',
+	op = require('./../support/optparse/optparse');
+
+var parser = new op.OptionParser([
+	['-p', '--port PORT', 'The port to bind to (default: 8999)'],
+	['', '--host HOST', 'The host to connect to (default: 127.0.0.1)'],
+	['-h', '--help', 'Shows this help message']
+]);
+
+parser.banner = 'Usage: planet [--port PORT] [--host HOST]';
+
+parser.bind('*', function(opt, value){
+	switch (opt){
+		case 'port': port = value || port; break;
+		case 'host': host = value || host; break;
+		case 'help':
+			console.log(this.toString());
+			parser.halt();
+			process.exit(0);
+		break;
+	}
+});
+
+parser.parse(process.argv);
+
+var Planet = require('./../lib/planet/planet').Planet;
+new Planet().listen(port, host);
