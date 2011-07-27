@@ -121,7 +121,7 @@
 	<script>
 	
 	
-		if (!this.io) new Element('li[text="Couldnt find server!"]').inject('info');
+		if (!this.io) new Element('li[text="Could not connect to server!"]').inject('info');
 			
 		var socket = new io.Socket('127.0.0.1', {
 			port: 8999,
