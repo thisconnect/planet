@@ -2,7 +2,7 @@
 
 var port = 8999,
 	host = '127.0.0.1',
-	op = require('./../support/optparse/optparse');
+	op = require('optparse/optparse');
 
 var parser = new op.OptionParser([
 	['-p', '--port PORT', 'The port to bind to (default: 8999)'],

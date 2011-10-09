@@ -1,28 +1,35 @@
 exports.setup = function(Tests){
 
+var channel = function(){
+	return '/' + (+new Date);
+};
+
 Tests.describe('Planet API: Connection', function(it){
 
 	it('should send an `initial_state` message after connect', function(expect){
-		var socket = new io.Socket();
+		var socket = io.connect(null, {'force new connection': 1});
 		socket.addListener('message', function(data){
 			data = JSON.parse(data);
+			console.log(data);
 			expect(data.type).toBe('initial_state');
 			expect(data.payload).toBeType('object');
 			this.disconnect();
 		});
-		socket.connect();
+		// socket.connect();
 	});
 
 
 });
 
 
+
 Tests.describe('Planet API: Locks', function(it){
 
 	it('should lock components', function(expect){
-		var socket = new io.Socket();
+		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.addListener('connect', function(){
+			console.log('connected!!');
 			socket.send(JSON.stringify({
 				type: 'state_update',
 				payload: {
@@ -39,11 +46,11 @@ Tests.describe('Planet API: Locks', function(it){
 			this.disconnect();
 		});
 
-		socket.connect();
+		// socket.connect();
 	});
 
 	it('should return a lock for unlocked components', function(expect){
-		var socket = new io.Socket();
+		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.addListener('connect', function(){
 			socket.send(JSON.stringify({
@@ -59,12 +66,12 @@ Tests.describe('Planet API: Locks', function(it){
 			this.disconnect();
 		});
 
-		socket.connect();
+		// socket.connect();
 	});
 
 	it('should return an acquire_lock_error for locked components', function(expect){
-		var socket = new io.Socket(),
-			client = new io.Socket();
+		var socket = io.connect(null, {'force new connection': 1}),
+			client = io.connect(null, {'force new connection': 1});
 
 		socket.addListener('connect', function(){
 			socket.send(JSON.stringify({
@@ -91,13 +98,13 @@ Tests.describe('Planet API: Locks', function(it){
 			socket.disconnect();
 		});
 
-		client.connect();
-		socket.connect();
+		// client.connect();
+		// socket.connect();
 	});
 
 	it('should unlock components', function(expect){
-		var socket = new io.Socket(),
-			client = new io.Socket();
+		var socket = io.connect(null, {'force new connection': 1}),
+			client = io.connect(null, {'force new connection': 1});
 
 		socket.addListener('connect', function(){
 			socket.send(JSON.stringify({
@@ -129,13 +136,13 @@ Tests.describe('Planet API: Locks', function(it){
 			socket.disconnect();
 		});
 
-		client.connect();
-		socket.connect();
+		// client.connect();
+		// socket.connect();
 	});
 
 	it('should broadcast locks', function(expect){
-		var socket = new io.Socket(),
-			client = new io.Socket();
+		var socket = io.connect(null, {'force new connection': 1}),
+			client = io.connect(null, {'force new connection': 1});
 
 		socket.addListener('connect', function(){
 			socket.send(JSON.stringify({
@@ -152,13 +159,13 @@ Tests.describe('Planet API: Locks', function(it){
 			socket.disconnect();
 		});
 
-		client.connect();
-		socket.connect();
+		// client.connect();
+		// socket.connect();
 	});
 
 	it('should broadcast unlocks', function(expect){
-		var socket = new io.Socket(),
-			client = new io.Socket();
+		var socket = io.connect(null, {'force new connection': 1}),
+			client = io.connect(null, {'force new connection': 1});
 
 		socket.addListener('connect', function(){
 			socket.send(JSON.stringify({
@@ -185,8 +192,8 @@ Tests.describe('Planet API: Locks', function(it){
 			socket.disconnect();
 		});
 
-		client.connect();
-		socket.connect();
+		// client.connect();
+		// socket.connect();
 	});
 
 });
@@ -194,7 +201,7 @@ Tests.describe('Planet API: Locks', function(it){
 Tests.describe('Planet API: Updates', function(it){
 
 	it('should echo a state_update message', function(expect){
-		var socket = new io.Socket();
+		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.addListener('connect', function(){
 			socket.send(JSON.stringify({
@@ -220,12 +227,12 @@ Tests.describe('Planet API: Updates', function(it){
 			}
 		});
 
-		socket.connect();
+		// socket.connect();
 	});
 
 	it('it should broacast messages to all connected clients', function(expect){
-		var socket = new io.Socket(),
-			client = new io.Socket();
+		var socket = io.connect(null, {'force new connection': 1}),
+			client = io.connect(null, {'force new connection': 1});
 
 		socket.addListener('connect', function(){
 			socket.send(JSON.stringify({
@@ -257,13 +264,13 @@ Tests.describe('Planet API: Updates', function(it){
 			}
 		});
 
-		client.connect();
-		socket.connect();
+		// client.connect();
+		// socket.connect();
 	});
 
 
 	it('should send back an `update_error` message for incorrect `state_update` requests', function(expect){
-		var socket = new io.Socket();
+		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.addListener('connect', function(){
 			socket.send(JSON.stringify({
@@ -288,7 +295,7 @@ Tests.describe('Planet API: Updates', function(it){
 			}
 		});
 
-		socket.connect();
+		// socket.connect();
 
 	});
 
@@ -298,7 +305,7 @@ Tests.describe('Planet API: Updates', function(it){
 Tests.describe('Planet API: Attempted Updates', function(it){
 
 	it('should allow for attempted updates', function(expect){
-		var socket = new io.Socket();
+		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.addListener('connect', function(){
 			socket.send(JSON.stringify({
@@ -317,12 +324,12 @@ Tests.describe('Planet API: Attempted Updates', function(it){
 			this.disconnect();
 		});
 
-		socket.connect();
+		// socket.connect();
 	});
 
 	it('should return a lock_error for locked components.', function(expect){
-		var socket = new io.Socket(),
-			client = new io.Socket();
+		var socket = io.connect(null, {'force new connection': 1}),
+			client = io.connect(null, {'force new connection': 1});
 
 		socket.addListener('connect', function(){
 			socket.send(JSON.stringify({
@@ -351,11 +358,12 @@ Tests.describe('Planet API: Attempted Updates', function(it){
 			socket.disconnect();
 		});
 
-		socket.connect();
-		client.connect();
+		// socket.connect();
+		// client.connect();
 	});
 
 });
+//*/
 
 
 };
