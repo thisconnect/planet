@@ -17,7 +17,7 @@ Requires
 --------
 
   - node.js 0.4.7
-  - socket.io 0.6.17
+  - socket.io 0.8.5
 
 Includes
 --------
