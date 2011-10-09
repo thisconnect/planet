@@ -1,3 +1,3 @@
-[submodule "support/socket.io"]
+[submodule "node_modules/socket.io"]
 	path = node_modules/socket.io
 	url = git://github.com/thisconnect/socket.io.git
