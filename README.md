@@ -6,6 +6,8 @@ Run
 	cd bin
 	./planet
 
+To run the tests browse to http://127.0.0.1:8999/tests/
+
 Requires
 --------
 
