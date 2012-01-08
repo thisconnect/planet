@@ -16,14 +16,17 @@ Setup
 Requires
 --------
 
-  - node.js 0.4.7
-  - socket.io 0.8.5
-  - socket.io-client 0.8.5
+  - node.js 0.6.6
+
+Submodules
+
+  - socket.io 0.8.7
+  - socket.io-client 0.8.7
+  - Optparse.js 1.0.3
+  - UglifyJS 1.1.0
 
 Includes
 --------
 
-  - Optparse.js 1.0.2
-  - UglifyJS 1.1.0
   - MooTools 1.3.2
   - Testigo
