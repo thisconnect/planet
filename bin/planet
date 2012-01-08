@@ -2,7 +2,7 @@
 
 var port = 8999,
 	host = '127.0.0.1',
-	op = require('optparse/optparse');
+	op = require('optparse');
 
 var parser = new op.OptionParser([
 	['-p', '--port PORT', 'The port to bind to (default: 8999)'],
@@ -12,7 +12,7 @@ var parser = new op.OptionParser([
 
 parser.banner = 'Usage: planet [--port PORT] [--host HOST]';
 
-parser.bind('*', function(opt, value){
+parser.on('*', function(opt, value){
 	switch (opt){
 		case 'port': port = value || port; break;
 		case 'host': host = value || host; break;
