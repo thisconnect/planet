@@ -23,7 +23,7 @@ Submodules
   - socket.io 0.8.7
   - socket.io-client 0.8.7
   - Optparse.js 1.0.3
-  - UglifyJS 1.1.0
+  - UglifyJS 1.2.4
 
 Includes
 --------

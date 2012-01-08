@@ -7,3 +7,6 @@
 [submodule "node_modules/optparse"]
 	path = node_modules/optparse
 	url = git://github.com/thisconnect/optparse-js.git
+[submodule "node_modules/uglify-js"]
+	path = node_modules/uglify-js
+	url = git://github.com/thisconnect/uglify-js.git
