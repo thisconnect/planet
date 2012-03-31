@@ -10,3 +10,9 @@
 [submodule "node_modules/uglify-js"]
 	path = node_modules/uglify-js
 	url = git://github.com/thisconnect/uglify-js.git
+[submodule "node_modules/zeparser"]
+	path = node_modules/zeparser
+	url = git://github.com/thisconnect/zeparser.git
+[submodule "node_modules/active-x-obfuscator"]
+	path = node_modules/active-x-obfuscator
+	url = git://github.com/thisconnect/active-x-obfuscator.git
