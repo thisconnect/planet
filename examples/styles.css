@@ -12,13 +12,14 @@ body, input, select, textarea {
 .clear:after { clear: both; }
 .clear{ zoom: 1; }
 
-
+/*
 ::selection {
 	background: transparent;
 }
 ::-moz-selection {
 	background: transparent;
 }
+*/
 
 header,
 section {
