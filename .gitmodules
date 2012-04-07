@@ -19,3 +19,6 @@
 [submodule "node_modules/mime"]
 	path = node_modules/mime
 	url = git://github.com/thisconnect/mime.git
+[submodule "tests/testigo"]
+	path = tests/testigo
+	url = git://github.com/thisconnect/testigo.git
