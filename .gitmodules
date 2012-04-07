@@ -16,3 +16,6 @@
 [submodule "node_modules/active-x-obfuscator"]
 	path = node_modules/active-x-obfuscator
 	url = git://github.com/thisconnect/active-x-obfuscator.git
+[submodule "node_modules/mime"]
+	path = node_modules/mime
+	url = git://github.com/thisconnect/mime.git
