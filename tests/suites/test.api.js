@@ -25,6 +25,7 @@ Tests.describe('Planet API: Connection', function(it){
 Tests.describe('Planet API: Locks', function(it){
 
 	it('should lock components', function(expect){
+		expect.perform(1);
 		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.addListener('connect', function(){
@@ -48,6 +49,7 @@ Tests.describe('Planet API: Locks', function(it){
 	});
 
 	it('should return a lock for unlocked components', function(expect){
+		expect.perform(1);
 		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.addListener('connect', function(){
@@ -67,6 +69,7 @@ Tests.describe('Planet API: Locks', function(it){
 	});
 
 	it('should return an acquire_lock_error for locked components', function(expect){
+		expect.perform(2);
 		var socket = io.connect(null, {'force new connection': 1}),
 			client = io.connect(null, {'force new connection': 1});
 
@@ -98,6 +101,7 @@ Tests.describe('Planet API: Locks', function(it){
 	});
 
 	it('should unlock components', function(expect){
+		expect.perform(1);
 		var socket = io.connect(null, {'force new connection': 1}),
 			client = io.connect(null, {'force new connection': 1});
 
@@ -134,6 +138,7 @@ Tests.describe('Planet API: Locks', function(it){
 	});
 
 	it('should broadcast locks', function(expect){
+		expect.perform(1);
 		var socket = io.connect(null, {'force new connection': 1}),
 			client = io.connect(null, {'force new connection': 1});
 
@@ -155,6 +160,7 @@ Tests.describe('Planet API: Locks', function(it){
 	});
 
 	it('should broadcast unlocks', function(expect){
+		expect.perform(1);
 		var socket = io.connect(null, {'force new connection': 1}),
 			client = io.connect(null, {'force new connection': 1});
 
