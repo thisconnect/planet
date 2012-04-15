@@ -11,7 +11,7 @@ Tests.describe('Planet API: Connection', function(it){
 		var socket = io.connect(null, {'force new connection': 1});
 		socket.addListener('message', function(data){
 			data = JSON.parse(data);
-			console.log(data);
+			//console.log(data);
 			expect(data.type).toBe('initial_state');
 			expect(data.payload).toBeType('object');
 			this.disconnect();
@@ -70,123 +70,139 @@ Tests.describe('Planet API: Locks', function(it){
 
 	it('should return an acquire_lock_error for locked components', function(expect){
 		expect.perform(2);
-		var socket = io.connect(null, {'force new connection': 1}),
-			client = io.connect(null, {'force new connection': 1});
 
-		socket.addListener('connect', function(){
-			socket.send(JSON.stringify({
-				type: 'acquire_lock',
-				payload: 'component-g'
-			}));
-		});
+		var socket, client = io.connect(null, {'force new connection': 1});
+		client.addListener('connect', function(){
 
-		socket.addListener('message', function(data){
-			data = JSON.parse(data);
-			if (data.type != 'lock_acquired') return;
-			client.send(JSON.stringify({
-				type: 'acquire_lock',
-				payload: 'component-g'
-			}));
-		});
+			client.addListener('message', function(data){
+				data = JSON.parse(data);
+				if (data.type != 'acquire_lock_error') return;
+				expect(data.payload).toBeType('object');
+				expect(data.payload.component).toBe('component-g');
+				this.disconnect();
+				socket.disconnect();
+			});
 
-		client.addListener('message', function(data){
-			data = JSON.parse(data);
-			if (data.type != 'acquire_lock_error') return;
-			expect(data.payload).toBeType('object');
-			expect(data.payload.component).toBe('component-g');
-			this.disconnect();
-			socket.disconnect();
+			socket = io.connect(null, {'force new connection': 1});
+			socket.addListener('connect', function(){
+				socket.send(JSON.stringify({
+					type: 'acquire_lock',
+					payload: 'component-g'
+				}));
+			});
+
+			socket.addListener('message', function(data){
+				data = JSON.parse(data);
+				if (data.type != 'lock_acquired') return;
+				client.send(JSON.stringify({
+					type: 'acquire_lock',
+					payload: 'component-g'
+				}));
+			});
+
 		});
 
 	});
 
 	it('should unlock components', function(expect){
 		expect.perform(1);
-		var socket = io.connect(null, {'force new connection': 1}),
-			client = io.connect(null, {'force new connection': 1});
 
-		socket.addListener('connect', function(){
-			socket.send(JSON.stringify({
-				type: 'acquire_lock',
-				payload: 'component-h'
-			}));
-		});
+		var socket, client = io.connect(null, {'force new connection': 1});
+		client.addListener('connect', function(){
 
-		socket.addListener('message', function(data){
-			data = JSON.parse(data);
-			if (data.type == 'lock_acquired'){
+			client.addListener('message', function(data){
+				data = JSON.parse(data);
+				if (data.type != 'lock_acquired') return;
+				expect(data.payload).toBe('component-h');
+				this.disconnect();
+				socket.disconnect();
+			});
+
+			socket = io.connect(null, {'force new connection': 1});
+			socket.addListener('connect', function(){
 				socket.send(JSON.stringify({
-					type: 'release_lock',
-					payload: 'component-h'
-				}));
-			} else if (data.type == 'lock_released'){
-				client.send(JSON.stringify({
 					type: 'acquire_lock',
 					payload: 'component-h'
 				}));
-			}
-		});
+			});
 
-		client.addListener('message', function(data){
-			data = JSON.parse(data);
-			if (data.type != 'lock_acquired') return;
-			expect(data.payload).toBe('component-h');
-			this.disconnect();
-			socket.disconnect();
+			socket.addListener('message', function(data){
+				data = JSON.parse(data);
+				if (data.type == 'lock_acquired'){
+					socket.send(JSON.stringify({
+						type: 'release_lock',
+						payload: 'component-h'
+					}));
+				} else if (data.type == 'lock_released'){
+					client.send(JSON.stringify({
+						type: 'acquire_lock',
+						payload: 'component-h'
+					}));
+				}
+			});
+
 		});
 
 	});
 
 	it('should broadcast locks', function(expect){
 		expect.perform(1);
-		var socket = io.connect(null, {'force new connection': 1}),
-			client = io.connect(null, {'force new connection': 1});
 
-		socket.addListener('connect', function(){
-			socket.send(JSON.stringify({
-				type: 'acquire_lock',
-				payload: 'component-z'
-			}));
-		});
+		var socket, client = io.connect(null, {'force new connection': 1});
+		client.addListener('connect', function(){
 
-		client.addListener('message', function(data){
-			data = JSON.parse(data);
-			if (data.type != 'lock_component') return;
-			expect(data.payload).toBe('component-z');
-			this.disconnect();
-			socket.disconnect();
+			client.addListener('message', function(data){
+				data = JSON.parse(data);
+				if (data.type != 'lock_component') return;
+				expect(data.payload).toBe('component-z');
+				this.disconnect();
+				socket.disconnect();
+			});
+
+			socket = io.connect(null, {'force new connection': 1});
+			socket.addListener('connect', function(){
+				socket.send(JSON.stringify({
+					type: 'acquire_lock',
+					payload: 'component-z'
+				}));
+			});
+
 		});
 
 	});
 
 	it('should broadcast unlocks', function(expect){
 		expect.perform(1);
-		var socket = io.connect(null, {'force new connection': 1}),
-			client = io.connect(null, {'force new connection': 1});
+		
+		var socket, client = io.connect(null, {'force new connection': 1});
+		client.addListener('connect', function(){
 
-		socket.addListener('connect', function(){
-			socket.send(JSON.stringify({
-				type: 'acquire_lock',
-				payload: 'component-i'
-			}));
-		});
+			client.addListener('message', function(data){
+				data = JSON.parse(data);
+				if (data.type != 'release_component') return;
+				expect(data.payload).toBe('component-i');
+				this.disconnect();
+				socket.disconnect();
+			});
 
-		socket.addListener('message', function(data){
-			data = JSON.parse(data);
-			if (data.type == 'lock_acquired'){
+			socket = io.connect(null, {'force new connection': 1});
+			socket.addListener('connect', function(){
 				socket.send(JSON.stringify({
-					type: 'release_lock',
+					type: 'acquire_lock',
 					payload: 'component-i'
 				}));
-			}
-		});
+			});
 
-		client.addListener('message', function(data){
-			data = JSON.parse(data);
-			if (data.type != 'release_component') return;
-			expect(data.payload).toBe('component-i');
-			this.disconnect();
-			socket.disconnect();
+			socket.addListener('message', function(data){
+				data = JSON.parse(data);
+				if (data.type == 'lock_acquired'){
+					socket.send(JSON.stringify({
+						type: 'release_lock',
+						payload: 'component-i'
+					}));
+				}
+			});
+
 		});
 
 	});
@@ -228,37 +244,41 @@ Tests.describe('Planet API: Updates', function(it){
 
 	it('it should broacast messages to all connected clients', function(expect){
 		expect.perform(2);
-		var socket = io.connect(null, {'force new connection': 1}),
-			client = io.connect(null, {'force new connection': 1});
 
-		socket.addListener('connect', function(){
-			socket.send(JSON.stringify({
-				type: 'acquire_lock',
-				payload: 'component-x'
-			}));
-		});
+		var socket, client = io.connect(null, {'force new connection': 1});
+		client.addListener('connect', function(){
 
-		socket.addListener('message', function(data){
-			data = JSON.parse(data);
-			if (data.type == 'lock_acquired' && data.payload == 'component-x'){
+			client.addListener('message', function(data){
+				data = JSON.parse(data);
+				if (data.type == 'state_update'){
+					expect(data.payload).toBeType('object');
+					expect(data.payload['component-x']).toBe(5050);
+					this.disconnect();
+					socket.disconnect();
+				}
+			});
+
+			socket = io.connect(null, {'force new connection': 1});
+			socket.addListener('connect', function(){
 				socket.send(JSON.stringify({
-					type: 'state_update',
-					payload: {
-						component: 'component-x',
-						payload: 5050
-					}
+					type: 'acquire_lock',
+					payload: 'component-x'
 				}));
-			}
-		});
+			});
 
-		client.addListener('message', function(data){
-			data = JSON.parse(data);
-			if (data.type == 'state_update'){
-				expect(data.payload).toBeType('object');
-				expect(data.payload['component-x']).toBe(5050);
-				this.disconnect();
-				socket.disconnect();
-			}
+			socket.addListener('message', function(data){
+				data = JSON.parse(data);
+				if (data.type == 'lock_acquired' && data.payload == 'component-x'){
+					socket.send(JSON.stringify({
+						type: 'state_update',
+						payload: {
+							component: 'component-x',
+							payload: 5050
+						}
+					}));
+				}
+			});
+
 		});
 
 	});
@@ -295,7 +315,6 @@ Tests.describe('Planet API: Updates', function(it){
 
 });
 
-
 Tests.describe('Planet API: Attempted Updates', function(it){
 
 	it('should allow for attempted updates', function(expect){
@@ -323,34 +342,38 @@ Tests.describe('Planet API: Attempted Updates', function(it){
 
 	it('should return a lock_error for locked components.', function(expect){
 		expect.perform(1);
-		var socket = io.connect(null, {'force new connection': 1}),
-			client = io.connect(null, {'force new connection': 1});
 
-		socket.addListener('connect', function(){
-			socket.send(JSON.stringify({
-				type: 'acquire_lock',
-				payload: 'component-y'
-			}));
-		});
+		var socket, client = io.connect(null, {'force new connection': 1});
+		client.addListener('connect', function(){
 
-		socket.addListener('message', function(data){
-			data = JSON.parse(data);
-			if (data.type != 'lock_acquired') return;
-			client.send(JSON.stringify({
-				type: 'attempt_update',
-				payload: {
-					component: 'component-y',
-					payload: 123
-				}
-			}));
-		});
+			client.addListener('message', function(data){
+				data = JSON.parse(data);
+				if (data.type != 'lock_error') return;
+				expect(data.payload).toBe('component-y');
+				this.disconnect();
+				socket.disconnect();
+			});
 
-		client.addListener('message', function(data){
-			data = JSON.parse(data);
-			if (data.type != 'lock_error') return;
-			expect(data.payload).toBe('component-y');
-			this.disconnect();
-			socket.disconnect();
+			socket = io.connect(null, {'force new connection': 1});
+			socket.addListener('connect', function(){
+				socket.send(JSON.stringify({
+					type: 'acquire_lock',
+					payload: 'component-y'
+				}));
+			});
+
+			socket.addListener('message', function(data){
+				data = JSON.parse(data);
+				if (data.type != 'lock_acquired') return;
+				client.send(JSON.stringify({
+					type: 'attempt_update',
+					payload: {
+						component: 'component-y',
+						payload: 123
+					}
+				}));
+			});
+
 		});
 
 	});
