@@ -11,7 +11,6 @@ Tests.describe('Planet API: Connection', function(it){
 		var socket = io.connect(null, {'force new connection': 1});
 		socket.addListener('message', function(data){
 			data = JSON.parse(data);
-			//console.log(data);
 			expect(data.type).toBe('initial_state');
 			expect(data.payload).toBeType('object');
 			this.disconnect();
@@ -29,7 +28,6 @@ Tests.describe('Planet API: Locks', function(it){
 		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.addListener('connect', function(){
-			console.log('connected!!');
 			socket.send(JSON.stringify({
 				type: 'state_update',
 				payload: {
@@ -48,7 +46,7 @@ Tests.describe('Planet API: Locks', function(it){
 
 	});
 
-	it('should return a lock for unlocked components', function(expect){
+	it('should return `lock_acquired` for unlocked components', function(expect){
 		expect.perform(1);
 		var socket = io.connect(null, {'force new connection': 1});
 
@@ -68,7 +66,7 @@ Tests.describe('Planet API: Locks', function(it){
 
 	});
 
-	it('should return an acquire_lock_error for locked components', function(expect){
+	it('should return an `acquire_lock_error` for locked components', function(expect){
 		expect.perform(2);
 
 		var socket, client = io.connect(null, {'force new connection': 1});
@@ -212,7 +210,7 @@ Tests.describe('Planet API: Locks', function(it){
 
 Tests.describe('Planet API: Updates', function(it){
 
-	it('should echo a state_update message', function(expect){
+	it('should echo a `state_update` message', function(expect){
 		expect.perform(2);
 		var socket = io.connect(null, {'force new connection': 1});
 
@@ -242,8 +240,8 @@ Tests.describe('Planet API: Updates', function(it){
 
 	});
 
-	it('it should broacast messages to all connected clients', function(expect){
-		expect.perform(2);
+	it('it should broacast `state_update` data to all connected clients', function(expect){
+		expect.perform(4);
 
 		var socket, client = io.connect(null, {'force new connection': 1});
 		client.addListener('connect', function(){
@@ -254,7 +252,6 @@ Tests.describe('Planet API: Updates', function(it){
 					expect(data.payload).toBeType('object');
 					expect(data.payload['component-x']).toBe(5050);
 					this.disconnect();
-					socket.disconnect();
 				}
 			});
 
@@ -276,6 +273,10 @@ Tests.describe('Planet API: Updates', function(it){
 							payload: 5050
 						}
 					}));
+				} else if (data.type == 'state_update'){
+					expect(data.payload).toBeType('object');
+					expect(data.payload['component-x']).toBe(5050);
+					this.disconnect();
 				}
 			});
 
@@ -301,7 +302,7 @@ Tests.describe('Planet API: Updates', function(it){
 				socket.send(JSON.stringify({
 					type: 'state_update',
 					payload: {
-						name: 'component-x',
+						//name: 'component-x', // wrong or no key
 						payload: 999
 					}
 				}));
@@ -340,7 +341,7 @@ Tests.describe('Planet API: Attempted Updates', function(it){
 
 	});
 
-	it('should return a lock_error for locked components.', function(expect){
+	it('should return a `lock_error` for locked components.', function(expect){
 		expect.perform(1);
 
 		var socket, client = io.connect(null, {'force new connection': 1});
