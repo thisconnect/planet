@@ -6,7 +6,8 @@ Run
 	cd bin
 	./planet
 
-To run the tests browse to http://127.0.0.1:8999/tests/
+- Run the tests http://127.0.0.1:8999/tests/
+- Browse the examples planet/examples/index.html (Chrome does not allow Websockets from filesystem) 
 
 Setup
 -----
@@ -16,16 +17,12 @@ Setup
 Requires
 --------
 
-  - node.js 0.6.11
+  - Node.js 0.6.11
 
-Submodules
+#### Submodules
 
-  - socket.io 0.9.3
-  - socket.io-client 0.9.3
-  - Optparse.js 1.0.3
+  - Socket.IO 0.9.5
+  - Socket.IO client 0.9.5
+  - Optparse-js 1.0.3
   - UglifyJS 1.2.6
-
-Includes
---------
-
   - Testigo
