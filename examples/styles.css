@@ -5,7 +5,7 @@ body {
 }
 
 body, input, select, textarea {
-	font: 100%/25px Helvetica, sans-serif;
+	font: 100%/1.25 Helvetica, sans-serif;
 }
 
 .clear:before, .clear:after { content: ""; display: table; }
@@ -32,14 +32,14 @@ section {
 
 #info {
 	display: block;
-	font-size: 13px;
+	font-size: 81.25%;
 	height: 3em;
-	line-height: 16px;
 	list-style: square;
 	overflow-y: auto;
 }
 
 h1 {
+	font-size: 150%;
 	margin: 0 0 0.25em 0;
 	padding: 0.25em 16px 2px;
 }
@@ -72,7 +72,6 @@ label span {
 
 input {
 	height: 2em;
-	line-height: 2em;
 	margin: 0 0 1em 0;
 	outline: none;
 	padding: 0;
@@ -122,7 +121,7 @@ select {
 select[multiple=multiple] {
 	border: 1px solid #bbb;
 	display: block;
-	font-size: 14px;
+	font-size: 81.25%;
 	height: 100px;
     outline: none;
 	padding: 10px;
