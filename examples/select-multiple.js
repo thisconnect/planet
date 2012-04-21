@@ -38,7 +38,6 @@ function select(value, index){
 	options[index].set('selected', value);
 }
 
-
 socket.addListener('message', function(data){
 	data = JSON.parse(data);
 	
