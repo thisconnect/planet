@@ -13,7 +13,6 @@ var mySlider = new Slider($('slider'), $('knob'), {
 				payload: step
 			}
 		}));
-		
 	},
 	onComplete: function(step){
 		if (state != 'acquired') return;
@@ -27,7 +26,7 @@ var mySlider = new Slider($('slider'), $('knob'), {
 
 mySlider.element.addEvent('mousedown', function(){
 	state = mySlider.step;
-	
+
 	if (state != 'locked') socket.send(JSON.stringify({
 		type: 'acquire_lock',
 		payload: 'slider'
@@ -44,10 +43,10 @@ socket.on('message', function(data){
 			case 'lock_released':
 			case 'release_component':
 */
-	
+
 	if (data.type == 'state_update'){
 		if (data.payload['slider'] == null) return;
-		
+
 		if (state != 'acquired'){
 			mySlider.setKnobPosition(mySlider.toPosition(data.payload['slider']));
 			mySlider.step = data.payload['slider'];
@@ -59,9 +58,9 @@ socket.on('message', function(data){
 		mySlider.setKnobPosition(mySlider.toPosition(data.payload['slider']));
 		mySlider.step = data.payload['slider'];
 	}
-	
+
 	if (data.payload != 'slider') return;
-	
+
 	if (data.type == 'lock_acquired'){
 		if (typeof state == 'number') socket.send(JSON.stringify({
 			type: 'state_update',
@@ -72,33 +71,30 @@ socket.on('message', function(data){
 		}));
 		state = 'acquired';
 	}
-	
+
 	if (data.type == 'lock_released'){
 		state = null;
 	}
-	
+
 	if (data.type == 'lock_component'){
 		mySlider.detach();
 		state = 'locked';
 	}
-	
+
 	if (data.type == 'lock_released'){
 		state = null;
 	}
-	
+
 	if (data.type == 'release_component'){
 		mySlider.attach();
 		state = null;
 	}
-	
+
 	if (data.type == 'acquire_lock_error'){
 		console.log('acquire_lock_error');
 	}
 
 });
 
-
 })();
-
-
 

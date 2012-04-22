@@ -21,15 +21,12 @@ socket.addListener('message', function(data){
 	var payload = data.payload['radio'];
 	if (payload == null) return;
 	
-	var radio = radios[values.indexOf(payload)],
-		label = radio.getParent('label');
+	var radio = radios[values.indexOf(payload)];
 	
 	if (data.type == 'initial_state') radio.set('checked', true);
 	
 	if (data.type == 'state_update' && !radio.get('checked')){
 		radio.set('checked', true);
-		label.addClass('updated');
-		(function(){ label.removeClass('updated'); }).delay(200);
 	}
 	
 });

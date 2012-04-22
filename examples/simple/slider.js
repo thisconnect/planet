@@ -25,7 +25,7 @@ mySlider.element.addEvent('mousedown', function(){
 
 socket.on('message', function(data){
 	data = JSON.parse(data);
-	
+
 	if (data.payload['slider'] == null) return;
 
 	if (data.type == 'state_update'){
@@ -39,8 +39,4 @@ socket.on('message', function(data){
 	}
 });
 
-
 })();
-
-
-
