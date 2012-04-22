@@ -1,6 +1,6 @@
 (function(){
 
-$$('input[type=text], input[type=number], input[type=range], select, textarea').each(function(input){
+$$('input[type=text], input[type=number], input[type=range], textarea').each(function(input){
 
 	var component = input.get('tag') + '.' + input.get('name');
 
@@ -32,8 +32,7 @@ $$('input[type=text], input[type=number], input[type=range], select, textarea').
 			}
 
 			if (data.type == 'state_update'){
-				input.set('value', payload[component]).addClass('updated');
-				(function(){ input.removeClass('updated'); }).delay(200);
+				input.set('value', payload[component]);
 			}
 		}
 	});

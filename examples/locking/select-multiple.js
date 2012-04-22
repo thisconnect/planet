@@ -65,14 +65,14 @@ socket.addListener('message', function(data){
 		multiselect.addClass('locked');
 		state = 'locked';
 	}
-	
+
 	if (data.type == 'lock_released') state = null;
-	
+
 	if (data.type == 'release_component'){
 		multiselect.removeClass('locked');
 		state = null;
 	}
-	
+
 });
 
 })();
