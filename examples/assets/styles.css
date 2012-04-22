@@ -105,7 +105,7 @@ input[type=range] {
 input[type=checkbox],
 input[type=radio] {
 	height: auto;
-	margin: 0 2px 0 0;
+	margin: 0 0.375em 0 0;
 	position: relative;
 	top: -1px;
 	vertical-align: baseline;

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>Planet Examples</title>
-	<link href="styles.css" rel="stylesheet">
+	<link rel=stylesheet href="assets/styles.css">
 </head>
 <body>
 	<header>
@@ -12,27 +12,11 @@
 	<section>
 		<ul id=info></ul>
 	</section>
-	
-	<section>
-		<div class="group clear">
-			<label><input type=checkbox name=box value=salt> Salt</label>
-			<label><input type=checkbox name=box value=sugar> Sugar</label>
-			<label><input type=checkbox name=box value=pepper> Pepper</label>
-		</div>
-		
-		<div class="group clear">
-			<label><input type=radio name=spice value=chili> Chili</label>
-			<label><input type=radio name=spice value=curry> Curry</label>
-			<label><input type=radio name=spice value=wasabi> Wasabi</label>
-		</div>
-	</section>
-	
 	<section>
 		<label>
 			<span>Text</span><input type=text name=specials placeholder=empty>
 		</label>
 	</section>
-	
 	<section>
 		<label>
 			<span>Select</span>
@@ -44,7 +28,6 @@
 			</select>
 		</label>
 	</section>
-		
 	<section>
 		<label>
 			<span>Multiple Select</span>
@@ -64,44 +47,40 @@
 		</select>
 		</label>
 	</section>
-	
 	<section>
 		<label>
 			<span>Textarea</span><textarea name=formula></textarea>
 		</label>
 	</section>
-	
 	<section>
 		<label>
 			<span>Number</span><input type=number name=amount min=1 max=1000 step="0.1" value=6>
 		</label>
 	</section>
-		
 	<section>
 		<label>
 			<span>Range</span><input type=range name=temperature min=50 max=300 value=100>
 		</label>
 	</section>
-		
 	<section>
 		<label>
 			<span>Slider</span>
 			<div id=slider class=slider><div id=knob class=knob></div></div>
 		</label>
 	</section>
-	
+
 	<script src="http://127.0.0.1:8999/socket.io/socket.io.js"></script>
-	<script src="mootools-core-1.4.5-full-nocompat-yc.js"></script>
-	<script src="mootools-more-1.4.0.1.js"></script>
+	<script src="assets/mootools-core-1.4.5-full-nocompat-yc.js"></script>
+	<script src="assets/mootools-more-1.4.0.1.js"></script>
 
 	<script>
-	
+
 		if (!this.io) new Element('li[text="Could not connect to server!"]').inject('info');
-			
+
 		var socket = io.connect('http://localhost:8999', {
 			'connect timeout': 2500
 		});
-		
+
 		socket.on('connecting', function(transport){
 			new Element('li', {
 				text: 'Connecting with ' + transport
@@ -123,7 +102,7 @@
 		socket.on('error', function(){ 
 			new Element('li[text="Error!"]').inject('info', 'top');
 		});
-		
+
 		socket.on('reconnecting', function(transport){
 			new Element('li[text="Reconnecting"]').inject('info', 'top');
 		});
@@ -131,15 +110,12 @@
 		socket.on('reconnect', function(){
 			new Element('li[text="Reconnected!"]').inject('info', 'top');
 		});
-		
+
 	</script>
 
-	<script src="slider.js"></script>
-	<script src="input-checkbox.js"></script>
-	<script src="input-radio.js"></script>
-	<script src="select-multiple.js"></script>
-	<script src="focusables.js"></script>
-		
-		
+	<script src="locking/focusables.js"></script>
+	<script src="locking/select-multiple.js"></script>
+	<script src="locking/slider.js"></script>
+
 </body>
 </html>
