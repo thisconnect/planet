@@ -30,7 +30,6 @@ socket.on('message', function(data){
 	if (data.payload['slider'] == null) return;
 
 	if (data.type == 'state_update' || data.type == 'initial_state'){
-	console.log('slider', data.payload['slider']);
 		mySlider.setKnobPosition(mySlider.toPosition(data.payload['slider']));
 		mySlider.step = data.payload['slider'];
 	}
