@@ -25,7 +25,7 @@ Tests.describe('Planet API: Attempted Updates', function(it){
 		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.on('connect', function(){
-			socket.emit('attempt update', {
+			socket.emit('update', {
 				component: 'component-u',
 				payload: 123
 			});
@@ -58,7 +58,7 @@ Tests.describe('Planet API: Attempted Updates', function(it){
 			});
 
 			socket.on('lock acquired', function(data){
-				client.emit('attempt update', {
+				client.emit('update', {
 					component: 'component-y',
 					payload: 34
 				});
@@ -70,7 +70,7 @@ Tests.describe('Planet API: Attempted Updates', function(it){
 });
 
 Tests.describe('Planet API: Locks', function(it){
-
+/*
 	it('should lock components', function(expect){
 		expect.perform(1);
 		var socket = io.connect(null, {'force new connection': 1});
@@ -87,7 +87,7 @@ Tests.describe('Planet API: Locks', function(it){
 			this.disconnect();
 		});
 	});
-
+*/
 	it('should return `lock acquired` for unlocked components', function(expect){
 		expect.perform(1);
 		var socket = io.connect(null, {'force new connection': 1});
@@ -219,7 +219,7 @@ Tests.describe('Planet API: Updates', function(it){
 
 		socket.on('lock acquired', function(data){
 			if (data == 'component-x'){
-				socket.emit('state update', {
+				socket.emit('update', {
 					component: 'component-x',
 					payload: 567
 				});
@@ -233,7 +233,7 @@ Tests.describe('Planet API: Updates', function(it){
 		});
 	});
 
-	it('it should broacast `state update` data to all connected clients', function(expect){
+	it('it should broacast `update` data to all connected clients', function(expect){
 		expect.perform(4);
 
 		var socket,
@@ -254,7 +254,7 @@ Tests.describe('Planet API: Updates', function(it){
 
 			socket.on('lock acquired', function(data){
 				if (data == 'component-x'){
-					socket.emit('state update', {
+					socket.emit('update', {
 						component: 'component-x',
 						payload: 5050
 					});
@@ -270,7 +270,7 @@ Tests.describe('Planet API: Updates', function(it){
 		});
 	});
 
-	it('should send back an `update error` message for incorrect `state update` requests', function(expect){
+	it('should send back an `update error` message for incorrect `update` requests', function(expect){
 		expect.perform(1);
 		var socket = io.connect(null, {'force new connection': 1});
 
@@ -280,7 +280,7 @@ Tests.describe('Planet API: Updates', function(it){
 
 		socket.on('lock acquired', function(data){
 			if (data == 'component-x'){
-				socket.emit('state update', {
+				socket.emit('update', {
 					//name: 'component-x', // wrong or no key
 					payload: 789
 				});
