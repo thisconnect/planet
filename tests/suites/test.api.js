@@ -72,24 +72,7 @@ Tests.describe('Planet API: Attempted Updates', function(it){
 });
 
 Tests.describe('Planet API: Locks', function(it){
-/*
-	it('should lock components', function(expect){
-		expect.perform(1);
-		var socket = io.connect(null, {'force new connection': 1});
 
-		socket.on('connect', function(){
-			socket.emit('state update', {
-				component: 'component-x',
-				payload: 45
-			});
-		});
-
-		socket.on('lock error', function(data){
-			expect(data).toBe('component-x');
-			this.disconnect();
-		});
-	});
-*/
 	it('should return `lock acquired` for unlocked components', function(expect){
 		expect.perform(1);
 		var socket = io.connect(null, {'force new connection': 1});
@@ -202,6 +185,31 @@ Tests.describe('Planet API: Locks', function(it){
 			});
 			socket.on('lock released', function(data){
 				client.emit('acquire lock', 'component-h');
+			});
+
+		});
+	});
+
+	it('should unlock components locked by disconnecting clients', function(expect){
+		expect.perform(1);
+
+		var socket,
+			client = io.connect(null, {'force new connection': 1});
+
+		client.on('connect', function(){
+
+			client.on('release component', function(data){
+				expect(data).toBe('component-j');
+				this.disconnect();
+			});
+
+			socket = io.connect(null, {'force new connection': 1});
+			socket.on('connect', function(){
+				socket.emit('acquire lock', 'component-j');
+			});
+
+			socket.on('lock acquired', function(data){
+				this.disconnect();
 			});
 
 		});
