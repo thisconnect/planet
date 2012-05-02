@@ -21,7 +21,7 @@ Tests.describe('Planet API: Connection', function(it){
 Tests.describe('Planet API: Attempted Updates', function(it){
 
 	it('should allow for attempted updates', function(expect){
-		expect.perform(1);
+		expect.perform(3);
 		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.on('connect', function(){
@@ -33,7 +33,9 @@ Tests.describe('Planet API: Attempted Updates', function(it){
 
 		socket.on('state update', function(data){
 			console.log('state update', data);
-			expect(data['component-u']).toBe(123);
+			expect(data).toBeType('object');
+			expect(data.component).toBe('component-u');
+			expect(data.payload).toBe(123);
 			this.disconnect();
 		});
 	});
@@ -210,7 +212,7 @@ Tests.describe('Planet API: Locks', function(it){
 Tests.describe('Planet API: Updates', function(it){
 
 	it('should echo a `state update` message', function(expect){
-		expect.perform(2);
+		expect.perform(3);
 		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.on('connect', function(){
@@ -228,13 +230,14 @@ Tests.describe('Planet API: Updates', function(it){
 
 		socket.on('state update', function(data){
 			expect(data).toBeType('object');
-			expect(data['component-x']).toBe(567);
+			expect(data.component).toBe('component-x');
+			expect(data.payload).toBe(567);
 			this.disconnect();
 		});
 	});
 
 	it('it should broacast `update` data to all connected clients', function(expect){
-		expect.perform(4);
+		expect.perform(6);
 
 		var socket,
 			client = io.connect(null, {'force new connection': 1});
@@ -243,7 +246,8 @@ Tests.describe('Planet API: Updates', function(it){
 
 			client.on('state update', function(data){
 				expect(data).toBeType('object');
-				expect(data['component-x']).toBe(5050);
+				expect(data.component).toBe('component-x');
+				expect(data.payload).toBe(5050);
 				this.disconnect();
 			});
 
@@ -263,7 +267,8 @@ Tests.describe('Planet API: Updates', function(it){
 
 			socket.on('state update', function(data){
 				expect(data).toBeType('object');
-				expect(data['component-x']).toBe(5050);
+				expect(data.component).toBe('component-x');
+				expect(data.payload).toBe(5050);
 				this.disconnect();
 			});
 
