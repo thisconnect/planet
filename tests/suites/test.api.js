@@ -10,7 +10,7 @@ Tests.describe('Planet API: Connection', function(it){
 		expect.perform(1);
 		var socket = io.connect(null, {'force new connection': 1});
 		socket.on('initial state', function(data){
-			console.log('initial state', data);
+			//console.log('initial state', data);
 			expect(data).toBeType('object');
 			this.disconnect();
 		});
@@ -32,7 +32,6 @@ Tests.describe('Planet API: Attempted Updates', function(it){
 		});
 
 		socket.on('state update', function(data){
-			console.log('state update', data);
 			expect(data).toBeType('object');
 			expect(data.component).toBe('component-u');
 			expect(data.payload).toBe(123);
@@ -284,8 +283,9 @@ Tests.describe('Planet API: Updates', function(it){
 	});
 
 	it('should send back an `update error` message for incorrect `update` requests', function(expect){
-		expect.perform(1);
-		var socket = io.connect(null, {'force new connection': 1});
+		expect.perform(3);
+		var counter = 0,
+			socket = io.connect(null, {'force new connection': 1});
 
 		socket.on('connect', function(){
 			socket.emit('acquire lock', 'component-x');
@@ -294,14 +294,23 @@ Tests.describe('Planet API: Updates', function(it){
 		socket.on('lock acquired', function(data){
 			if (data == 'component-x'){
 				socket.emit('update', {
-					//name: 'component-x', // wrong or no key
+					//component: 'component-x', // no key
 					payload: 789
+				});
+				socket.emit('update', {
+					name: 'component-x'//, // or wrong key
+					//payload: 789
+				});
+				socket.emit('update', {
+					component: 'component-x'//,
+					//payload: 789 // or no payload
 				});
 			}
 		});
 		socket.on('update error', function(data){
+			counter++;
 			expect(data).toBe(null);
-			this.disconnect();
+			if (counter > 2) this.disconnect();
 		});
 	});
 
