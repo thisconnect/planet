@@ -316,4 +316,62 @@ Tests.describe('Planet API: Updates', function(it){
 
 });
 
+Tests.describe('Planet API: Create', function(it){
+
+	it('should create an object', function(expect){
+		expect.perform(5);
+		var socket = io.connect(null, {'force new connection': 1});
+
+		socket.on('connect', function(){
+			socket.emit('create', {
+				'component-a': 12,
+				'component-b': 23
+			});
+		});
+
+		socket.on('create', function(data){
+			expect(data).toBeType('object');
+			expect('component-a' in data).toBeTrue();
+			expect('component-b' in data).toBeTrue();
+			expect(data['component-a']).toBe(12);
+			expect(data['component-b']).toBe(23);
+			this.disconnect();
+		});
+	});
+
+});
+
+Tests.describe('Planet API: Delete', function(it){
+
+	it('should allow for delete object', function(expect){
+		expect.perform(3);
+		var socket = io.connect(null, {'force new connection': 1});
+
+		socket.on('connect', function(){
+			socket.emit('create', {
+				'component-d': 5,
+				'component-e': 6
+			});
+		});
+
+		socket.on('create', function(data){
+			socket.emit('delete', 'component-d');
+		});
+
+		socket.on('delete', function(data){
+			expect(data).toBe('component-d');
+			this.disconnect();
+			
+			var second = io.connect(null, {'force new connection': 1});
+			second.on('initial state', function(data){
+				expect(data).toBeType('object');
+				expect('component-d' in data).toBeFalse();
+				expect(data['component-e']).toBe(6);
+				this.disconnect();
+			});
+		});
+	});
+
+});
+
 };
