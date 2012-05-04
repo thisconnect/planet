@@ -41,27 +41,27 @@ Tests.describe('Planet API: Attempted Updates', function(it){
 		});
 	});
 
-	it('should return a `lock error` for locked components.', function(expect){
+	it('should return a `lock error` for locked components', function(expect){
 		expect.perform(1);
 
-		var socket,
-			client = io.connect(null, {'force new connection': 1});
+		var first = io.connect(null, {'force new connection': 1}),
+			second;
 
-		client.on('connect', function(){
+		first.on('connect', function(){
 
-			client.on('lock error', function(data){
+			first.on('lock error', function(data){
 				expect(data).toBe('component-y');
 				this.disconnect();
-				socket.disconnect();
+				second.disconnect();
 			});
 
-			socket = io.connect(null, {'force new connection': 1});
-			socket.on('connect', function(){
-				socket.emit('acquire lock', 'component-y');
+			second = io.connect(null, {'force new connection': 1});
+			second.on('connect', function(){
+				second.emit('acquire lock', 'component-y');
 			});
 
-			socket.on('lock acquired', function(data){
-				client.emit('update', {
+			second.on('lock acquired', function(data){
+				first.emit('update', {
 					component: 'component-y',
 					payload: 34
 				});
@@ -91,20 +91,20 @@ Tests.describe('Planet API: Locks', function(it){
 	it('should broadcast locks', function(expect){
 		expect.perform(1);
 
-		var socket,
-			client = io.connect(null, {'force new connection': 1});
+		var first = io.connect(null, {'force new connection': 1}),
+			second;
 
-		client.on('connect', function(){
+		first.on('connect', function(){
 
-			client.on('lock component', function(data){
+			first.on('lock component', function(data){
 				expect(data).toBe('component-z');
 				this.disconnect();
-				socket.disconnect();
+				second.disconnect();
 			});
 
-			socket = io.connect(null, {'force new connection': 1});
-			socket.on('connect', function(){
-				socket.emit('acquire lock', 'component-z');
+			second = io.connect(null, {'force new connection': 1});
+			second.on('connect', function(){
+				second.emit('acquire lock', 'component-z');
 			});
 
 		});
@@ -113,24 +113,24 @@ Tests.describe('Planet API: Locks', function(it){
 	it('should return an `acquire lock error` for locked components', function(expect){
 		expect.perform(1);
 
-		var socket,
-			client = io.connect(null, {'force new connection': 1});
+		var first = io.connect(null, {'force new connection': 1}),
+			second;
 
-		client.on('connect', function(){
+		first.on('connect', function(){
 
-			client.on('acquire lock error', function(data){
+			first.on('acquire lock error', function(data){
 				expect(data).toBe('component-g');
 				this.disconnect();
-				socket.disconnect();
+				second.disconnect();
 			});
 
-			socket = io.connect(null, {'force new connection': 1});
-			socket.on('connect', function(){
-				socket.emit('acquire lock', 'component-g');
+			second = io.connect(null, {'force new connection': 1});
+			second.on('connect', function(){
+				second.emit('acquire lock', 'component-g');
 			});
 
-			socket.on('lock acquired', function(data){
-				client.emit('acquire lock', 'component-g');
+			second.on('lock acquired', function(data){
+				first.emit('acquire lock', 'component-g');
 			});
 
 		});
@@ -139,24 +139,24 @@ Tests.describe('Planet API: Locks', function(it){
 	it('should broadcast unlocks', function(expect){
 		expect.perform(1);
 		
-		var socket,
-			client = io.connect(null, {'force new connection': 1});
+		var first = io.connect(null, {'force new connection': 1}),
+			second;
 
-		client.on('connect', function(){
+		first.on('connect', function(){
 
-			client.on('release component', function(data){
+			first.on('release component', function(data){
 				expect(data).toBe('component-i');
 				this.disconnect();
-				socket.disconnect();
+				second.disconnect();
 			});
 
-			socket = io.connect(null, {'force new connection': 1});
-			socket.on('connect', function(){
-				socket.emit('acquire lock', 'component-i');
+			second = io.connect(null, {'force new connection': 1});
+			second.on('connect', function(){
+				second.emit('acquire lock', 'component-i');
 			});
 
-			socket.on('lock acquired', function(data){
-				socket.emit('release lock', 'component-i');
+			second.on('lock acquired', function(data){
+				second.emit('release lock', 'component-i');
 			});
 
 		});
@@ -165,27 +165,28 @@ Tests.describe('Planet API: Locks', function(it){
 	it('should unlock components', function(expect){
 		expect.perform(1);
 
-		var socket,
-			client = io.connect(null, {'force new connection': 1});
+		var first = io.connect(null, {'force new connection': 1}),
+			second;
 
-		client.on('connect', function(){
+		first.on('connect', function(){
 
-			client.on('lock acquired', function(data){
+			first.on('lock acquired', function(data){
 				expect(data).toBe('component-h');
 				this.disconnect();
-				socket.disconnect();
+				second.disconnect();
 			});
 
-			socket = io.connect(null, {'force new connection': 1});
-			socket.on('connect', function(){
-				socket.emit('acquire lock', 'component-h');
+			second = io.connect(null, {'force new connection': 1});
+			second.on('connect', function(){
+				second.emit('acquire lock', 'component-h');
 			});
 
-			socket.on('lock acquired', function(data){
-				socket.emit('release lock', 'component-h');
+			second.on('lock acquired', function(data){
+				second.emit('release lock', 'component-h');
 			});
-			socket.on('lock released', function(data){
-				client.emit('acquire lock', 'component-h');
+
+			second.on('lock released', function(data){
+				first.emit('acquire lock', 'component-h');
 			});
 
 		});
@@ -194,22 +195,22 @@ Tests.describe('Planet API: Locks', function(it){
 	it('should unlock components locked by disconnecting clients', function(expect){
 		expect.perform(1);
 
-		var socket,
-			client = io.connect(null, {'force new connection': 1});
+		var first = io.connect(null, {'force new connection': 1}),
+			second;
 
-		client.on('connect', function(){
+		first.on('connect', function(){
 
-			client.on('release component', function(data){
+			first.on('release component', function(data){
 				expect(data).toBe('component-j');
 				this.disconnect();
 			});
 
-			socket = io.connect(null, {'force new connection': 1});
-			socket.on('connect', function(){
-				socket.emit('acquire lock', 'component-j');
+			second = io.connect(null, {'force new connection': 1});
+			second.on('connect', function(){
+				second.emit('acquire lock', 'component-j');
 			});
 
-			socket.on('lock acquired', function(data){
+			second.on('lock acquired', function(data){
 				this.disconnect();
 			});
 
@@ -245,36 +246,36 @@ Tests.describe('Planet API: Updates', function(it){
 		});
 	});
 
-	it('it should broacast `update` data to all connected clients', function(expect){
+	it('should broacast `update` data to all connected clients', function(expect){
 		expect.perform(6);
 
-		var socket,
-			client = io.connect(null, {'force new connection': 1});
+		var first = io.connect(null, {'force new connection': 1}),
+			second;
 
-		client.on('connect', function(){
+		first.on('connect', function(){
 
-			client.on('state update', function(data){
+			first.on('state update', function(data){
 				expect(data).toBeType('object');
 				expect(data.component).toBe('component-x');
 				expect(data.payload).toBe(5050);
 				this.disconnect();
 			});
 
-			socket = io.connect(null, {'force new connection': 1});
-			socket.on('connect', function(){
-				socket.emit('acquire lock', 'component-x');
+			second = io.connect(null, {'force new connection': 1});
+			second.on('connect', function(){
+				second.emit('acquire lock', 'component-x');
 			});
 
-			socket.on('lock acquired', function(data){
+			second.on('lock acquired', function(data){
 				if (data == 'component-x'){
-					socket.emit('update', {
+					second.emit('update', {
 						component: 'component-x',
 						payload: 5050
 					});
 				}
 			});
 
-			socket.on('state update', function(data){
+			second.on('state update', function(data){
 				expect(data).toBeType('object');
 				expect(data.component).toBe('component-x');
 				expect(data.payload).toBe(5050);
@@ -323,20 +324,20 @@ Tests.describe('Planet API: Updates', function(it){
 
 });
 
-Tests.describe('Planet API: Create', function(it){
+Tests.describe('Planet API: Put', function(it){
 
-	it('should create an object', function(expect){
+	it('should put an object', function(expect){
 		expect.perform(5);
 		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.on('connect', function(){
-			socket.emit('create', {
+			socket.emit('put', {
 				'component-a': 12,
 				'component-b': 23
 			});
 		});
 
-		socket.on('create', function(data){
+		socket.on('put', function(data){
 			expect(data).toBeType('object');
 			expect('component-a' in data).toBeTrue();
 			expect('component-b' in data).toBeTrue();
@@ -346,26 +347,61 @@ Tests.describe('Planet API: Create', function(it){
 		});
 	});
 
+	it('should broacast data to all connected clients', function(expect){
+		expect.perform(10);
+		var first = io.connect(null, {'force new connection': 1});
+
+		first.on('put', function(data){
+			expect(data).toBeType('object');
+			expect('component-a' in data).toBeTrue();
+			expect('component-b' in data).toBeTrue();
+			expect(data['component-a']).toBe(12);
+			expect(data['component-b']).toBe(23);
+			this.disconnect();
+		});
+
+		first.on('connect', function(){
+			var second = io.connect(null, {'force new connection': 1});
+
+			second.on('put', function(data){
+				expect(data).toBeType('object');
+				expect('component-a' in data).toBeTrue();
+				expect('component-b' in data).toBeTrue();
+				expect(data['component-a']).toBe(12);
+				expect(data['component-b']).toBe(23);
+				this.disconnect();
+			});
+
+			second.on('connect', function(){
+				first.emit('put', {
+					'component-a': 12,
+					'component-b': 23
+				});
+			});
+		});
+
+	});
+
 });
 
 Tests.describe('Planet API: Delete', function(it){
 
 	it('should allow for delete object', function(expect){
-		expect.perform(3);
-		var socket = io.connect(null, {'force new connection': 1});
+		expect.perform(5);
+		var first = io.connect(null, {'force new connection': 1});
 
-		socket.on('connect', function(){
-			socket.emit('create', {
+		first.on('connect', function(){
+			first.emit('put', {
 				'component-d': 5,
 				'component-e': 6
 			});
 		});
 
-		socket.on('create', function(data){
-			socket.emit('delete', 'component-d');
+		first.on('put', function(data){
+			first.emit('delete', 'component-d');
 		});
 
-		socket.on('delete', function(data){
+		first.on('delete', function(data){
 			expect(data).toBe('component-d');
 			this.disconnect();
 			
@@ -373,6 +409,7 @@ Tests.describe('Planet API: Delete', function(it){
 			second.on('initial state', function(data){
 				expect(data).toBeType('object');
 				expect('component-d' in data).toBeFalse();
+				expect('component-e' in data).toBeTrue();
 				expect(data['component-e']).toBe(6);
 				this.disconnect();
 			});
