@@ -4,6 +4,8 @@ var channel = function(){
 	return '/' + (+new Date);
 };
 
+var Spy = require('../testigo/Source/lib/spy').Spy;
+
 Tests.describe('Planet API: Connection', function(it){
 
 	it('should send an `initial state` message after connect', function(expect){
@@ -283,8 +285,8 @@ Tests.describe('Planet API: Updates', function(it){
 	});
 
 	it('should send back an `update error` message for incorrect `update` requests', function(expect){
-		expect.perform(3);
-		var counter = 0,
+		expect.perform(1);
+		var spy = new Spy(),
 			socket = io.connect(null, {'force new connection': 1});
 
 		socket.on('connect', function(){
@@ -298,19 +300,24 @@ Tests.describe('Planet API: Updates', function(it){
 					payload: 789
 				});
 				socket.emit('update', {
-					name: 'component-x'//, // or wrong key
-					//payload: 789
+					name: 'component-x', // or wrong key
+					payload: 789
 				});
 				socket.emit('update', {
 					component: 'component-x'//,
-					//payload: 789 // or no payload
+					//payload: 789 // or missing payload
 				});
+				socket.emit('update'); // or no data at all
 			}
 		});
+
 		socket.on('update error', function(data){
-			counter++;
-			expect(data).toBe(null);
-			if (counter > 2) this.disconnect();
+			spy();
+			if (spy.getCallCount() > 3) this.disconnect();
+		});
+
+		socket.on('disconnect', function(){
+			expect(spy.getCallCount()).toBe(4);
 		});
 	});
 
