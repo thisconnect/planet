@@ -41,7 +41,7 @@ Tests.describe('Planet API: Attempted Updates', function(it){
 		});
 	});
 
-	it('should return a `lock error` for locked components', function(expect){
+	it('should return a lock `error` for locked components', function(expect){
 		expect.perform(1);
 
 		var first = io.connect(null, {'force new connection': 1}),
@@ -49,7 +49,8 @@ Tests.describe('Planet API: Attempted Updates', function(it){
 
 		first.on('connect', function(){
 
-			first.on('lock error', function(data){
+			first.on('error', function(name, data){
+				expect(name).toBe('lock error');
 				expect(data).toBe('component-y');
 				this.disconnect();
 				second.disconnect();
@@ -110,7 +111,7 @@ Tests.describe('Planet API: Locks', function(it){
 		});
 	});
 
-	it('should return an `acquire lock error` for locked components', function(expect){
+	it('should return an acquire lock `error` for locked components', function(expect){
 		expect.perform(1);
 
 		var first = io.connect(null, {'force new connection': 1}),
@@ -118,7 +119,8 @@ Tests.describe('Planet API: Locks', function(it){
 
 		first.on('connect', function(){
 
-			first.on('acquire lock error', function(data){
+			first.on('error', function(name, data){
+				expect(name).toBe('acquire lock error');
 				expect(data).toBe('component-g');
 				this.disconnect();
 				second.disconnect();
@@ -145,6 +147,7 @@ Tests.describe('Planet API: Locks', function(it){
 		first.on('connect', function(){
 
 			first.on('release component', function(data){
+				console.log('release component', data);
 				expect(data).toBe('component-i');
 				this.disconnect();
 				second.disconnect();
@@ -285,8 +288,8 @@ Tests.describe('Planet API: Updates', function(it){
 		});
 	});
 
-	it('should send back an `update error` message for incorrect `update` requests', function(expect){
-		expect.perform(1);
+	it('should reply an update `error` message for corrupt `update` requests', function(expect){
+		expect.perform(5);
 		var spy = new Spy(),
 			socket = io.connect(null, {'force new connection': 1});
 
@@ -312,7 +315,8 @@ Tests.describe('Planet API: Updates', function(it){
 			}
 		});
 
-		socket.on('update error', function(data){
+		socket.on('error', function(name, data){
+			expect(name).toBe('update error');
 			spy();
 			if (spy.getCallCount() > 3) this.disconnect();
 		});
@@ -326,7 +330,7 @@ Tests.describe('Planet API: Updates', function(it){
 
 Tests.describe('Planet API: Put', function(it){
 
-	it('should put an object', function(expect){
+	it('should allow to put an object', function(expect){
 		expect.perform(5);
 		var socket = io.connect(null, {'force new connection': 1});
 
@@ -347,7 +351,7 @@ Tests.describe('Planet API: Put', function(it){
 		});
 	});
 
-	it('should broacast data to all connected clients', function(expect){
+	it('should put data to all connected clients', function(expect){
 		expect.perform(10);
 		var first = io.connect(null, {'force new connection': 1});
 
