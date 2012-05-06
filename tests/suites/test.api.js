@@ -385,6 +385,38 @@ Tests.describe('Planet API: Put', function(it){
 
 	});
 
+	it('should put nested objects', function(expect){
+		expect.perform(4);
+		var socket = io.connect(null, {'force new connection': 1});
+
+		socket.on('connect', function(){
+			socket.emit('put', {
+				'key-a': 12,
+				'key-b': {
+					'key-c': 34
+				}
+			});
+			socket.emit('put', {
+				'key-b': {
+					'key-d': 56
+				}
+			});
+
+			socket.on('disconnect', function(){
+				var second = io.connect(null, {'force new connection': 1});
+				second.on('initial state', function(data){
+					expect(data).toBeType('object');
+					expect(data['key-b']).toBeType('object');
+					expect(data['key-b']['key-c']).toBe(34);
+					expect(data['key-b']['key-d']).toBe(56);
+					this.disconnect();
+				});
+			});
+
+			this.disconnect();
+		});
+	});
+
 });
 
 Tests.describe('Planet API: Delete', function(it){
