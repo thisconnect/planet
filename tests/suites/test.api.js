@@ -453,4 +453,52 @@ Tests.describe('Planet API: Delete', function(it){
 
 });
 
+Tests.describe('Planet API: Update @path', function(it){
+
+	it('should update data at path in nested object', function(expect){
+		expect.perform(11);
+		var first = io.connect(null, {'force new connection': 1});
+
+		first.on('connect', function(){
+			first.emit('put', {
+				'a': {
+					'b': {
+						'c': 123
+					}
+				}
+			});
+		});
+
+		first.on('put', function(data){
+			first.emit('update', {
+				path: ['a', 'b', 'c'],
+				value: 321
+			});
+		});
+
+		first.on('state update', function(data){
+			console.log('update', data, data.path);
+			expect(data).toBeType('object');
+			expect(data.path).toBeType('array');
+			expect(data.path[0]).toBe('a');
+			expect(data.path[1]).toBe('b');
+			expect(data.path[2]).toBe('c');
+			expect(data.value).toBe(321);
+			this.disconnect();
+
+			var second = io.connect(null, {'force new connection': 1});
+
+			second.on('initial state', function(data){
+				expect(data).toBeType('object');
+				expect(data.a).toBeType('object');
+				expect(data.a.b).toBeType('object');
+				expect(data.a.b.c).toBeType('number');
+				expect(data.a.b.c).toBe(321);
+				this.disconnect();
+			});
+		});
+	});
+
+});
+
 };
