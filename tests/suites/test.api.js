@@ -449,6 +449,9 @@ Tests.describe('Planet API: Delete', function(it){
 				this.disconnect();
 			});
 		});
+		
+		// TODO: delete by path
+		// TODO: delte null
 	});
 
 });
