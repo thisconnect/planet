@@ -20,7 +20,7 @@ Tests.describe('Planet API: Connection', function(it){
 
 });
 
-Tests.describe('Planet API: Attempted Updates', function(it){
+Tests.describe('Planet API: Update', function(it){
 
 	it('should allow for attempted updates', function(expect){
 		expect.perform(3);
@@ -41,11 +41,14 @@ Tests.describe('Planet API: Attempted Updates', function(it){
 		});
 	});
 
+});
+
+Tests.describe('Planet API: Locks', function(it){
+
 	it('should return a lock `error` for locked keys', function(expect){
 		expect.perform(1);
 
-		var first = io.connect(null, {'force new connection': 1}),
-			second;
+		var first = io.connect(null, {'force new connection': 1});
 
 		first.on('connect', function(){
 
@@ -56,7 +59,7 @@ Tests.describe('Planet API: Attempted Updates', function(it){
 				second.disconnect();
 			});
 
-			second = io.connect(null, {'force new connection': 1});
+			var second = io.connect(null, {'force new connection': 1});
 			second.on('connect', function(){
 				second.emit('acquire lock', 'key-y');
 			});
@@ -70,10 +73,6 @@ Tests.describe('Planet API: Attempted Updates', function(it){
 
 		});
 	});
-
-});
-
-Tests.describe('Planet API: Locks', function(it){
 
 	it('should return `lock acquired` for unlocked keys', function(expect){
 		expect.perform(1);
@@ -92,8 +91,7 @@ Tests.describe('Planet API: Locks', function(it){
 	it('should broadcast locks', function(expect){
 		expect.perform(1);
 
-		var first = io.connect(null, {'force new connection': 1}),
-			second;
+		var first = io.connect(null, {'force new connection': 1});
 
 		first.on('connect', function(){
 
@@ -103,7 +101,7 @@ Tests.describe('Planet API: Locks', function(it){
 				second.disconnect();
 			});
 
-			second = io.connect(null, {'force new connection': 1});
+			var second = io.connect(null, {'force new connection': 1});
 			second.on('connect', function(){
 				second.emit('acquire lock', 'key-z');
 			});
@@ -114,8 +112,7 @@ Tests.describe('Planet API: Locks', function(it){
 	it('should return an acquire lock `error` for locked keys', function(expect){
 		expect.perform(1);
 
-		var first = io.connect(null, {'force new connection': 1}),
-			second;
+		var first = io.connect(null, {'force new connection': 1});
 
 		first.on('connect', function(){
 
@@ -126,7 +123,7 @@ Tests.describe('Planet API: Locks', function(it){
 				second.disconnect();
 			});
 
-			second = io.connect(null, {'force new connection': 1});
+			var second = io.connect(null, {'force new connection': 1});
 			second.on('connect', function(){
 				second.emit('acquire lock', 'key-g');
 			});
@@ -141,8 +138,7 @@ Tests.describe('Planet API: Locks', function(it){
 	it('should broadcast unlocks', function(expect){
 		expect.perform(1);
 		
-		var first = io.connect(null, {'force new connection': 1}),
-			second;
+		var first = io.connect(null, {'force new connection': 1});
 
 		first.on('connect', function(){
 
@@ -152,7 +148,7 @@ Tests.describe('Planet API: Locks', function(it){
 				second.disconnect();
 			});
 
-			second = io.connect(null, {'force new connection': 1});
+			var second = io.connect(null, {'force new connection': 1});
 			second.on('connect', function(){
 				second.emit('acquire lock', 'key-i');
 			});
@@ -167,8 +163,7 @@ Tests.describe('Planet API: Locks', function(it){
 	it('should unlock keys', function(expect){
 		expect.perform(1);
 
-		var first = io.connect(null, {'force new connection': 1}),
-			second;
+		var first = io.connect(null, {'force new connection': 1});
 
 		first.on('connect', function(){
 
@@ -178,7 +173,7 @@ Tests.describe('Planet API: Locks', function(it){
 				second.disconnect();
 			});
 
-			second = io.connect(null, {'force new connection': 1});
+			var second = io.connect(null, {'force new connection': 1});
 			second.on('connect', function(){
 				second.emit('acquire lock', 'key-h');
 			});
@@ -197,8 +192,7 @@ Tests.describe('Planet API: Locks', function(it){
 	it('should unlock keys locked by disconnecting clients', function(expect){
 		expect.perform(1);
 
-		var first = io.connect(null, {'force new connection': 1}),
-			second;
+		var first = io.connect(null, {'force new connection': 1});
 
 		first.on('connect', function(){
 
@@ -207,7 +201,7 @@ Tests.describe('Planet API: Locks', function(it){
 				this.disconnect();
 			});
 
-			second = io.connect(null, {'force new connection': 1});
+			var second = io.connect(null, {'force new connection': 1});
 			second.on('connect', function(){
 				second.emit('acquire lock', 'key-j');
 			});
@@ -251,8 +245,7 @@ Tests.describe('Planet API: Updates', function(it){
 	it('should broacast `update` data to all connected clients', function(expect){
 		expect.perform(6);
 
-		var first = io.connect(null, {'force new connection': 1}),
-			second;
+		var first = io.connect(null, {'force new connection': 1});
 
 		first.on('connect', function(){
 
@@ -263,7 +256,7 @@ Tests.describe('Planet API: Updates', function(it){
 				this.disconnect();
 			});
 
-			second = io.connect(null, {'force new connection': 1});
+			var second = io.connect(null, {'force new connection': 1});
 			second.on('connect', function(){
 				second.emit('acquire lock', 'key-x');
 			});
