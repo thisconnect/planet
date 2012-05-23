@@ -33,7 +33,7 @@ Tests.describe('Planet API: Attempted Updates', function(it){
 			});
 		});
 
-		socket.on('state update', function(data){
+		socket.on('update', function(data){
 			expect(data).toBeType('object');
 			expect(data.key).toBe('key-u');
 			expect(data.value).toBe(123);
@@ -223,7 +223,7 @@ Tests.describe('Planet API: Locks', function(it){
 
 Tests.describe('Planet API: Updates', function(it){
 
-	it('should echo a `state update` message', function(expect){
+	it('should echo a `update` message', function(expect){
 		expect.perform(3);
 		var socket = io.connect(null, {'force new connection': 1});
 
@@ -240,7 +240,7 @@ Tests.describe('Planet API: Updates', function(it){
 			}
 		});
 
-		socket.on('state update', function(data){
+		socket.on('update', function(data){
 			expect(data).toBeType('object');
 			expect(data.key).toBe('key-x');
 			expect(data.value).toBe(567);
@@ -256,7 +256,7 @@ Tests.describe('Planet API: Updates', function(it){
 
 		first.on('connect', function(){
 
-			first.on('state update', function(data){
+			first.on('update', function(data){
 				expect(data).toBeType('object');
 				expect(data.key).toBe('key-x');
 				expect(data.value).toBe(5050);
@@ -277,7 +277,7 @@ Tests.describe('Planet API: Updates', function(it){
 				}
 			});
 
-			second.on('state update', function(data){
+			second.on('update', function(data){
 				expect(data).toBeType('object');
 				expect(data.key).toBe('key-x');
 				expect(data.value).toBe(5050);
@@ -479,7 +479,7 @@ Tests.describe('Planet API: Update @path', function(it){
 			});
 		});
 
-		first.on('state update', function(data){
+		first.on('update', function(data){
 			console.log('update', data, data.path);
 			expect(data).toBeType('object');
 			expect(data.path).toBeType('array');
@@ -503,5 +503,7 @@ Tests.describe('Planet API: Update @path', function(it){
 	});
 
 });
+
+// TODO: implement get
 
 };
