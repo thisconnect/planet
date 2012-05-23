@@ -1,34 +1,25 @@
 (function(){
 
-var radios = $$('input[type=radio][name=spice]'),
-	values = radios.get('value');
+	var radios = $$('input[type=radio][name=spice]'),
+		values = radios.get('value');
 
-radios.addEvent('change', function(){
+	radios.addEvent('change', function(){
+		socket.emit('update', {
+			key: 'spice',
+			value: this.get('value')
+		});
+	});
 
-	socket.send(JSON.stringify({
-		type: 'attempt_update',
-		payload: {
-			component: 'radio',
-			payload: this.get('value')
+	socket.on('update', function(data){
+		if (data.key == 'spice'){
+			radios[values.indexOf(data.value)].set('checked', true);
 		}
-	}));
+	});
 
-});
-	
-socket.addListener('message', function(data){
-	data = JSON.parse(data);
-	
-	var payload = data.payload['radio'];
-	if (payload == null) return;
-	
-	var radio = radios[values.indexOf(payload)];
-	
-	if (data.type == 'initial_state') radio.set('checked', true);
-	
-	if (data.type == 'state_update' && !radio.get('checked')){
-		radio.set('checked', true);
-	}
-	
-});
+	socket.on('initial state', function(data){
+		if ('spice' in data){
+			radios[values.indexOf(data.spice)].set('checked', true);
+		}
+	});
 
 })();

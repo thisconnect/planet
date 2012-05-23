@@ -1,39 +1,35 @@
 (function(){
 
-var mySlider = new Slider($('slider'), $('knob'), {
-	offset: -2
-});
+	var mySlider = new Slider('slider', 'knob', {
+		offset: -2
+	});
 
-mySlider.addEvent('change', function(step){
-	socket.send(JSON.stringify({
-		type: 'attempt_update',
-		payload: {
-			component: 'slider',
-			payload: step
+	mySlider.addEvent('change', function(step){
+		socket.emit('update', {
+			key: 'slider',
+			value: step
+		});
+	});
+
+	mySlider.element.addEvent('mousedown', function(){
+		socket.emit('update', {
+			key: 'slider',
+			value: mySlider.step
+		});
+	});
+
+	socket.on('update', function(data){
+		if (data.key == 'slider'){
+			mySlider.setKnobPosition(mySlider.toPosition(data.value));
+			mySlider.step = data.value;
 		}
-	}));
-});
+	});
 
-mySlider.element.addEvent('mousedown', function(){
-	socket.send(JSON.stringify({
-		type: 'attempt_update',
-		payload: {
-			component: 'slider',
-			payload: mySlider.step
+	socket.on('initial state', function(data){
+		if ('slider' in data){
+			mySlider.setKnobPosition(mySlider.toPosition(data.slider));
+			mySlider.step = data.slider;
 		}
-	}));
-});
-
-socket.on('message', function(data){
-	data = JSON.parse(data);
-
-	if (data.payload['slider'] == null) return;
-
-	if (data.type == 'state_update' || data.type == 'initial_state'){
-		mySlider.setKnobPosition(mySlider.toPosition(data.payload['slider']));
-		mySlider.step = data.payload['slider'];
-	}
-
-});
+	});
 
 })();

@@ -1,17 +1,12 @@
-(function(){
-
 $$('input[type=text], input[type=number], input[type=range], textarea').each(function(input){
 
 	var component = input.get('tag') + '.' + input.get('name');
 
 	input.addEvent('change', function(){
-		socket.send(JSON.stringify({
-			type: 'attempt_update',
-			payload: {
-				component: component,
-				payload: this.get('value')
-			}
-		}));
+		socket.emit('update', {
+			key: component,
+			value: this.get('value')
+		});
 	});
 
 	if (input.get('tag') == 'textarea') input.addEvent('keyup', function(){
@@ -22,21 +17,16 @@ $$('input[type=text], input[type=number], input[type=range], textarea').each(fun
 		input.fireEvent('change');
 	});
 
-	socket.addListener('message', function(data){
-		data = JSON.parse(data);
-		var payload = data.payload;
+	socket.on('update', function(data){
+		if (component == data.key){
+			input.set('value', data.value);
+		}
+	});
 
-		if (payload[component] != null){
-			if (data.type == 'initial_state'){
-				input.set('value', payload[component]);
-			}
-
-			if (data.type == 'state_update'){
-				input.set('value', payload[component]);
-			}
+	socket.on('initial state', function(data){
+		if (component in data){
+			input.set('value', data[component]);
 		}
 	});
 
 });
-
-})();
