@@ -67,7 +67,4 @@ socket.on('release key', function(data){
 	}
 });
 
-
-
 })();
-

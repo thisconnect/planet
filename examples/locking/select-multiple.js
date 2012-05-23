@@ -71,43 +71,4 @@ socket.on('initial state', function(data){
 	}
 });
 
-
-/*
-socket.addListener('message', function(data){
-	data = JSON.parse(data);
-	
-	var payload = data.payload;
-	
-	if (payload['multiselect'] != null){
-		
-		if (data.type == 'initial_state'){
-			payload['multiselect'].each(select);
-		}
-		
-		if (data.type == 'state_update' && state != 'acquired'){
-			payload['multiselect'].each(select);
-			multiselect.addClass('updated');
-			(function(){ multiselect.removeClass('updated'); }).delay(200);
-		}
-		
-	}
-	
-	if (payload != 'multiselect') return;
-	
-	if (data.type == 'lock_acquired') state = 'acquired';
-
-	if (data.type == 'lock_component'){
-		multiselect.addClass('locked');
-		state = 'locked';
-	}
-
-	if (data.type == 'lock_released') state = null;
-
-	if (data.type == 'release_component'){
-		multiselect.removeClass('locked');
-		state = null;
-	}
-
-});
-*/
 })();

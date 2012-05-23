@@ -73,4 +73,10 @@ $$('input[type=text], input[type=number], select[multiple!=multiple], textarea')
 		}
 	});
 
+	socket.on('initial state', function(data){
+		if (component in data){
+			input.set('value', data[component]);
+		}
+	});
+
 });
