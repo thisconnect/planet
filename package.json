@@ -16,9 +16,9 @@
 	"engines": { "node": "0.6.x" },
 	"licenses": [{
 		"type": "MIT",
-		"url": "http://github.com/thisconnect/planet/LICENSE"
+		"url": "https://raw.github.com/thisconnect/planet/master/LICENSE"
 	}],
 	"bugs": {
-		"url" : "http://github.com/postwait/node-amqp/issues"
+		"url" : "https://github.com/thisconnect/planet/issues"
 	}
 }
