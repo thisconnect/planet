@@ -3,7 +3,7 @@
 Warning
 -------
 
-Until 1.0.0 is released expect some API changes and a few more examples and tests!
+Until 1.0.0 is released expect *API changes* and a few more examples and tests!
 
 Run
 ---

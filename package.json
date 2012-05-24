@@ -2,23 +2,29 @@
 	"name": "planet",
 	"version": "0.4.1",
 	"author": "Enrique Erne (http://mild.ch/)",
-	"description": "",
+	"description": "collaborative editing anything",
 	"keywords": ["concurrent", "collaborative", "realtime", "wave", "socket.io"],
 	"repository": "git://github.com/thisconnect/planet.git",
 	"main": "./lib/planet",
-	"bin": { "planet": "./bin/planet" },
-	"contributors": [{"name": "Enrique Erne"}],
+	"bin": {
+		"planet": "./bin/planet"
+	},
+	"contributors": [
+		{"name": "Enrique Erne"}
+	],
 	"dependencies": {
 		"socket.io": ">= 0.9.5",
 		"mime": ">= 1.2.5",
 		"optparse": ">= 1.0.3"
 	},
-	"engines": { "node": "0.6.x" },
+	"engines": {
+		"node": "0.6.x"
+	},
 	"licenses": [{
 		"type": "MIT",
 		"url": "https://raw.github.com/thisconnect/planet/master/LICENSE"
 	}],
 	"bugs": {
-		"url" : "https://github.com/thisconnect/planet/issues"
+		"url": "https://github.com/thisconnect/planet/issues"
 	}
 }
