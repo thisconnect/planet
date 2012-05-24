@@ -5,7 +5,8 @@
 	"description": "collaborative editing anything",
 	"keywords": ["concurrent", "collaborative", "realtime", "wave", "socket.io"],
 	"repository": "git://github.com/thisconnect/planet.git",
-	"main": "./lib/planet",
+	"homepage": "https://github.com/thisconnect/planet",
+	"main": "./lib/planet/planet",
 	"bin": {
 		"planet": "./bin/planet"
 	},
