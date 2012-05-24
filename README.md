@@ -1,14 +1,26 @@
 # Planet
 
+Warning
+-------
+
+Until 1.0.0 is released expect some API changes and a few more examples and tests!
+
 Run
 ---
 
 	cd bin
 	./planet
 
-- Run the tests http://localhost:8999/tests/
 - Browse the examples planet/examples/index.html
   (Chrome does not allow Websockets from filesystem)
+
+### Tests
+
+To run the tests you need [Testigo](https://github.com/keeto/testigo)
+
+	git submodule update --init --recursive
+
+- Run the tests http://localhost:8999/tests/
 
 
 Events
@@ -39,17 +51,16 @@ Events
   Fired when a delete message is emitted by a client
 
 
-Engine
-------
+#### Engine
 
   - Node.js 0.6.x
 
 
 #### Dependencies
 
-  - Socket.IO 0.9.5
+  - [Socket.IO](http://socket.io/) 0.9.5
   - Optparse-js 1.0.3
 
 
 #### Dev Dependencies
-  - Testigo
+  - [Testigo](https://github.com/keeto/testigo)
