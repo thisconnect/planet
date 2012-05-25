@@ -15,7 +15,7 @@
 	],
 	"dependencies": {
 		"socket.io": ">= 0.9.5",
-		"mime": ">= 1.2.5",
+		"mime": ">= 1.2.4",
 		"optparse": ">= 1.0.3"
 	},
 	"engines": {
