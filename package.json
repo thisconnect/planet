@@ -1,8 +1,8 @@
 {
 	"name": "planet",
-	"version": "0.4.3",
+	"version": "0.5.0",
 	"author": "Enrique Erne (http://mild.ch/)",
-	"description": "collaborative editing anything",
+	"description": "collaboratively edit anything",
 	"keywords": ["concurrent", "collaborative", "realtime", "wave", "socket.io"],
 	"repository": "git://github.com/thisconnect/planet.git",
 	"homepage": "https://github.com/thisconnect/planet",

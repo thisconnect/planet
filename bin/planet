@@ -2,6 +2,7 @@
 
 var port = 8999,
 	host = '127.0.0.1',
+	http = require('http'),
 	op = require('optparse');
 
 var parser = new op.OptionParser([
@@ -26,5 +27,7 @@ parser.on('*', function(opt, value){
 
 parser.parse(process.argv);
 
-var Planet = require('./../lib/planet/planet').Planet;
-new Planet().listen(port, host);
+var server = http.createServer(),
+	Planet = require('./../lib/planet/planet').Planet;
+
+new Planet(server).listen(port, host);
