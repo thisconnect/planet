@@ -1,6 +1,6 @@
 {
 	"name": "planet",
-	"version": "0.5.0",
+	"version": "0.5.1",
 	"author": "Enrique Erne (http://mild.ch/)",
 	"description": "collaboratively edit anything",
 	"keywords": ["concurrent", "collaborative", "realtime", "wave", "socket.io"],
@@ -17,9 +17,6 @@
 		"socket.io": ">= 0.9.5",
 		"mime": ">= 1.2.4",
 		"optparse": ">= 1.0.3"
-	},
-	"engines": {
-		"node": "0.6.x"
 	},
 	"licenses": [{
 		"type": "MIT",
