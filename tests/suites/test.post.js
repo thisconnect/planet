@@ -6,7 +6,7 @@ var Spy = require('../testigo/Source/lib/spy').Spy;
 Tests.describe('Planet API: Post', function(it){
 
 	it('should allow for `post` messages', function(expect){
-		expect.perform(3);
+		expect.perform(4);
 
 		var socket = io.connect(null, {'force new connection': 1});
 
@@ -14,10 +14,11 @@ Tests.describe('Planet API: Post', function(it){
 			socket.emit('post', 'key-u', 123);
 		});
 
-		socket.on('post', function(data){
-			expect(data).toBeType('object');
-			expect(data.key).toBe('key-u');
-			expect(data.value).toBe(123);
+		socket.on('post', function(key, value){
+			expect(key).toBeType('string');
+			expect(key).toBe('key-u');
+			expect(value).toBeType('number');
+			expect(value).toBe(123);
 			this.disconnect();
 		});
 	});
@@ -37,11 +38,11 @@ Tests.describe('Planet API: Post', function(it){
 		socket.on('error', function(name, data){
 			expect(name).toBe('post error');
 			spy();
-			if (spy.getCallCount() > 3) this.disconnect();
+			if (spy.getCallCount() >= 3) this.disconnect();
 		});
 
 		socket.on('disconnect', function(){
-			expect(spy.getCallCount()).toBe(4);
+			expect(spy.getCallCount()).toBe(3);
 		});
 	});
 
@@ -64,13 +65,13 @@ Tests.describe('Planet API: Post', function(it){
 			first.emit('post', ['a', 'b', 'c'], 321);
 		});
 
-		first.on('post', function(data){
-			expect(data).toBeType('object');
-			expect(data.path).toBeType('array');
-			expect(data.path[0]).toBe('a');
-			expect(data.path[1]).toBe('b');
-			expect(data.path[2]).toBe('c');
-			expect(data.value).toBe(321);
+		first.on('post', function(key, value){
+			expect(key).toBeType('array');
+			expect(value).toBeType('number');
+			expect(key[0]).toBe('a');
+			expect(key[1]).toBe('b');
+			expect(key[2]).toBe('c');
+			expect(value).toBe(321);
 			this.disconnect();
 		});
 
