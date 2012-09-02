@@ -1,42 +1,40 @@
 <!doctype html>
-<html>
-<head>
-	
-	<script type="text/javascript" src="../testigo/Source/runners/html/assets/require.js"></script>
-	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
-	<script type="text/javascript">
-		var Testigo = require('../testigo/Source/testigo').Testigo,
-			Tests = new Testigo();
 
-		//if (Browser.opera) Tests.noArgCheck(true);
-		Tests.setCallbacks({
-			describe: function(suite){
-				window.top.addSuite(suite);
-			},
-			after: function(success, results){
-				window.top.after(success, results);
-			},
-			suiteError: function(suite, count, error){
-				window.top.suiteError(suite, count, error);
-			},
-			afterSuite: function(suite, success, results){
-				window.top.afterSuite(suite, success, results);
-			},
-			afterTest: function(suite, test, results){
-				window.top.addTest(suite, test, results);
-			}
-		});
+<meta charset="utf-8">
+<title>Testing Planet</title>
 
-		// Import test
-		require('tests').setup(Tests);
+<script src="../testigo/Source/runners/html/assets/require.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
 
-		// Run Hook
-		window.runTests = function(){ Tests.run(); }
-	</script>
-</head>
+var Testigo = require('../testigo/Source/testigo').Testigo,
+	Tests = new Testigo();
 
-<body>
-	
-</body>
-</html>
+//if (Browser.opera) Tests.noArgCheck(true);
+Tests.setCallbacks({
+	describe: function(suite){
+		window.top.addSuite(suite);
+	},
+	after: function(success, results){
+		window.top.after(success, results);
+	},
+	suiteError: function(suite, count, error){
+		window.top.suiteError(suite, count, error);
+	},
+	afterSuite: function(suite, success, results){
+		window.top.afterSuite(suite, success, results);
+	},
+	afterTest: function(suite, test, results){
+		window.top.addTest(suite, test, results);
+	}
+});
 
+// Import test
+require('tests').setup(Tests);
+
+// Run Hook
+window.runTests = function(){
+	Tests.run();
+};
+
+</script>
