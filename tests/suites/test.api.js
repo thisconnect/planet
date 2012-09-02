@@ -10,7 +10,9 @@ Tests.describe('Planet API: Connection', function(it){
 
 	it('should send an `initial state` message after connect', function(expect){
 		expect.perform(1);
+
 		var socket = io.connect(null, {'force new connection': 1});
+
 		socket.on('initial state', function(data){
 			expect(data).toBeType('object');
 			this.disconnect();
@@ -19,6 +21,7 @@ Tests.describe('Planet API: Connection', function(it){
 
 	it('should allow for simple `message`', function(expect){
 		expect.perform(1);
+
 		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.on('connect', function(){
@@ -37,13 +40,11 @@ Tests.describe('Planet API: Post', function(it){
 
 	it('should allow for `post` messages', function(expect){
 		expect.perform(3);
+
 		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.on('connect', function(){
-			socket.emit('post', {
-				key: 'key-u',
-				value: 123
-			});
+			socket.emit('post', 'key-u', 123);
 		});
 
 		socket.on('post', function(data){
@@ -54,24 +55,15 @@ Tests.describe('Planet API: Post', function(it){
 		});
 	});
 
-	it('should reply an `error` message for corrupt `post` requests', function(expect){
-		expect.perform(5);
+	it('should `error` on corrupt `post` requests', function(expect){
+		expect.perform(4);
+
 		var spy = new Spy(),
 			socket = io.connect(null, {'force new connection': 1});
 
 		socket.on('connect', function(){
-			socket.emit('post', {
-				//key: 'key-x', // no key
-				value: 789
-			});
-			socket.emit('post', {
-				name: 'key-x', // or wrong key
-				value: 789
-			});
-			socket.emit('post', {
-				key: 'key-x'//,
-				//value: 789 // or missing value
-			});
+			socket.emit('post', 789); // missing key
+			socket.emit('post', 'key-x'); // missing value
 			socket.emit('post'); // or no data at all
 		});
 
@@ -88,6 +80,7 @@ Tests.describe('Planet API: Post', function(it){
 
 	it('should `post` data at path in nested object', function(expect){
 		expect.perform(11);
+
 		var first = io.connect(null, {'force new connection': 1});
 
 		first.on('connect', function(){
@@ -101,10 +94,7 @@ Tests.describe('Planet API: Post', function(it){
 		});
 
 		first.on('put', function(data){
-			first.emit('post', {
-				path: ['a', 'b', 'c'],
-				value: 321
-			});
+			first.emit('post', ['a', 'b', 'c'], 321);
 		});
 
 		first.on('post', function(data){
@@ -118,7 +108,9 @@ Tests.describe('Planet API: Post', function(it){
 		});
 
 		first.on('disconnect', function(data){
+
 			var second = io.connect(null, {'force new connection': 1});
+
 			second.on('initial state', function(data){
 				expect(data).toBeType('object');
 				expect(data.a).toBeType('object');
@@ -136,6 +128,7 @@ Tests.describe('Planet API: Put', function(it){
 
 	it('should allow to put an object', function(expect){
 		expect.perform(5);
+
 		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.on('connect', function(){
@@ -157,6 +150,7 @@ Tests.describe('Planet API: Put', function(it){
 
 	it('should put data to all connected clients', function(expect){
 		expect.perform(10);
+
 		var first = io.connect(null, {'force new connection': 1});
 
 		first.on('put', function(data){
@@ -169,6 +163,7 @@ Tests.describe('Planet API: Put', function(it){
 		});
 
 		first.on('connect', function(){
+
 			var second = io.connect(null, {'force new connection': 1});
 
 			second.on('put', function(data){
@@ -190,8 +185,9 @@ Tests.describe('Planet API: Put', function(it){
 
 	});
 
-	it('should put nested objects', function(expect){
+	it('should merge objects into planet', function(expect){
 		expect.perform(4);
+
 		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.on('connect', function(){
@@ -210,7 +206,9 @@ Tests.describe('Planet API: Put', function(it){
 		});
 
 		socket.on('disconnect', function(){
+
 			var second = io.connect(null, {'force new connection': 1});
+
 			second.on('initial state', function(data){
 				expect(data).toBeType('object');
 				expect(data['key-b']).toBeType('object');
@@ -227,6 +225,7 @@ Tests.describe('Planet API: Delete', function(it){
 
 	it('should allow for delete object', function(expect){
 		expect.perform(5);
+
 		var first = io.connect(null, {'force new connection': 1});
 
 		first.on('connect', function(){
@@ -246,7 +245,9 @@ Tests.describe('Planet API: Delete', function(it){
 		});
 
 		first.on('disconnect', function(data){
+
 			var second = io.connect(null, {'force new connection': 1});
+
 			second.on('initial state', function(data){
 				expect(data).toBeType('object');
 				expect('key-d' in data).toBeFalse();
