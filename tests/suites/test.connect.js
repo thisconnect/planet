@@ -1,7 +1,7 @@
 exports.setup = function(Tests){
 
 
-Tests.describe('Planet API: Connection', function(it){
+Tests.describe('Planet API: Connect', function(it){
 
 	it('should send an `initial state` message after connect', function(expect){
 		expect.perform(1);
