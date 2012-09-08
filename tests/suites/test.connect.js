@@ -20,7 +20,7 @@ Tests.describe('Planet API: Connect', function(it){
 		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.on('connect', function(){
-			socket.emit('message', 'simple message');
+			socket.send('simple message');
 		});
 
 		socket.on('message', function(data){
