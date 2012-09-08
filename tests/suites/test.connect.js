@@ -15,7 +15,7 @@ Tests.describe('Planet API: Connect', function(it){
 	});
 
 	it('should allow for simple `message`', function(expect){
-		expect.perform(1);
+		expect.perform(2);
 
 		var socket = io.connect(null, {'force new connection': 1});
 
@@ -24,6 +24,7 @@ Tests.describe('Planet API: Connect', function(it){
 		});
 
 		socket.on('message', function(data){
+			expect(data).toBeType('string');
 			expect(data).toBe('simple message');
 			this.disconnect();
 		});
