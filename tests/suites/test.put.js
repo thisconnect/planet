@@ -4,7 +4,7 @@ exports.setup = function(Tests){
 Tests.describe('Planet API: Put', function(it){
 
 	it('should allow to put an object', function(expect){
-		expect.perform(13);
+		expect.perform(15);
 
 		var socket = io.connect(null, {'force new connection': 1});
 
@@ -14,7 +14,8 @@ Tests.describe('Planet API: Put', function(it){
 				'key-b': 'ok',
 				'key-c': null,
 				'key-d': [],
-				'key-e': {}
+				'key-e': {},
+				'key-f': false
 			});
 		});
 
@@ -25,48 +26,59 @@ Tests.describe('Planet API: Put', function(it){
 			expect(data).toHaveProperty('key-c');
 			expect(data).toHaveProperty('key-d');
 			expect(data).toHaveProperty('key-e');
+			expect(data).toHaveProperty('key-f');
 			expect(data['key-a']).toBeType('number');
-			expect(data['key-b']).toBeType('string');
-			expect(data['key-c']).toBeNull();
-			expect(data['key-e']).toBeType('object');
-			expect(data['key-d']).toBeType('array');
 			expect(data['key-a']).toBe(12);
+			expect(data['key-b']).toBeType('string');
 			expect(data['key-b']).toBe('ok');
+			expect(data['key-c']).toBeNull();
+			expect(data['key-d']).toBeType('array');
+			expect(data['key-e']).toBeType('object');
+			expect(data['key-f']).toBeFalse();
 			this.disconnect();
 		});
 	});
 
 	it('should put data to all connected clients', function(expect){
-		expect.perform(10);
+		expect.perform(15);
 
 		var first = io.connect(null, {'force new connection': 1});
 
-		first.on('put', function(data){
+		function puts(data){
 			expect(data).toBeType('object');
 			expect(data).toHaveProperty('key-a');
 			expect(data).toHaveProperty('key-b');
+			expect(data).toHaveProperty('key-c');
+			expect(data).toHaveProperty('key-d');
+			expect(data).toHaveProperty('key-e');
+			expect(data).toHaveProperty('key-f');
+			expect(data['key-a']).toBeType('number');
 			expect(data['key-a']).toBe(12);
-			expect(data['key-b']).toBe(23);
+			expect(data['key-b']).toBeType('string');
+			expect(data['key-b']).toBe('ok');
+			expect(data['key-c']).toBeNull();
+			expect(data['key-d']).toBeType('array');
+			expect(data['key-e']).toBeType('object');
+			expect(data['key-f']).toBeFalse();
 			this.disconnect();
-		});
+		}
+
+		first.on('put', puts);
 
 		first.on('connect', function(){
 
 			var second = io.connect(null, {'force new connection': 1});
 
-			second.on('put', function(data){
-				expect(data).toBeType('object');
-				expect(data).toHaveProperty('key-a');
-				expect(data).toHaveProperty('key-b');
-				expect(data['key-a']).toBe(12);
-				expect(data['key-b']).toBe(23);
-				this.disconnect();
-			});
+			second.on('put', puts);
 
 			second.on('connect', function(){
 				first.emit('put', {
 					'key-a': 12,
-					'key-b': 23
+					'key-b': 'ok',
+					'key-c': null,
+					'key-d': [],
+					'key-e': {},
+					'key-f': false
 				});
 			});
 		});

@@ -4,24 +4,35 @@ exports.setup = function(Tests){
 Tests.describe('Planet API: Delete', function(it){
 
 	it('should delete by key (string)', function(expect){
-		expect.perform(5);
+		expect.perform(12);
 
 		var first = io.connect(null, {'force new connection': 1});
 
 		first.on('connect', function(){
 			first.emit('put', {
-				'key-d': 5,
-				'key-e': 6
+				'key-a': 12,
+				'key-b': 'ok',
+				'key-c': null,
+				'key-d': [],
+				'key-e': {},
+				'key-f': false
 			});
 		});
 
 		first.on('put', function(data){
+			
+			first.emit('delete', 'key-a');
+			first.emit('delete', 'key-b');
+			first.emit('delete', 'key-c');
 			first.emit('delete', 'key-d');
+			first.emit('delete', 'key-e');
+			first.emit('delete', 'key-f');
+			
+			this.disconnect();
 		});
 
 		first.on('delete', function(key){
-			expect(key).toBe('key-d');
-			this.disconnect();
+			expect(key).toMatch(/key-[a-f]/);
 		});
 
 		first.on('disconnect', function(data){
@@ -30,9 +41,12 @@ Tests.describe('Planet API: Delete', function(it){
 
 			second.on('get', function(data){
 				expect(data).toBeType('object');
-				expect('key-d' in data).toBeFalse();
-				expect(data).toHaveProperty('key-e');
-				expect(data['key-e']).toBe(6);
+				expect(data).not.toHaveProperty('key-a');
+				expect(data).not.toHaveProperty('key-b');
+				expect(data['key-c']).not.toBeNull();
+				expect(data).not.toHaveProperty('key-d');
+				expect(data['key-e']).not.toBeType('object');
+				expect(data['key-f']).not.toBeType('boolean');
 				this.disconnect();
 			});
 		});
