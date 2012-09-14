@@ -3,7 +3,7 @@ exports.setup = function(Tests){
 
 Tests.describe('Planet API: Delete', function(it){
 
-	it('should allow for delete object', function(expect){
+	it('should delete by key (string)', function(expect){
 		expect.perform(5);
 
 		var first = io.connect(null, {'force new connection': 1});
@@ -38,13 +38,14 @@ Tests.describe('Planet API: Delete', function(it){
 		});
 	});
 
-	it('should delete a nested object', function(expect){
-		expect.perform(9);
+	it('should delete a nested object by path (array)', function(expect){
+		expect.perform(10);
 
 		var first = io.connect(null, {'force new connection': 1});
 
 		first.on('connect', function(){
 			first.emit('put', {
+				'veggies': null,
 				'fruits': {
 					'apples': 2,
 					'oranges': 3
@@ -69,6 +70,7 @@ Tests.describe('Planet API: Delete', function(it){
 
 			second.on('get', function(data){
 				expect(data).toBeType('object');
+				expect(data).toHaveProperty('veggies');
 				expect(data).toHaveProperty('fruits');
 				expect(data['fruits']).toBeType('object');
 				expect('apples' in data['fruits']).toBeFalse();
