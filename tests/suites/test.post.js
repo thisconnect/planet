@@ -25,9 +25,9 @@ Tests.describe('Planet API: Post', function(it){
 
 	it('should `error` on corrupt `post` requests', function(expect){
 		expect.perform(4);
+		var spy = new Spy();
 
-		var spy = new Spy(),
-			socket = io.connect(null, {'force new connection': 1});
+		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.on('connect', function(){
 			socket.emit('post', 789); // missing key
@@ -46,47 +46,32 @@ Tests.describe('Planet API: Post', function(it){
 		});
 	});
 
-	it('should `post` data at path in nested object', function(expect){
-		expect.perform(11);
+	it('should allow for `post` the same key', function(expect){
+		expect.perform(22);
+		var spy = new Spy();
 
-		var first = io.connect(null, {'force new connection': 1});
+		var socket = io.connect(null, {'force new connection': 1});
 
-		first.on('connect', function(){
-			first.emit('put', {
-				'a': {
-					'b': {
-						'c': 123
-					}
-				}
-			});
+		socket.on('connect', function(){
+			socket.emit('post', ['a', 'b', 'c'], 10);
+			socket.emit('post', ['a', 'b', 'c'], 20);
+			socket.emit('post', ['a', 'b', 'c'], 30);
 		});
 
-		first.on('put', function(data){
-			first.emit('post', ['a', 'b', 'c'], 321);
-		});
-
-		first.on('post', function(key, value){
+		socket.on('post', function(key, value){
+			spy();
 			expect(key).toBeType('array');
 			expect(value).toBeType('number');
+			expect(key.length).toBe(3);
 			expect(key[0]).toBe('a');
 			expect(key[1]).toBe('b');
 			expect(key[2]).toBe('c');
-			expect(value).toBe(321);
-			this.disconnect();
+			expect(value).toBe(10 * spy.getCallCount());
+			if (3 <= spy.getCallCount()) this.disconnect();
 		});
 
-		first.on('disconnect', function(data){
-
-			var second = io.connect(null, {'force new connection': 1});
-
-			second.on('initial state', function(data){
-				expect(data).toBeType('object');
-				expect(data.a).toBeType('object');
-				expect(data.a.b).toBeType('object');
-				expect(data.a.b.c).toBeType('number');
-				expect(data.a.b.c).toBe(321);
-				this.disconnect();
-			});
+		socket.on('disconnect', function(){
+			expect(spy.getCallCount()).toBe(3);
 		});
 	});
 

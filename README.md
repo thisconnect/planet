@@ -20,17 +20,21 @@ Open http://localhost:8999/tests/ in a browser
 Events
 ------
 
-- *initial state(data)*
+- *initial state(object)*
 
   Fired when handshake is successful and passes the current state.
 
-- *put(data)*
+- *put(object)*
 
   Fired when a put message is emitted by a client
 
-- *post(data)*
+- *post(key, value)*
 
   Fired when a post message is emitted by a client
+
+- *get(object)*
+
+  Fired on connection and passes a dump of the current state
 
 - *delete(key)*
 
@@ -39,7 +43,7 @@ Events
 
 #### Dependencies
 
-  - [Socket.IO](http://socket.io/) 0.9.5
+  - [Socket.IO](http://socket.io/) 0.9.x
   - Optparse-js 1.0.3
 
 
