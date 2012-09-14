@@ -17,8 +17,8 @@ Tests.describe('Planet API: Put', function(it){
 
 		socket.on('put', function(data){
 			expect(data).toBeType('object');
-			expect('key-a' in data).toBeTrue();
-			expect('key-b' in data).toBeTrue();
+			expect(data).toHaveProperty('key-a');
+			expect(data).toHaveProperty('key-b');
 			expect(data['key-a']).toBe(12);
 			expect(data['key-b']).toBe(23);
 			this.disconnect();
@@ -32,8 +32,8 @@ Tests.describe('Planet API: Put', function(it){
 
 		first.on('put', function(data){
 			expect(data).toBeType('object');
-			expect('key-a' in data).toBeTrue();
-			expect('key-b' in data).toBeTrue();
+			expect(data).toHaveProperty('key-a');
+			expect(data).toHaveProperty('key-b');
 			expect(data['key-a']).toBe(12);
 			expect(data['key-b']).toBe(23);
 			this.disconnect();
@@ -45,8 +45,8 @@ Tests.describe('Planet API: Put', function(it){
 
 			second.on('put', function(data){
 				expect(data).toBeType('object');
-				expect('key-a' in data).toBeTrue();
-				expect('key-b' in data).toBeTrue();
+				expect(data).toHaveProperty('key-a');
+				expect(data).toHaveProperty('key-b');
 				expect(data['key-a']).toBe(12);
 				expect(data['key-b']).toBe(23);
 				this.disconnect();
@@ -88,6 +88,7 @@ Tests.describe('Planet API: Put', function(it){
 
 			second.on('get', function(data){
 				expect(data).toBeType('object');
+				expect(data).toHaveProperty('key-b');
 				expect(data['key-b']).toBeType('object');
 				expect(data['key-b']['key-c']).toBe(34);
 				expect(data['key-b']['key-d']).toBe(56);
