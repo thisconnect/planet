@@ -17,7 +17,7 @@ Tests.describe('Planet API: Get', function(it){
 			spy();
 		});
 
-		socket.on('initial state', function(data){
+		socket.on('get', function(data){
 			expect(data).toBeType('object');
 			expect(spy.getCallCount()).toBe(1);
 			spy();
@@ -50,7 +50,7 @@ Tests.describe('Planet API: Get', function(it){
 
 			var second = io.connect(null, {'force new connection': 1});
 
-			second.on('initial state', function(data){
+			second.on('get', function(data){
 				expect(data).toBeType('object');
 				expect(data.a).toBeType('object');
 				expect(data.a.b).toBeType('object');

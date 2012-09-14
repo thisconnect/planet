@@ -28,7 +28,7 @@ Tests.describe('Planet API: Delete', function(it){
 
 			var second = io.connect(null, {'force new connection': 1});
 
-			second.on('initial state', function(data){
+			second.on('get', function(data){
 				expect(data).toBeType('object');
 				expect('key-d' in data).toBeFalse();
 				expect('key-e' in data).toBeTrue();
