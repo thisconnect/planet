@@ -66,7 +66,7 @@ Tests.describe('Planet API: Post', function(it){
 		});
 	});
 
-	it('should `error` on corrupt `post` requests', function(expect){
+	it('should `error` on corrupt `post` messages', function(expect){
 		expect.perform(14);
 		var spy = new Spy();
 
@@ -86,6 +86,20 @@ Tests.describe('Planet API: Post', function(it){
 			socket.emit('post', null);
 			socket.emit('post', undefined);
 			socket.emit('post'); // or no data at all
+
+			// invalid path keys are ignored silently
+			socket.emit('post', [1], 1);
+			socket.emit('post', [false], 2);
+			socket.emit('post', [[]], 3);
+			socket.emit('post', [{}], 4);
+			socket.emit('post', [null], 5);
+			socket.emit('post', [undefined], 6);
+			socket.emit('post', ['a', 1], 1);
+			socket.emit('post', ['a', false], 2);
+			socket.emit('post', ['a', []], 3);
+			socket.emit('post', ['a', {}], 4);
+			socket.emit('post', ['a', null], 5);
+			socket.emit('post', ['a', undefined], 6);
 		});
 
 		socket.on('error', function(type, key, value){
