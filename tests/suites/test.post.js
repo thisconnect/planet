@@ -23,6 +23,49 @@ Tests.describe('Planet API: Post', function(it){
 		});
 	});
 
+	it('should `post` values with all possible types', function(expect){
+		expect.perform(22);
+		var spy = new Spy();
+
+		var container = {},
+			socket = io.connect(null, {'force new connection': 1});
+
+		socket.on('connect', function(){
+			socket.emit('post', 'key-a', 12);
+			socket.emit('post', 'key-b', 'ok');
+			socket.emit('post', 'key-c', null);
+			socket.emit('post', 'key-d', []);
+			socket.emit('post', 'key-e', {});
+			socket.emit('post', 'key-f', false);
+		});
+
+		socket.on('post', function(key, value){
+			spy();
+			expect(key).toBeType('string');
+			container[key] = value;
+			if (6 == spy.getCallCount()) this.disconnect();
+		});
+
+		socket.on('disconnect', function(){
+			expect(spy.getCallCount()).toBe(6);
+			expect(container).toHaveProperty('key-a');
+			expect(container).toHaveProperty('key-b');
+			expect(container).toHaveProperty('key-c');
+			expect(container).toHaveProperty('key-d');
+			expect(container).toHaveProperty('key-e');
+			expect(container).toHaveProperty('key-f');
+			expect(container['key-a']).toBeType('number');
+			expect(container['key-b']).toBeType('string');
+			expect(container['key-d']).toBeType('array');
+			expect(container['key-e']).toBeType('object');
+			expect(container['key-f']).toBeType('boolean');
+			expect(container['key-a']).toBe(12);
+			expect(container['key-b']).toBe('ok');
+			expect(container['key-c']).toBeNull();
+			expect(container['key-f']).toBeFalse();
+		});
+	});
+
 	it('should `error` on corrupt `post` requests', function(expect){
 		expect.perform(4);
 		var spy = new Spy();
