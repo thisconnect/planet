@@ -67,25 +67,35 @@ Tests.describe('Planet API: Post', function(it){
 	});
 
 	it('should `error` on corrupt `post` requests', function(expect){
-		expect.perform(4);
+		expect.perform(14);
 		var spy = new Spy();
 
 		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.on('connect', function(){
-			socket.emit('post', 789); // missing key
+			socket.emit('post', 789);
+			socket.emit('post', false, 1); // missing key
+			socket.emit('post', [], 2);
+			socket.emit('post', {}, 3);
+			socket.emit('post', null, 4);
+			socket.emit('post', undefined, 5);
 			socket.emit('post', 'key-x'); // missing value
+			socket.emit('post', false);
+			socket.emit('post', []);
+			socket.emit('post', {});
+			socket.emit('post', null);
+			socket.emit('post', undefined);
 			socket.emit('post'); // or no data at all
 		});
 
-		socket.on('error', function(name, data){
-			expect(name).toBe('post error');
+		socket.on('error', function(type, key, value){
+			expect(type).toBe('post');
 			spy();
-			if (spy.getCallCount() >= 3) this.disconnect();
+			if (spy.getCallCount() >= 13) this.disconnect();
 		});
 
 		socket.on('disconnect', function(){
-			expect(spy.getCallCount()).toBe(3);
+			expect(spy.getCallCount()).toBe(13);
 		});
 	});
 
