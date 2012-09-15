@@ -29,12 +29,12 @@ Tests.describe('Planet API: Delete', function(it){
 			first.emit('delete', 'key-d');
 			first.emit('delete', 'key-e');
 			first.emit('delete', 'key-f');
-			this.disconnect();
 		});
 
 		first.on('delete', function(key){
 			spy();
 			expect(key).toMatch(/key-[a-f]/);
+			if (spy.getCallCount() == 6) this.disconnect();
 		});
 
 		first.on('disconnect', function(data){
@@ -84,7 +84,6 @@ Tests.describe('Planet API: Delete', function(it){
 			first.emit('delete', ['key-a', 'key-d']);
 			first.emit('delete', ['key-a', 'key-e']);
 			first.emit('delete', ['key-a', 'key-f']);
-			this.disconnect();
 		});
 
 		first.on('delete', function(key){
@@ -92,6 +91,7 @@ Tests.describe('Planet API: Delete', function(it){
 			expect(key).toBeType('array');
 			expect(key[0]).toBe('key-a');
 			expect(key[1]).toMatch(/key-[a-f]/);
+			if (spy.getCallCount() == 6) this.disconnect();
 		});
 
 		first.on('disconnect', function(data){
