@@ -26,19 +26,19 @@ Events
 
 - *put(object)*
 
-  Fired when a put message is emitted by a client
+  Fired when a put message is emitted by a client.
 
 - *post(key, value)*
 
-  Fired when a post message is emitted by a client
+  Fired when a post message is emitted by a client. Key can be a string or an array (path).
 
 - *get(object)*
 
-  Fired on connection and passes a dump of the current state
+  Fired on connection and passes a dump of the current state.
 
 - *delete(key)*
 
-  Fired when a delete message is emitted by a client
+  Fired when a delete message is emitted by a client.
 
 
 #### Dependencies
