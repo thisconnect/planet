@@ -20,7 +20,7 @@ Open http://localhost:8999/tests/ in a browser
 Events
 ------
 
-- *initial state(object)*
+- *get(object)*
 
   Fired when handshake is successful and passes the current state.
 
@@ -31,10 +31,6 @@ Events
 - *post(key, value)*
 
   Fired when a post message is emitted by a client. Key can be a string or an array (path).
-
-- *get(object)*
-
-  Fired on connection and passes a dump of the current state.
 
 - *delete(key)*
 
