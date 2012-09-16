@@ -5,7 +5,7 @@ var Spy = require('../testigo/Source/lib/spy').Spy;
 
 Tests.describe('Planet API: Get', function(it){
 
-	it('should get a data dump at first connection', function(expect){
+	it('should `get` a dump of the current state after `connect`', function(expect){
 		expect.perform(5);
 		var spy = new Spy()
 
@@ -29,7 +29,7 @@ Tests.describe('Planet API: Get', function(it){
 		});
 	});
 
-	it('should `post` data at path in nested object', function(expect){
+	it('should `get` the latest data', function(expect){
 		expect.perform(5);
 
 		var first = io.connect(null, {'force new connection': 1});

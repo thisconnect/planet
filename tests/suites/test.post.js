@@ -95,6 +95,30 @@ Tests.describe('Planet API: Post', function(it){
 		});
 	});
 
+	it('should allow `post` with reserved object props and methods as key names', function(expect){
+		expect.perform(46);
+
+		var arrayProtos = ['prototype', 'isArray', 'length', 'pop',
+			'push', 'reverse', 'shift', 'sort', 'splice', 'unshift',
+			'concat', 'join', 'slice', 'toString', 'indexOf', 'lastIndexOf',
+			'filter', 'forEach', 'every', 'map', 'some', 'reduce', 'reduceRight'];
+
+		var socket = io.connect(null, {'force new connection': 1});
+
+		socket.on('connect', function(){
+			arrayProtos.forEach(function(item){
+				socket.emit('post', item, false);
+			});
+		});
+
+		var indexOf = Array.prototype.indexOf;
+		socket.on('post', function(key, value){
+			expect(indexOf.call(arrayProtos, key)).not.toBe(-1);
+			expect(value).toBeFalse();
+			this.disconnect();
+		});
+	});
+
 	it('should `error` on corrupt `post` messages', function(expect){
 		expect.perform(15);
 		var spy = new Spy();

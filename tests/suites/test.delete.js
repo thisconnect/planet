@@ -191,6 +191,60 @@ Tests.describe('Planet API: Delete', function(it){
 		});
 	});
 
+	it('should allow `delete` reserved object props and methods as key names', function(expect){
+		expect.perform(2);
+		var spy = new Spy();
+
+		var props = {
+			'prototype': true,
+			'isArray': true,
+			'length': true,
+			'pop': true,
+			'push': true,
+			'reverse': true,
+			'shift': true,
+			'sort': true,
+			'splice': true,
+			'unshift': true,
+			'concat': true,
+			'join': true,
+			'slice': true,
+			'toString': true,
+			'indexOf': true,
+			'lastIndexOf': true,
+			'filter': true,
+			'forEach': true,
+			'every': true,
+			'map': true,
+			'some': true,
+			'reduce': true,
+			'reduceRight': true
+		};
+
+		var socket = io.connect(null, {'force new connection': 1});
+
+		socket.on('connect', function(){
+			socket.emit('put', props);
+		});
+
+		socket.on('put', function(data){
+			for (var key in props){
+				socket.emit('delete', key);
+			}
+		});
+
+		socket.on('delete', function(key){
+			delete props[key];
+			spy();
+			if (spy.getCallCount() == 23) this.disconnect();
+		});
+
+		socket.on('disconnect', function(){
+			expect(spy.getCallCount()).toBe(23);
+			expect(Object.keys(props).length).toBe(0);
+		});
+	});
+
 	it('should not allow invalid keys', function(expect){
 		expect.perform(6);
 		var spy = new Spy();
