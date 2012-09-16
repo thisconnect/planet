@@ -210,12 +210,13 @@ Tests.describe('Planet API: Delete', function(it){
 			first.emit('delete', true);
 			first.emit('delete', false);
 			first.emit('delete', []);
+			first.emit('delete', [null, false, {}]);
 			first.emit('delete', {});
 		});
 
 		first.on('error', function(type, key){
 			spy();
-			if (spy.getCallCount() == 6) this.disconnect();
+			if (spy.getCallCount() == 7) this.disconnect();
 		});
 
 		first.on('disconnect', function(){
@@ -223,7 +224,7 @@ Tests.describe('Planet API: Delete', function(it){
 			var second = io.connect(null, {'force new connection': 1});
 
 			second.on('get', function(data){
-				expect(spy.getCallCount()).toBe(6);
+				expect(spy.getCallCount()).toBe(7);
 				expect(data).toBeType('object');
 				expect(data).toHaveProperty('key-a');
 				expect(data['key-a']).toBeType('number');

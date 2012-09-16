@@ -41,6 +41,84 @@ Tests.describe('Planet API: Put', function(it){
 		});
 	});
 
+	it('should allow reserved object properties and methods as key names', function(expect){
+		expect.perform(41);
+
+		var socket = io.connect(null, {'force new connection': 1});
+
+		socket.on('connect', function(){
+			socket.emit('put', {
+				'prototype': null,
+				'create': null,
+				'defineProperty': null,
+				'defineProperties': null,
+				'getOwnPropertyDescriptor': null,
+				'keys': null,
+				'getOwnPropertyNames': null,
+				'getPrototypeOf': null,
+				'preventExtensions': null,
+				'isExtensible': null,
+				'seal': null,
+				'isSealed': null,
+				'freeze': null,
+				'isFrozen': null,
+				'hasOwnProperty': null,
+				'isPrototypeOf': null,
+				'propertyIsEnumerable': null,
+				'toLocaleString': null,
+				'toString': null,
+				'valueOf': null
+			});
+		});
+
+		socket.on('put', function(data){
+			expect(data).toBeType('object');
+			expect(data).toHaveProperty('prototype');
+			expect(data).toHaveProperty('create');
+			expect(data).toHaveProperty('defineProperty');
+			expect(data).toHaveProperty('defineProperties');
+			expect(data).toHaveProperty('getOwnPropertyDescriptor');
+			expect(data).toHaveProperty('keys');
+			expect(data).toHaveProperty('getOwnPropertyNames');
+			expect(data).toHaveProperty('getPrototypeOf');
+			expect(data).toHaveProperty('preventExtensions');
+			expect(data).toHaveProperty('isExtensible');
+			expect(data).toHaveProperty('seal');
+			expect(data).toHaveProperty('isSealed');
+			expect(data).toHaveProperty('freeze');
+			expect(data).toHaveProperty('isFrozen');
+			expect(data).toHaveProperty('hasOwnProperty');
+			expect(data).toHaveProperty('isPrototypeOf');
+			expect(data).toHaveProperty('propertyIsEnumerable');
+			expect(data).toHaveProperty('toLocaleString');
+			expect(data).toHaveProperty('toString');
+			expect(data).toHaveProperty('valueOf');
+
+			expect(data['prototype']).toBeNull();
+			expect(data['create']).toBeNull();
+			expect(data['defineProperty']).toBeNull();
+			expect(data['defineProperties']).toBeNull();
+			expect(data['getOwnPropertyDescriptor']).toBeNull();
+			expect(data['keys']).toBeNull();
+			expect(data['getOwnPropertyNames']).toBeNull();
+			expect(data['getPrototypeOf']).toBeNull();
+			expect(data['preventExtensions']).toBeNull();
+			expect(data['isExtensible']).toBeNull();
+			expect(data['seal']).toBeNull();
+			expect(data['isSealed']).toBeNull();
+			expect(data['freeze']).toBeNull();
+			expect(data['isFrozen']).toBeNull();
+			expect(data['hasOwnProperty']).toBeNull();
+			expect(data['isPrototypeOf']).toBeNull();
+			expect(data['propertyIsEnumerable']).toBeNull();
+			expect(data['toLocaleString']).toBeNull();
+			expect(data['toString']).toBeNull();
+			expect(data['valueOf']).toBeNull();
+
+			this.disconnect();
+		});
+	});
+
 	it('should put data to all connected clients', function(expect){
 		expect.perform(30);
 
