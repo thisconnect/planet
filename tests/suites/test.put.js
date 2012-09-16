@@ -230,7 +230,6 @@ Tests.describe('Planet API: Put', function(it){
 		});
 
 		socket.on('error', function(type, data){
-			console.log('error', type, data);
 			spy();
 			expect(type).toBeType('string');
 			expect(type).toBe('put');
