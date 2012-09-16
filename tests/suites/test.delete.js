@@ -191,6 +191,49 @@ Tests.describe('Planet API: Delete', function(it){
 		});
 	});
 
+	it('should not allow invalid keys', function(expect){
+		expect.perform(6);
+		var spy = new Spy();
+
+		var first = io.connect(null, {'force new connection': 1});
+
+		first.on('connect', function(){
+			first.emit('delete');
+			first.emit('put', {
+				'key-a': 1
+			});
+		});
+
+		first.on('put', function(data){
+			first.emit('delete', 12);
+			first.emit('delete', null);
+			first.emit('delete', true);
+			first.emit('delete', false);
+			first.emit('delete', []);
+			first.emit('delete', {});
+		});
+
+		first.on('error', function(type, key){
+			spy();
+			if (spy.getCallCount() == 6) this.disconnect();
+		});
+
+		first.on('disconnect', function(){
+
+			var second = io.connect(null, {'force new connection': 1});
+
+			second.on('get', function(data){
+				expect(spy.getCallCount()).toBe(6);
+				expect(data).toBeType('object');
+				expect(data).toHaveProperty('key-a');
+				expect(data['key-a']).toBeType('number');
+				expect(data['key-a']).toBe(1);
+				expect(Object.keys(data).length).toBe(1);
+				this.disconnect();
+			});
+		});
+	});
+
 });
 
 };
