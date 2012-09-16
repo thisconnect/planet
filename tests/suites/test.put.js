@@ -5,6 +5,7 @@ var Spy = require('../testigo/Source/lib/spy').Spy;
 
 Tests.describe('Planet API: Put', function(it){
 
+
 	it('should allow to put an object', function(expect){
 		expect.perform(15);
 
@@ -40,6 +41,7 @@ Tests.describe('Planet API: Put', function(it){
 			this.disconnect();
 		});
 	});
+
 
 	it('should allow reserved object properties and methods as key names', function(expect){
 		expect.perform(41);
@@ -119,6 +121,7 @@ Tests.describe('Planet API: Put', function(it){
 		});
 	});
 
+
 	it('should put data to all connected clients', function(expect){
 		expect.perform(30);
 
@@ -162,8 +165,8 @@ Tests.describe('Planet API: Put', function(it){
 				});
 			});
 		});
-
 	});
+
 
 	it('should recursively merge objects into planet', function(expect){
 		expect.perform(28);
@@ -242,6 +245,7 @@ Tests.describe('Planet API: Put', function(it){
 		});
 	});
 
+
 	it('should harminze strange keys', function(expect){
 		expect.perform(13);
 
@@ -287,6 +291,7 @@ Tests.describe('Planet API: Put', function(it){
 		});
 	});
 
+
 	it('should error for putting invalid data', function(expect){
 		expect.perform(21);
 		var spy = new Spy();
@@ -318,6 +323,7 @@ Tests.describe('Planet API: Put', function(it){
 			expect(spy.getCallCount()).toBe(10);
 		});
 	});
+
 
 });
 

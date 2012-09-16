@@ -5,6 +5,7 @@ var Spy = require('../testigo/Source/lib/spy').Spy;
 
 Tests.describe('Planet API: Delete', function(it){
 
+
 	it('should delete by key (string)', function(expect){
 		expect.perform(17);
 		var spy = new Spy();
@@ -57,6 +58,7 @@ Tests.describe('Planet API: Delete', function(it){
 			});
 		});
 	});
+
 
 	it('should delete a nested object by path (array)', function(expect){
 		expect.perform(28);
@@ -114,6 +116,7 @@ Tests.describe('Planet API: Delete', function(it){
 		});
 	});
 
+
 	it('should delete everything', function(expect){
 		expect.perform(4);
 
@@ -147,6 +150,7 @@ Tests.describe('Planet API: Delete', function(it){
 			});
 		});
 	});
+
 
 	it('should error when deleting nonexistent keys', function(expect){
 		expect.perform(7);
@@ -190,6 +194,7 @@ Tests.describe('Planet API: Delete', function(it){
 			});
 		});
 	});
+
 
 	it('should allow `delete` reserved object props and methods as key names', function(expect){
 		expect.perform(2);
@@ -245,6 +250,7 @@ Tests.describe('Planet API: Delete', function(it){
 		});
 	});
 
+
 	it('should not allow invalid keys', function(expect){
 		expect.perform(6);
 		var spy = new Spy();
@@ -288,6 +294,7 @@ Tests.describe('Planet API: Delete', function(it){
 			});
 		});
 	});
+
 
 });
 

@@ -5,6 +5,7 @@ var Spy = require('../testigo/Source/lib/spy').Spy;
 
 Tests.describe('Socket.IO: Connect', function(it){
 
+
 	it('should `connect` and `disconnect`', function(expect){
 		expect.perform(4);
 		var spy = new Spy();
@@ -23,6 +24,7 @@ Tests.describe('Socket.IO: Connect', function(it){
 			expect(spy.getCallCount()).toBe(1);
 		});
 	});
+
 
 	it('should allow for simple `message`', function(expect){
 		expect.perform(4);
@@ -47,6 +49,7 @@ Tests.describe('Socket.IO: Connect', function(it){
 			expect(spy.getCallCount()).toBe(2);
 		});
 	});
+
 
 });
 

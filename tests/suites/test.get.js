@@ -5,6 +5,7 @@ var Spy = require('../testigo/Source/lib/spy').Spy;
 
 Tests.describe('Planet API: Get', function(it){
 
+
 	it('should `get` a dump of the current state after `connect`', function(expect){
 		expect.perform(5);
 		var spy = new Spy()
@@ -28,6 +29,7 @@ Tests.describe('Planet API: Get', function(it){
 			expect(spy.getCallCount()).toBe(2);
 		});
 	});
+
 
 	it('should `get` the latest data', function(expect){
 		expect.perform(5);
@@ -61,6 +63,7 @@ Tests.describe('Planet API: Get', function(it){
 		});
 	});
 
+
 	it('should `get` by key', function(expect){
 		expect.perform(4);
 
@@ -91,6 +94,7 @@ Tests.describe('Planet API: Get', function(it){
 			});
 		});
 	});
+
 
 });
 

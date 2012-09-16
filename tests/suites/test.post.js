@@ -5,6 +5,7 @@ var Spy = require('../testigo/Source/lib/spy').Spy;
 
 Tests.describe('Planet API: Post', function(it){
 
+
 	it('should allow for `post` key value pairs', function(expect){
 		expect.perform(4);
 
@@ -22,6 +23,7 @@ Tests.describe('Planet API: Post', function(it){
 			this.disconnect();
 		});
 	});
+
 
 	it('should `post` values with all possible types', function(expect){
 		expect.perform(22);
@@ -66,6 +68,7 @@ Tests.describe('Planet API: Post', function(it){
 		});
 	});
 
+
 	it('should allow for `post` the same key', function(expect){
 		expect.perform(22);
 		var spy = new Spy();
@@ -95,6 +98,7 @@ Tests.describe('Planet API: Post', function(it){
 		});
 	});
 
+
 	it('should allow `post` with reserved object props and methods as key names', function(expect){
 		expect.perform(46);
 
@@ -118,6 +122,7 @@ Tests.describe('Planet API: Post', function(it){
 			this.disconnect();
 		});
 	});
+
 
 	it('should `error` on corrupt `post` messages', function(expect){
 		expect.perform(15);
@@ -166,6 +171,7 @@ Tests.describe('Planet API: Post', function(it){
 			expect(spy.getCallCount()).toBe(14);
 		});
 	});
+
 
 });
 
