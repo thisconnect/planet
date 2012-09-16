@@ -1,5 +1,7 @@
 exports.setup = function(Tests){
 
+var Spy = require('../testigo/Source/lib/spy').Spy;
+
 
 Tests.describe('Planet API: Put', function(it){
 
@@ -159,6 +161,84 @@ Tests.describe('Planet API: Put', function(it){
 				expect(data['key-f']).toBe(5);
 				this.disconnect();
 			});
+		});
+	});
+
+	it('should harminze strange keys', function(expect){
+		expect.perform(13);
+
+		var storage = {},
+			socket = io.connect(null, {'force new connection': 1});
+
+		socket.on('connect', function(){
+			socket.emit('put', {
+				'': 1,
+				1: null,
+				null: '',
+				undefined: {},
+				false: []
+			});
+			socket.emit('put', {
+				'': 2,
+				1: 'ok',
+				null: null,
+				undefined: [],
+				false: {}
+			});
+		});
+
+		socket.on('put', function(data){
+			storage = data;
+			if (data['1'] == 'ok') this.disconnect();
+		});
+
+		socket.on('disconnect', function(){
+			expect(storage).toBeType('object');
+			expect(storage).toHaveProperty('');
+			expect(storage).toHaveProperty('1');
+			expect(storage).toHaveProperty('null');
+			expect(storage).toHaveProperty('undefined');
+			expect(storage).toHaveProperty('false');
+			expect(storage['']).toBeType('number');
+			expect(storage['']).toBe(2);
+			expect(storage['1']).toBeType('string');
+			expect(storage['1']).toBe('ok');
+			expect(storage['null']).toBeNull();
+			expect(storage['undefined']).toBeType('array');
+			expect(storage['false']).toBeType('object');
+		});
+	});
+
+	it('should error for putting invalid data', function(expect){
+		expect.perform(21);
+		var spy = new Spy();
+
+		var socket = io.connect(null, {'force new connection': 1});
+
+		socket.on('connect', function(){
+			socket.emit('put');
+			socket.emit('put', 12);
+			socket.emit('put', '');
+			socket.emit('put', null);
+			socket.emit('put', []);
+			socket.emit('put', {}); // doesnt error
+			socket.emit('put', false);
+			socket.emit('put', true);
+			socket.emit('put', undefined);
+			socket.emit('put', new Date);
+			socket.emit('put', new String('lalala'));
+		});
+
+		socket.on('error', function(type, data){
+			console.log('error', type, data);
+			spy();
+			expect(type).toBeType('string');
+			expect(type).toBe('put');
+			if (10 == spy.getCallCount()) this.disconnect();
+		});
+
+		socket.on('disconnect', function(){
+			expect(spy.getCallCount()).toBe(10);
 		});
 	});
 
