@@ -40,7 +40,7 @@ Tests.describe('Planet API: Put', function(it){
 	});
 
 	it('should put data to all connected clients', function(expect){
-		expect.perform(15);
+		expect.perform(30);
 
 		var first = io.connect(null, {'force new connection': 1});
 
@@ -86,7 +86,7 @@ Tests.describe('Planet API: Put', function(it){
 	});
 
 	it('should recursively merge objects into planet', function(expect){
-		expect.perform(25);
+		expect.perform(28);
 
 		var socket = io.connect(null, {'force new connection': 1});
 
@@ -155,7 +155,7 @@ Tests.describe('Planet API: Put', function(it){
 				expect(data['key-e']['key-c']).toBeFalse();
 				expect(data['key-e']['key-d']).toBeType('object');
 				expect(data['key-e']['key-e']).toBeType('array');
-				expect(data['key-e']['key-e']).toBe(4);
+				expect(data['key-e']['key-e'].length).toBe(0);
 				expect(data['key-f']).toBe(5);
 				this.disconnect();
 			});
