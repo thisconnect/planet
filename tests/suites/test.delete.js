@@ -37,7 +37,7 @@ Tests.describe('Planet API: Delete', function(it){
 			if (spy.getCallCount() == 6) this.disconnect();
 		});
 
-		first.on('disconnect', function(data){
+		first.on('disconnect', function(){
 
 			var second = io.connect(null, {'force new connection': 1});
 
@@ -94,7 +94,7 @@ Tests.describe('Planet API: Delete', function(it){
 			if (spy.getCallCount() == 6) this.disconnect();
 		});
 
-		first.on('disconnect', function(data){
+		first.on('disconnect', function(){
 
 			var second = io.connect(null, {'force new connection': 1});
 
@@ -112,8 +112,83 @@ Tests.describe('Planet API: Delete', function(it){
 				this.disconnect();
 			});
 		});
-		
-		// TODO: delete null
+	});
+
+	it('should delete everything', function(expect){
+		expect.perform(4);
+
+		var first = io.connect(null, {'force new connection': 1});
+
+		first.on('connect', function(){
+			first.emit('put', {
+				'key-a': null,
+				'key-b': ''
+			});
+		});
+
+		first.on('put', function(data){
+			first.emit('delete');
+		});
+
+		first.on('delete', function(key){
+			this.disconnect();
+		});
+
+		first.on('disconnect', function(){
+
+			var second = io.connect(null, {'force new connection': 1});
+
+			second.on('get', function(data){
+				expect(data).toBeType('object');
+				expect(data).not.toHaveProperty('key-a');
+				expect(data).not.toHaveProperty('key-b');
+				expect(Object.keys(data).length).toBe(0);
+				this.disconnect();
+			});
+		});
+	});
+
+	it('should error when deleting nonexistent keys', function(expect){
+		expect.perform(7);
+		var spy = new Spy();
+
+		var first = io.connect(null, {'force new connection': 1});
+
+		first.on('connect', function(){
+			first.emit('delete');
+			first.emit('put', {
+				'key-a': {
+					'key-a': 1
+				}
+			});
+		});
+
+		first.on('put', function(data){
+			first.emit('delete', 'key-b');
+			first.emit('delete', ['key-a', 'key-b']);
+			first.emit('delete', ['key-v']);
+		});
+
+		first.on('error', function(type, key){
+			spy();
+			if (spy.getCallCount() == 3) this.disconnect();
+		});
+
+		first.on('disconnect', function(){
+
+			var second = io.connect(null, {'force new connection': 1});
+
+			second.on('get', function(data){
+				expect(spy.getCallCount()).toBe(3);
+				expect(data).toBeType('object');
+				expect(data).toHaveProperty('key-a');
+				expect(data['key-a']).toBeType('object');
+				expect(data['key-a']).toHaveProperty('key-a');
+				expect(data['key-a']).not.toHaveProperty('key-b');
+				expect(Object.keys(data).length).toBe(1);
+				this.disconnect();
+			});
+		});
 	});
 
 });
