@@ -56,12 +56,12 @@ Tests.describe('Planet API: Post', function(it){
 			expect(container).toHaveProperty('key-f');
 			expect(container['key-a']).toBeType('number');
 			expect(container['key-b']).toBeType('string');
+			expect(container['key-c']).toBeNull();
 			expect(container['key-d']).toBeType('array');
 			expect(container['key-e']).toBeType('object');
 			expect(container['key-f']).toBeType('boolean');
 			expect(container['key-a']).toBe(12);
 			expect(container['key-b']).toBe('');
-			expect(container['key-c']).toBeNull();
 			expect(container['key-f']).toBeFalse();
 		});
 	});
