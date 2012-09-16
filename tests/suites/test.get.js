@@ -61,6 +61,37 @@ Tests.describe('Planet API: Get', function(it){
 		});
 	});
 
+	it('should `get` by key', function(expect){
+		expect.perform(4);
+
+		var first = io.connect(null, {'force new connection': 1});
+
+		first.on('connect', function(){
+			first.emit('put', { a: { b: { c: 0 } } });
+		});
+
+		first.on('put', function(data){
+			this.disconnect();
+		});
+
+		first.on('disconnect', function(){
+
+			var second = io.connect(null, {'force new connection': 1});
+
+			second.emit('get', 'a', function(data){
+				expect(data).toBeType('object');
+				expect(data.b).toBeType('object');
+				expect(data.b.c).toBeType('number');
+				expect(data.b.c).toBe(0);
+			});
+
+			second.emit('get', 'b', function(data){
+				expect(data).toBeNull();
+				this.disconnect();
+			});
+		});
+	});
+
 });
 
 };
