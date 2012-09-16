@@ -24,7 +24,7 @@ Tests.describe('Planet API: Get', function(it){
 			this.disconnect();
 		});
 
-		socket.on('disconnect', function(data){
+		socket.on('disconnect', function(){
 			expect(spy.getCallCount()).toBe(2);
 		});
 	});
@@ -46,7 +46,7 @@ Tests.describe('Planet API: Get', function(it){
 			this.disconnect();
 		});
 
-		first.on('disconnect', function(data){
+		first.on('disconnect', function(){
 
 			var second = io.connect(null, {'force new connection': 1});
 

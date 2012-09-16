@@ -18,7 +18,7 @@ Tests.describe('Socket.IO: Connect', function(it){
 			this.disconnect();
 		});
 
-		socket.on('disconnect', function(data){
+		socket.on('disconnect', function(){
 			expect(spy.getErrorCount()).toBe(0);
 			expect(spy.getCallCount()).toBe(1);
 		});
@@ -42,7 +42,7 @@ Tests.describe('Socket.IO: Connect', function(it){
 			this.disconnect();
 		});
 
-		socket.on('disconnect', function(data){
+		socket.on('disconnect', function(){
 			expect(spy.getErrorCount()).toBe(0);
 			expect(spy.getCallCount()).toBe(2);
 		});

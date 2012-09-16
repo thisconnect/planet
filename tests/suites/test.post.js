@@ -5,7 +5,7 @@ var Spy = require('../testigo/Source/lib/spy').Spy;
 
 Tests.describe('Planet API: Post', function(it){
 
-	it('should allow for `post` messages', function(expect){
+	it('should allow for `post` key value pairs', function(expect){
 		expect.perform(4);
 
 		var socket = io.connect(null, {'force new connection': 1});
@@ -32,7 +32,7 @@ Tests.describe('Planet API: Post', function(it){
 
 		socket.on('connect', function(){
 			socket.emit('post', 'key-a', 12);
-			socket.emit('post', 'key-b', 'ok');
+			socket.emit('post', 'key-b', '');
 			socket.emit('post', 'key-c', null);
 			socket.emit('post', 'key-d', []);
 			socket.emit('post', 'key-e', {});
@@ -60,21 +60,51 @@ Tests.describe('Planet API: Post', function(it){
 			expect(container['key-e']).toBeType('object');
 			expect(container['key-f']).toBeType('boolean');
 			expect(container['key-a']).toBe(12);
-			expect(container['key-b']).toBe('ok');
+			expect(container['key-b']).toBe('');
 			expect(container['key-c']).toBeNull();
 			expect(container['key-f']).toBeFalse();
 		});
 	});
 
+	it('should allow for `post` the same key', function(expect){
+		expect.perform(22);
+		var spy = new Spy();
+
+		var socket = io.connect(null, {'force new connection': 1});
+
+		socket.on('connect', function(){
+			socket.emit('post', ['a', 'b', 'c'], 10);
+			socket.emit('post', ['a', 'b', 'c'], 20);
+			socket.emit('post', 'a.b.c'.split('.'), 30);
+		});
+
+		socket.on('post', function(key, value){
+			spy();
+			expect(key).toBeType('array');
+			expect(value).toBeType('number');
+			expect(key.length).toBe(3);
+			expect(key[0]).toBe('a');
+			expect(key[1]).toBe('b');
+			expect(key[2]).toBe('c');
+			expect(value).toBe(10 * spy.getCallCount());
+			if (3 <= spy.getCallCount()) this.disconnect();
+		});
+
+		socket.on('disconnect', function(){
+			expect(spy.getCallCount()).toBe(3);
+		});
+	});
+
 	it('should `error` on corrupt `post` messages', function(expect){
-		expect.perform(14);
+		expect.perform(15);
 		var spy = new Spy();
 
 		var socket = io.connect(null, {'force new connection': 1});
 
 		socket.on('connect', function(){
 			socket.emit('post', 789);
-			socket.emit('post', false, 1); // missing key
+			socket.emit('post', 0, 0);
+			socket.emit('post', false, 1);
 			socket.emit('post', [], 2);
 			socket.emit('post', {}, 3);
 			socket.emit('post', null, 4);
@@ -105,40 +135,11 @@ Tests.describe('Planet API: Post', function(it){
 		socket.on('error', function(type, key, value){
 			expect(type).toBe('post');
 			spy();
-			if (spy.getCallCount() >= 13) this.disconnect();
+			if (spy.getCallCount() >= 14) this.disconnect();
 		});
 
 		socket.on('disconnect', function(){
-			expect(spy.getCallCount()).toBe(13);
-		});
-	});
-
-	it('should allow for `post` the same key', function(expect){
-		expect.perform(22);
-		var spy = new Spy();
-
-		var socket = io.connect(null, {'force new connection': 1});
-
-		socket.on('connect', function(){
-			socket.emit('post', ['a', 'b', 'c'], 10);
-			socket.emit('post', ['a', 'b', 'c'], 20);
-			socket.emit('post', ['a', 'b', 'c'], 30);
-		});
-
-		socket.on('post', function(key, value){
-			spy();
-			expect(key).toBeType('array');
-			expect(value).toBeType('number');
-			expect(key.length).toBe(3);
-			expect(key[0]).toBe('a');
-			expect(key[1]).toBe('b');
-			expect(key[2]).toBe('c');
-			expect(value).toBe(10 * spy.getCallCount());
-			if (3 <= spy.getCallCount()) this.disconnect();
-		});
-
-		socket.on('disconnect', function(){
-			expect(spy.getCallCount()).toBe(3);
+			expect(spy.getCallCount()).toBe(14);
 		});
 	});
 
