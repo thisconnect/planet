@@ -1,4 +1,26 @@
-$$('select').each(function(select){
+$$('select:not([multiple])').each(function(select){
+
+	var component = select.get('name');
+
+	select.addEvent('change', function(){
+		socket.emit('post', component, select.get('value'));
+	});
+
+	socket.on('post', function(key, values){
+		if (key == component){
+			select.set('value', value);
+		}
+	});
+
+	socket.once('get', function(data){
+		if (component in data){
+			select.set('value', data[component]);
+		}
+	});
+
+});
+
+$$('select[multiple]').each(function(select){
 
 	var component = select.get('name'),
 		options = select.getElements('option');
