@@ -4,21 +4,18 @@
 		values = radios.get('value');
 
 	radios.addEvent('change', function(){
-		socket.emit('update', {
-			key: 'spice',
-			value: this.get('value')
-		});
+		socket.emit('post', 'spice', this.get('value'));
 	});
 
-	socket.on('update', function(data){
-		if (data.key == 'spice'){
-			radios[values.indexOf(data.value)].set('checked', true);
+	socket.on('post', function(key, value){
+		if (key == 'spice'){
+			radios[values.indexOf(value)].set('checked', true);
 		}
 	});
 
-	socket.on('initial state', function(data){
+	socket.on('get', function(data){
 		if ('spice' in data){
-			radios[values.indexOf(data.spice)].set('checked', true);
+			radios[values.indexOf(data['spice'])].set('checked', true);
 		}
 	});
 

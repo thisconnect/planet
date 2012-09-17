@@ -5,27 +5,21 @@
 	});
 
 	mySlider.addEvent('change', function(step){
-		socket.emit('update', {
-			key: 'slider',
-			value: step
-		});
+		socket.emit('post', 'slider', step);
 	});
 
 	mySlider.element.addEvent('mousedown', function(){
-		socket.emit('update', {
-			key: 'slider',
-			value: mySlider.step
-		});
+		socket.emit('post', 'slider', mySlider.step);
 	});
 
-	socket.on('update', function(data){
-		if (data.key == 'slider'){
-			mySlider.setKnobPosition(mySlider.toPosition(data.value));
-			mySlider.step = data.value;
+	socket.on('post', function(key, value){
+		if (key == 'slider'){
+			mySlider.setKnobPosition(mySlider.toPosition(value));
+			mySlider.step = value;
 		}
 	});
 
-	socket.on('initial state', function(data){
+	socket.on('get', function(data){
 		if ('slider' in data){
 			mySlider.setKnobPosition(mySlider.toPosition(data.slider));
 			mySlider.step = data.slider;

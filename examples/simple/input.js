@@ -3,10 +3,7 @@ $$('input[type=text], input[type=number], input[type=range], textarea').each(fun
 	var component = input.get('tag') + '.' + input.get('name');
 
 	input.addEvent('change', function(){
-		socket.emit('update', {
-			key: component,
-			value: this.get('value')
-		});
+		socket.emit('post', component, this.get('value'));
 	});
 
 	if (input.get('tag') == 'textarea') input.addEvent('keyup', function(){
@@ -17,13 +14,13 @@ $$('input[type=text], input[type=number], input[type=range], textarea').each(fun
 		input.fireEvent('change');
 	});
 
-	socket.on('update', function(data){
-		if (component == data.key){
-			input.set('value', data.value);
+	socket.on('post', function(key, value){
+		if (key == component){
+			input.set('value', value);
 		}
 	});
 
-	socket.on('initial state', function(data){
+	socket.on('get', function(data){
 		if (component in data){
 			input.set('value', data[component]);
 		}
