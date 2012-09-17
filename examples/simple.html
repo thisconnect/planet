@@ -1,151 +1,181 @@
 <!doctype html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Planet Examples</title>
-	<link rel=stylesheet href="assets/styles.css">
-</head>
-<body>
-	<header>
-		<h1>Planet Examples</h1>
-	</header>
-	<section>
-		<ul id=info></ul>
-	</section>
 
-	<section>
-		<div class="group clear">
-			<label><input type=checkbox name=box value=salt>Salt</label>
-			<label><input type=checkbox name=box value=sugar>Sugar</label>
-			<label><input type=checkbox name=box value=pepper>Pepper</label>
-		</div>
-		<div class="group clear">
-			<label><input type=radio name=spice value=chili>Chili</label>
-			<label><input type=radio name=spice value=curry>Curry</label>
-			<label><input type=radio name=spice value=wasabi>Wasabi</label>
-		</div>
-	</section>
+<meta charset="utf-8">
+<title>Planet Examples</title>
 
-	<section>
-		<label>
-			<span>Text</span><input type=text name=specials placeholder=empty>
-		</label>
-	</section>
+<link rel=stylesheet href="assets/styles.css">
 
-	<section>
-		<label>
-			<span>Select</span>
-			<select name=device>
-				<option>Grill</option>
-				<option>Microwave</option>
-				<option>Oven</option>
-				<option>Stove</option>
-			</select>
-		</label>
-	</section>
+<header>
+	<h1>Planet Examples</h1>
+</header>
 
-	<section>
-		<label>
-			<span>Multiple Select</span>
-			<select name=ingredients multiple=multiple>
-				<optgroup label=Meat>
-					<option value=beaf>Beaf</option>
-					<option value=chicken>Chicken</option>
-					<option value=fish>Fish</option>
-					<option value=pork>Pork</option>
-				</optgroup>
-				<optgroup label=Vegetable>
-					<option value=corn>Corn</option>
-					<option value=patatos>Patatos</option>
-					<option value=rice>Rice</option>
-					<option value=tofu>Tofu</option>
-				</optgroup>
-			</select>
-		</label>
-	</section>
+<section>
+	<div class="group clear">
+		<label><input type=checkbox name=box value=salt>Salt</label>
+		<label><input type=checkbox name=box value=sugar>Sugar</label>
+		<label><input type=checkbox name=box value=pepper>Pepper</label>
+	</div>
+	<div class="group clear">
+		<label><input type=radio name=spice value=chili>Chili</label>
+		<label><input type=radio name=spice value=curry>Curry</label>
+		<label><input type=radio name=spice value=wasabi>Wasabi</label>
+	</div>
+</section>
 
-	<section>
-		<label>
-			<span>Textarea</span><textarea name=formula></textarea>
-		</label>
-	</section>
+<section>
+	<label>
+		<span>Text</span><input type=text name=specials placeholder=empty>
+	</label>
+</section>
 
-	<section>
-		<label>
-			<span>Number</span><input type=number name=amount min=1 max=1000 step="0.1" value=6>
-		</label>
-	</section>
+<section>
+	<label>
+		<span>Select</span>
+		<select name=device>
+			<option>Grill</option>
+			<option>Microwave</option>
+			<option>Oven</option>
+			<option>Stove</option>
+		</select>
+	</label>
+</section>
 
-	<section>
-		<label>
-			<span>Range</span><input type=range name=temperature min=50 max=300 value=100>
-		</label>
-	</section>
+<section>
+	<label>
+		<span>Multiple Select</span>
+		<select name=ingredients multiple=multiple>
+			<optgroup label=Meat>
+				<option value=beaf>Beaf</option>
+				<option value=chicken>Chicken</option>
+				<option value=fish>Fish</option>
+				<option value=pork>Pork</option>
+			</optgroup>
+			<optgroup label=Vegetable>
+				<option value=corn>Corn</option>
+				<option value=patatos>Patatos</option>
+				<option value=rice>Rice</option>
+				<option value=tofu>Tofu</option>
+			</optgroup>
+		</select>
+	</label>
+</section>
 
-	<section>
-		<label>
-			<span>Slider</span>
-			<div id=slider class=slider><div id=knob class=knob></div></div>
-		</label>
-	</section>
+<section>
+	<label>
+		<span>Textarea</span><textarea name=formula></textarea>
+	</label>
+</section>
 
-	<script src="http://127.0.0.1:8999/socket.io/socket.io.js"></script>
-	<script src="assets/mootools-core-1.4.5-full-nocompat-yc.js"></script>
-	<script src="assets/mootools-more-1.4.0.1.js"></script>
+<section>
+	<label>
+		<span>Number</span><input type=number name=amount min=1 max=1000 step="0.1" value=6>
+	</label>
+</section>
 
-	<script>
+<section>
+	<label>
+		<span>Range</span><input type=range name=temperature min=50 max=300 value=100>
+	</label>
+</section>
 
-		if (!this.io) new Element('li[text="Could not connect to server!"]').inject('info');
+<section>
+	<label>
+		<span>Slider</span>
+		<div id=slider class=slider><div id=knob class=knob></div></div>
+	</label>
+</section>
 
-		var socket = io.connect('//:8999', {
-			'connect timeout': 2500
-		});
+<section>
+	<label>
+		<input type=reset>
+	</labe>
+</section>
 
-		socket.on('connecting', function(transport){
-			new Element('li', {
-				text: 'Connecting with ' + transport
-			}).inject('info', 'top');
-		});
+<hr>
 
-		socket.on('connect', function(){
-			new Element('li[text="Connected!"]').inject('info', 'top');
-		});
+<ul id=log></ul>
 
-		socket.on('disconnect', function(){
-			new Element('li[text="Disconnected!"]').inject('info', 'top');
-		});
+<hr>
 
-		socket.on('connect_failed', function(){ 
-			new Element('li[text="Connect failed!"]').inject('info', 'top');
-		});
+<ul id=lug></ul>
 
-		socket.on('error', function(){ 
-			new Element('li[text="Error!"]').inject('info', 'top');
-		});
+<script src="http://127.0.0.1:8999/socket.io/socket.io.js"></script>
+<script src="assets/mootools-core-1.4.5-full-nocompat-yc.js"></script>
+<script src="assets/mootools-more-1.4.0.1.js"></script>
 
-		socket.on('reconnecting', function(delay, attempts){
-			new Element('li', {
-				text: 'Reconnecting (' + delay + ' ' + attempts + ')'
-			}).inject('info', 'top');
-		});
+<script>
 
-		socket.on('reconnect', function(transport, attempts){
-			new Element('li', {
-				text: 'Reconnected (' + transport + ' ' + attempts + ')!'
-			}).inject('info', 'top');
-		});
+if (!this.io) new Element('li[text="Could not connect to server!"]').inject('log');
 
-		socket.on('reconnect_failed', function(){ 
-			new Element('li[text="Reconnect failed!"]').inject('info', 'top');
-		});
+var socket = io.connect('//:8999');
 
-	</script>
 
-	<script src="simple/input.js"></script>
-	<script src="simple/input-checkbox.js"></script>
-	<script src="simple/input-radio.js"></script>
-	<script src="simple/select.js"></script>
-	<script src="simple/slider.js"></script>
+// log:
 
-</body>
-</html>
+socket.on('connecting', function(transport){
+	new Element('li', {
+		text: 'Connecting with ' + transport
+	}).inject('log', 'top');
+});
+
+socket.on('connect', function(){
+	new Element('li[text="Connected!"]').inject('log', 'top');
+});
+
+socket.on('disconnect', function(){
+	new Element('li[text="Disconnected!"]').inject('log', 'top');
+});
+
+socket.on('connect_failed', function(){ 
+	new Element('li[text="Connect failed!"]').inject('log', 'top');
+});
+
+socket.on('error', function(){ 
+	new Element('li[text="Error!"]').inject('log', 'top');
+});
+
+socket.on('reconnecting', function(delay, attempts){
+	new Element('li', {
+		text: 'Reconnecting (' + delay + ' ' + attempts + ')'
+	}).inject('log', 'top');
+});
+
+socket.on('reconnect', function(transport, attempts){
+	new Element('li', {
+		text: 'Reconnected (' + transport + ' ' + attempts + ')!'
+	}).inject('log', 'top');
+});
+
+socket.on('reconnect_failed', function(){ 
+	new Element('li[text="Reconnect failed!"]').inject('log', 'top');
+});
+
+// lug:
+
+socket.on('get', function(data){
+	new Element('li', {
+		text: 'get: ' + JSON.stringify(data)
+	}).inject('lug', 'top');
+});
+
+socket.on('put', function(data){
+	new Element('li', {
+		text: 'put: ' + JSON.stringify(data)
+	}).inject('lug', 'top');
+});
+
+socket.on('post', function(key, value){
+	new Element('li', {
+		text: 'post: ' + key + ' ' + JSON.stringify(value)
+	}).inject('lug', 'top');
+});
+
+</script>
+
+
+<script src="simple/input.js"></script>
+<script src="simple/input-checkbox.js"></script>
+<script src="simple/input-radio.js"></script>
+<script src="simple/select.js"></script>
+<script src="simple/slider.js"></script>
+<script src="simple/input-reset.js"></script>

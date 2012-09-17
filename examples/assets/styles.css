@@ -30,12 +30,22 @@ section {
 	width: 250px;
 }
 
-#info {
-	display: block;
+#log,
+#lug {
+	clear: both;
 	font-size: 81.25%;
-	height: 3em;
+	height: 6em;
 	list-style: square;
+	margin: 0.5em 1em;
 	overflow-y: auto;
+	max-width: 750px;
+}
+
+hr {
+	border-color: #eee white white white;
+	clear: both;
+	margin: 2em;
+	max-width: 780px;
 }
 
 h1 {
