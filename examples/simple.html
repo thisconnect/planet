@@ -97,7 +97,7 @@
 
 		if (!this.io) new Element('li[text="Could not connect to server!"]').inject('info');
 
-		var socket = io.connect('http://localhost:8999', {
+		var socket = io.connect('//:8999', {
 			'connect timeout': 2500
 		});
 
@@ -123,12 +123,20 @@
 			new Element('li[text="Error!"]').inject('info', 'top');
 		});
 
-		socket.on('reconnecting', function(transport){
-			new Element('li[text="Reconnecting"]').inject('info', 'top');
+		socket.on('reconnecting', function(delay, attempts){
+			new Element('li', {
+				text: 'Reconnecting (' + delay + ' ' + attempts + ')'
+			}).inject('info', 'top');
 		});
 
-		socket.on('reconnect', function(){
-			new Element('li[text="Reconnected!"]').inject('info', 'top');
+		socket.on('reconnect', function(transport, attempts){
+			new Element('li', {
+				text: 'Reconnected (' + transport + ' ' + attempts + ')!'
+			}).inject('info', 'top');
+		});
+
+		socket.on('reconnect_failed', function(){ 
+			new Element('li[text="Reconnect failed!"]').inject('info', 'top');
 		});
 
 	</script>

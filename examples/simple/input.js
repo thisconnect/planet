@@ -20,7 +20,7 @@ $$('input[type=text], input[type=number], input[type=range], textarea').each(fun
 		}
 	});
 
-	socket.on('get', function(data){
+	socket.once('get', function(data){
 		if (component in data){
 			input.set('value', data[component]);
 		}

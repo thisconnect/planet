@@ -15,7 +15,7 @@ $$('select').each(function(select){
 		}
 	});
 
-	socket.on('get', function(data){
+	socket.once('get', function(data){
 		if (component in data){
 			data[component].each(function(value, i){
 				options[i].set('selected', value);

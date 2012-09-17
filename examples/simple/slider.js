@@ -19,7 +19,7 @@
 		}
 	});
 
-	socket.on('get', function(data){
+	socket.once('get', function(data){
 		if ('slider' in data){
 			mySlider.setKnobPosition(mySlider.toPosition(data.slider));
 			mySlider.step = data.slider;

@@ -12,7 +12,7 @@ $$('input[type=checkbox]').each(function(checkbox){
 		}
 	});
 
-	socket.on('get', function(data){
+	socket.once('get', function(data){
 		if (component in data){
 			checkbox.set('checked', data[component]);
 		}

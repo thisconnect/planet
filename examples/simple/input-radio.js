@@ -13,7 +13,7 @@
 		}
 	});
 
-	socket.on('get', function(data){
+	socket.once('get', function(data){
 		if ('spice' in data){
 			radios[values.indexOf(data['spice'])].set('checked', true);
 		}
