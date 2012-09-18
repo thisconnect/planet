@@ -10,7 +10,7 @@ Tests.describe('Socket.IO: Connect', function(it){
 		expect.perform(4);
 		var spy = new Spy();
 
-		var socket = io.connect(null, {'force new connection': 1});
+		var socket = io.connect('//:8999', {'force new connection': 1});
 
 		socket.on('connect', function(){
 			expect(spy.getErrorCount()).toBe(0);
@@ -30,7 +30,7 @@ Tests.describe('Socket.IO: Connect', function(it){
 		expect.perform(4);
 		var spy = new Spy();
 
-		var socket = io.connect(null, {'force new connection': 1});
+		var socket = io.connect('//:8999', {'force new connection': 1});
 
 		socket.on('connect', function(){
 			spy();

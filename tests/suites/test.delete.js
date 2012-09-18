@@ -10,7 +10,7 @@ Tests.describe('Planet API: Delete', function(it){
 		expect.perform(17);
 		var spy = new Spy();
 
-		var first = io.connect(null, {'force new connection': 1});
+		var first = io.connect('//:8999', {'force new connection': 1});
 
 		first.on('connect', function(){
 			first.emit('put', {
@@ -40,7 +40,7 @@ Tests.describe('Planet API: Delete', function(it){
 
 		first.on('disconnect', function(){
 
-			var second = io.connect(null, {'force new connection': 1});
+			var second = io.connect('//:8999', {'force new connection': 1});
 
 			second.on('get', function(data){
 				expect(spy.getCallCount()).toBe(6);
@@ -64,7 +64,7 @@ Tests.describe('Planet API: Delete', function(it){
 		expect.perform(28);
 		var spy = new Spy();
 
-		var first = io.connect(null, {'force new connection': 1});
+		var first = io.connect('//:8999', {'force new connection': 1});
 
 		first.on('connect', function(){
 			first.emit('put', {
@@ -98,7 +98,7 @@ Tests.describe('Planet API: Delete', function(it){
 
 		first.on('disconnect', function(){
 
-			var second = io.connect(null, {'force new connection': 1});
+			var second = io.connect('//:8999', {'force new connection': 1});
 
 			second.on('get', function(data){
 				expect(spy.getCallCount()).toBe(6);
@@ -120,7 +120,7 @@ Tests.describe('Planet API: Delete', function(it){
 	it('should delete everything', function(expect){
 		expect.perform(4);
 
-		var first = io.connect(null, {'force new connection': 1});
+		var first = io.connect('//:8999', {'force new connection': 1});
 
 		first.on('connect', function(){
 			first.emit('put', {
@@ -139,7 +139,7 @@ Tests.describe('Planet API: Delete', function(it){
 
 		first.on('disconnect', function(){
 
-			var second = io.connect(null, {'force new connection': 1});
+			var second = io.connect('//:8999', {'force new connection': 1});
 
 			second.on('get', function(data){
 				expect(data).toBeType('object');
@@ -156,7 +156,7 @@ Tests.describe('Planet API: Delete', function(it){
 		expect.perform(7);
 		var spy = new Spy();
 
-		var first = io.connect(null, {'force new connection': 1});
+		var first = io.connect('//:8999', {'force new connection': 1});
 
 		first.on('connect', function(){
 			first.emit('delete');
@@ -180,7 +180,7 @@ Tests.describe('Planet API: Delete', function(it){
 
 		first.on('disconnect', function(){
 
-			var second = io.connect(null, {'force new connection': 1});
+			var second = io.connect('//:8999', {'force new connection': 1});
 
 			second.on('get', function(data){
 				expect(spy.getCallCount()).toBe(3);
@@ -226,7 +226,7 @@ Tests.describe('Planet API: Delete', function(it){
 			'reduceRight': true
 		};
 
-		var socket = io.connect(null, {'force new connection': 1});
+		var socket = io.connect('//:8999', {'force new connection': 1});
 
 		socket.on('connect', function(){
 			socket.emit('put', props);
@@ -255,7 +255,7 @@ Tests.describe('Planet API: Delete', function(it){
 		expect.perform(6);
 		var spy = new Spy();
 
-		var first = io.connect(null, {'force new connection': 1});
+		var first = io.connect('//:8999', {'force new connection': 1});
 
 		first.on('connect', function(){
 			first.emit('delete');
@@ -281,7 +281,7 @@ Tests.describe('Planet API: Delete', function(it){
 
 		first.on('disconnect', function(){
 
-			var second = io.connect(null, {'force new connection': 1});
+			var second = io.connect('//:8999', {'force new connection': 1});
 
 			second.on('get', function(data){
 				expect(spy.getCallCount()).toBe(7);

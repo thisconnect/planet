@@ -9,7 +9,7 @@ Tests.describe('Planet API: Post', function(it){
 	it('should allow for `post` key value pairs', function(expect){
 		expect.perform(4);
 
-		var socket = io.connect(null, {'force new connection': 1});
+		var socket = io.connect('//:8999', {'force new connection': 1});
 
 		socket.on('connect', function(){
 			socket.emit('post', 'key-u', 123);
@@ -30,7 +30,7 @@ Tests.describe('Planet API: Post', function(it){
 		var spy = new Spy();
 
 		var container = {},
-			socket = io.connect(null, {'force new connection': 1});
+			socket = io.connect('//:8999', {'force new connection': 1});
 
 		socket.on('connect', function(){
 			socket.emit('post', 'key-a', 12);
@@ -73,7 +73,7 @@ Tests.describe('Planet API: Post', function(it){
 		expect.perform(22);
 		var spy = new Spy();
 
-		var socket = io.connect(null, {'force new connection': 1});
+		var socket = io.connect('//:8999', {'force new connection': 1});
 
 		socket.on('connect', function(){
 			socket.emit('post', ['a', 'b', 'c'], 10);
@@ -108,7 +108,7 @@ Tests.describe('Planet API: Post', function(it){
 			'concat', 'join', 'slice', 'toString', 'indexOf', 'lastIndexOf',
 			'filter', 'forEach', 'every', 'map', 'some', 'reduce', 'reduceRight'];
 
-		var socket = io.connect(null, {'force new connection': 1});
+		var socket = io.connect('//:8999', {'force new connection': 1});
 
 		socket.on('connect', function(){
 			arrayProtos.forEach(function(item){
@@ -134,7 +134,7 @@ Tests.describe('Planet API: Post', function(it){
 		expect.perform(15);
 		var spy = new Spy();
 
-		var socket = io.connect(null, {'force new connection': 1});
+		var socket = io.connect('//:8999', {'force new connection': 1});
 
 		socket.on('connect', function(){
 			socket.emit('post', 789);
