@@ -100,7 +100,8 @@ Tests.describe('Planet API: Post', function(it){
 
 
 	it('should allow `post` with reserved object props and methods as key names', function(expect){
-		expect.perform(46);
+		expect.perform(47);
+		var spy = new Spy();
 
 		var arrayProtos = ['prototype', 'isArray', 'length', 'pop',
 			'push', 'reverse', 'shift', 'sort', 'splice', 'unshift',
@@ -117,9 +118,14 @@ Tests.describe('Planet API: Post', function(it){
 
 		var indexOf = Array.prototype.indexOf;
 		socket.on('post', function(key, value){
+			spy();
 			expect(indexOf.call(arrayProtos, key)).not.toBe(-1);
 			expect(value).toBeFalse();
-			this.disconnect();
+			if (spy.getCallCount() >= 23) this.disconnect();
+		});
+
+		socket.on('disconnect', function(){
+			expect(spy.getCallCount()).toBe(23);
 		});
 	});
 
