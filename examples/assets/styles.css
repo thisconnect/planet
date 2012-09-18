@@ -12,15 +12,6 @@ body, input, select, textarea {
 .clear:after { clear: both; }
 .clear{ zoom: 1; }
 
-/*
-::selection {
-	background: transparent;
-}
-::-moz-selection {
-	background: transparent;
-}
-*/
-
 header,
 section {
 	display: block;
@@ -29,6 +20,8 @@ section {
 	padding: 0;
 	width: 250px;
 }
+
+.clear { clear: both; }
 
 #log,
 #lug {
@@ -85,6 +78,7 @@ input {
 	margin: 0 0 1em 0;
 	outline: none;
 	padding: 0;
+	width: 100%;
 }
 
 input::-webkit-input-placeholder { }
@@ -94,15 +88,13 @@ input[type=text] {
 	border-spacing: 0;
 	display: block;
     outline: none;
-	width: 100%;
 	text-indent: 10px;
 }
 
 input[type=number] {
 	border: 1px solid #bbb;
 	display: block;
-	padding-left: 10px;
-	width: 50%;
+	text-indent: 10px;
 }
 
 input[type=range] {
@@ -119,6 +111,7 @@ input[type=radio] {
 	position: relative;
 	top: -1px;
 	vertical-align: baseline;
+	width: auto;
 }
 
 select {
@@ -145,8 +138,8 @@ textarea {
 	border: 1px solid #bbb;
 	border-spacing: 0;
 	display: block;
-	height: 5em;
-	margin: 0 0 14px 0;
+	height: 80px;
+	margin: 0;
     outline: none;
 	padding: 10px;
 	resize: none;

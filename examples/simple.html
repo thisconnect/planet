@@ -11,21 +11,18 @@
 
 <section>
 	<div class="group clear">
-		<label><input type=checkbox name=box value=salt>Salt</label>
-		<label><input type=checkbox name=box value=sugar>Sugar</label>
-		<label><input type=checkbox name=box value=pepper>Pepper</label>
-	</div>
-	<div class="group clear">
-		<label><input type=radio name=spice value=chili>Chili</label>
-		<label><input type=radio name=spice value=curry>Curry</label>
-		<label><input type=radio name=spice value=wasabi>Wasabi</label>
+		<label><input type=checkbox name=spice value=pepper>Pepper</label>
+		<label><input type=checkbox name=spice value=cinnamon>Cinnamon</label>
+		<label><input type=checkbox name=spice value=cumin>Cumin</label>
 	</div>
 </section>
 
 <section>
-	<label>
-		<span>Text</span><input type=text name=specials placeholder=empty>
-	</label>
+	<div class="group clear">
+		<label><input type=radio name=herb value=basil>Basil</label>
+		<label><input type=radio name=herb value=coriander>Coriander</label>
+		<label><input type=radio name=herb value=rosemary>Rosemary</label>
+	</div>
 </section>
 
 <section>
@@ -37,6 +34,24 @@
 			<option>Oven</option>
 			<option>Stove</option>
 		</select>
+	</label>
+</section>
+
+<section>
+	<label>
+		<span>Text</span><input type=text name=specials placeholder=empty>
+	</label>
+</section>
+
+<section>
+	<label>
+		<span>Number</span><input type=number name=amount min=1 max=1000 step="0.1" value=6>
+	</label>
+</section>
+
+<section>
+	<label>
+		<span>Textarea</span><textarea name=formula></textarea>
 	</label>
 </section>
 
@@ -62,30 +77,18 @@
 
 <section>
 	<label>
-		<span>Textarea</span><textarea name=formula></textarea>
+		<span>Range (HTML5)</span><input type=range name=temperature min=50 max=300 value=100>
 	</label>
 </section>
 
 <section>
 	<label>
-		<span>Number</span><input type=number name=amount min=1 max=1000 step="0.1" value=6>
-	</label>
-</section>
-
-<section>
-	<label>
-		<span>Range</span><input type=range name=temperature min=50 max=300 value=100>
-	</label>
-</section>
-
-<section>
-	<label>
-		<span>Slider</span>
+		<span>Slider (JavaScript)</span>
 		<div id=slider class=slider><div id=knob class=knob></div></div>
 	</label>
 </section>
 
-<section>
+<section class=clear>
 	<label>
 		<input type=reset>
 	</labe>

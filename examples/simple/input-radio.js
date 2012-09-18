@@ -1,21 +1,21 @@
 (function(){
 
-	var radios = $$('input[type=radio][name=spice]'),
+	var radios = $$('input[type=radio][name=herb]'),
 		values = radios.get('value');
 
 	radios.addEvent('change', function(){
-		socket.emit('post', 'spice', this.get('value'));
+		socket.emit('post', 'herb', this.get('value'));
 	});
 
 	socket.on('post', function(key, value){
-		if (key == 'spice'){
+		if (key == 'herb'){
 			radios[values.indexOf(value)].set('checked', true);
 		}
 	});
 
 	socket.once('get', function(data){
-		if ('spice' in data){
-			radios[values.indexOf(data['spice'])].set('checked', true);
+		if ('herb' in data){
+			radios[values.indexOf(data['herb'])].set('checked', true);
 		}
 	});
 
