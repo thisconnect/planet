@@ -9,7 +9,7 @@ Tests.describe('Planet API: Post', function(it){
 	it('should allow for `post` key value pairs', function(expect){
 		expect.perform(4);
 
-		var socket = io.connect('//:8999', {'force new connection': 1});
+		var socket = io.connect('//:8999', {'force new connection': true});
 
 		socket.on('connect', function(){
 			socket.emit('post', 'key-u', 123);
@@ -30,7 +30,7 @@ Tests.describe('Planet API: Post', function(it){
 		var spy = new Spy();
 
 		var container = {},
-			socket = io.connect('//:8999', {'force new connection': 1});
+			socket = io.connect('//:8999', {'force new connection': true});
 
 		socket.on('connect', function(){
 			socket.emit('post', 'key-a', 12);
@@ -39,17 +39,18 @@ Tests.describe('Planet API: Post', function(it){
 			socket.emit('post', 'key-d', []);
 			socket.emit('post', 'key-e', {});
 			socket.emit('post', 'key-f', false);
+			socket.emit('post', 'key-g', new Date());
 		});
 
 		socket.on('post', function(key, value){
 			spy();
 			expect(key).toBeType('string');
 			container[key] = value;
-			if (6 == spy.getCallCount()) this.disconnect();
+			if (7 == spy.getCallCount()) this.disconnect();
 		});
 
 		socket.on('disconnect', function(){
-			expect(spy.getCallCount()).toBe(6);
+			expect(spy.getCallCount()).toBe(7);
 			expect(container).toHaveProperty('key-a');
 			expect(container).toHaveProperty('key-b');
 			expect(container).toHaveProperty('key-c');
@@ -65,6 +66,7 @@ Tests.describe('Planet API: Post', function(it){
 			expect(container['key-a']).toBe(12);
 			expect(container['key-b']).toBe('');
 			expect(container['key-f']).toBeFalse();
+			expect(container['key-g']).toBeType('string');
 		});
 	});
 
@@ -73,7 +75,7 @@ Tests.describe('Planet API: Post', function(it){
 		expect.perform(22);
 		var spy = new Spy();
 
-		var socket = io.connect('//:8999', {'force new connection': 1});
+		var socket = io.connect('//:8999', {'force new connection': true});
 
 		socket.on('connect', function(){
 			socket.emit('post', ['a', 'b', 'c'], 10);
@@ -108,7 +110,7 @@ Tests.describe('Planet API: Post', function(it){
 			'concat', 'join', 'slice', 'toString', 'indexOf', 'lastIndexOf',
 			'filter', 'forEach', 'every', 'map', 'some', 'reduce', 'reduceRight'];
 
-		var socket = io.connect('//:8999', {'force new connection': 1});
+		var socket = io.connect('//:8999', {'force new connection': true});
 
 		socket.on('connect', function(){
 			arrayProtos.forEach(function(item){
@@ -134,7 +136,7 @@ Tests.describe('Planet API: Post', function(it){
 		expect.perform(15);
 		var spy = new Spy();
 
-		var socket = io.connect('//:8999', {'force new connection': 1});
+		var socket = io.connect('//:8999', {'force new connection': true});
 
 		socket.on('connect', function(){
 			socket.emit('post', 789);

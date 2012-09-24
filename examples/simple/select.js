@@ -6,7 +6,7 @@ $$('select:not([multiple])').each(function(select){
 		socket.emit('post', component, select.get('value'));
 	});
 
-	socket.on('post', function(key, values){
+	socket.on('post', function(key, value){
 		if (key == component){
 			select.set('value', value);
 		}

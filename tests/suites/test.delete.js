@@ -10,7 +10,7 @@ Tests.describe('Planet API: Delete', function(it){
 		expect.perform(17);
 		var spy = new Spy();
 
-		var first = io.connect('//:8999', {'force new connection': 1});
+		var first = io.connect('//:8999', {'force new connection': true});
 
 		first.on('connect', function(){
 			first.emit('put', {
@@ -35,12 +35,12 @@ Tests.describe('Planet API: Delete', function(it){
 		first.on('delete', function(key){
 			spy();
 			expect(key).toMatch(/key-[a-f]/);
-			if (spy.getCallCount() == 6) this.disconnect();
+			if (spy.getCallCount() == 6) first.disconnect();
 		});
 
 		first.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {'force new connection': 1});
+			var second = io.connect('//:8999', {'force new connection': true});
 
 			second.on('get', function(data){
 				expect(spy.getCallCount()).toBe(6);
@@ -54,7 +54,7 @@ Tests.describe('Planet API: Delete', function(it){
 				expect(data['key-e']).not.toBeType('object');
 				expect(data).not.toHaveProperty('key-f');
 				expect(data['key-f']).not.toBeType('boolean');
-				this.disconnect();
+				second.disconnect();
 			});
 		});
 	});
@@ -64,7 +64,7 @@ Tests.describe('Planet API: Delete', function(it){
 		expect.perform(28);
 		var spy = new Spy();
 
-		var first = io.connect('//:8999', {'force new connection': 1});
+		var first = io.connect('//:8999', {'force new connection': true});
 
 		first.on('connect', function(){
 			first.emit('put', {
@@ -93,12 +93,12 @@ Tests.describe('Planet API: Delete', function(it){
 			expect(key).toBeType('array');
 			expect(key[0]).toBe('key-a');
 			expect(key[1]).toMatch(/key-[a-f]/);
-			if (spy.getCallCount() == 6) this.disconnect();
+			if (spy.getCallCount() == 6) first.disconnect();
 		});
 
 		first.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {'force new connection': 1});
+			var second = io.connect('//:8999', {'force new connection': true});
 
 			second.on('get', function(data){
 				expect(spy.getCallCount()).toBe(6);
@@ -111,7 +111,7 @@ Tests.describe('Planet API: Delete', function(it){
 				expect(data['key-a']).not.toHaveProperty('key-d');
 				expect(data['key-a']).not.toHaveProperty('key-e');
 				expect(data['key-a']).not.toHaveProperty('key-f');
-				this.disconnect();
+				second.disconnect();
 			});
 		});
 	});
@@ -120,7 +120,7 @@ Tests.describe('Planet API: Delete', function(it){
 	it('should delete everything', function(expect){
 		expect.perform(4);
 
-		var first = io.connect('//:8999', {'force new connection': 1});
+		var first = io.connect('//:8999', {'force new connection': true});
 
 		first.on('connect', function(){
 			first.emit('put', {
@@ -134,19 +134,19 @@ Tests.describe('Planet API: Delete', function(it){
 		});
 
 		first.on('delete', function(key){
-			this.disconnect();
+			first.disconnect();
 		});
 
 		first.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {'force new connection': 1});
+			var second = io.connect('//:8999', {'force new connection': true});
 
 			second.on('get', function(data){
 				expect(data).toBeType('object');
 				expect(data).not.toHaveProperty('key-a');
 				expect(data).not.toHaveProperty('key-b');
 				expect(Object.keys(data).length).toBe(0);
-				this.disconnect();
+				second.disconnect();
 			});
 		});
 	});
@@ -156,7 +156,7 @@ Tests.describe('Planet API: Delete', function(it){
 		expect.perform(7);
 		var spy = new Spy();
 
-		var first = io.connect('//:8999', {'force new connection': 1});
+		var first = io.connect('//:8999', {'force new connection': true});
 
 		first.on('connect', function(){
 			first.emit('delete');
@@ -175,12 +175,12 @@ Tests.describe('Planet API: Delete', function(it){
 
 		first.on('error', function(type, key){
 			spy();
-			if (spy.getCallCount() == 3) this.disconnect();
+			if (spy.getCallCount() == 3) first.disconnect();
 		});
 
 		first.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {'force new connection': 1});
+			var second = io.connect('//:8999', {'force new connection': true});
 
 			second.on('get', function(data){
 				expect(spy.getCallCount()).toBe(3);
@@ -190,7 +190,7 @@ Tests.describe('Planet API: Delete', function(it){
 				expect(data['key-a']).toHaveProperty('key-a');
 				expect(data['key-a']).not.toHaveProperty('key-b');
 				expect(Object.keys(data).length).toBe(1);
-				this.disconnect();
+				second.disconnect();
 			});
 		});
 	});
@@ -226,7 +226,7 @@ Tests.describe('Planet API: Delete', function(it){
 			'reduceRight': true
 		};
 
-		var socket = io.connect('//:8999', {'force new connection': 1});
+		var socket = io.connect('//:8999', {'force new connection': true});
 
 		socket.on('connect', function(){
 			socket.emit('put', props);
@@ -241,7 +241,7 @@ Tests.describe('Planet API: Delete', function(it){
 		socket.on('delete', function(key){
 			delete props[key];
 			spy();
-			if (spy.getCallCount() == 23) this.disconnect();
+			if (spy.getCallCount() == 23) socket.disconnect();
 		});
 
 		socket.on('disconnect', function(){
@@ -255,7 +255,7 @@ Tests.describe('Planet API: Delete', function(it){
 		expect.perform(6);
 		var spy = new Spy();
 
-		var first = io.connect('//:8999', {'force new connection': 1});
+		var first = io.connect('//:8999', {'force new connection': true});
 
 		first.on('connect', function(){
 			first.emit('delete');
@@ -276,12 +276,12 @@ Tests.describe('Planet API: Delete', function(it){
 
 		first.on('error', function(type, key){
 			spy();
-			if (spy.getCallCount() == 7) this.disconnect();
+			if (spy.getCallCount() == 7) first.disconnect();
 		});
 
 		first.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {'force new connection': 1});
+			var second = io.connect('//:8999', {'force new connection': true});
 
 			second.on('get', function(data){
 				expect(spy.getCallCount()).toBe(7);
@@ -290,7 +290,7 @@ Tests.describe('Planet API: Delete', function(it){
 				expect(data['key-a']).toBeType('number');
 				expect(data['key-a']).toBe(1);
 				expect(Object.keys(data).length).toBe(1);
-				this.disconnect();
+				second.disconnect();
 			});
 		});
 	});

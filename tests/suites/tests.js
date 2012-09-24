@@ -7,6 +7,6 @@ exports.setup = function(tests){
 	require('./test.put').setup(tests);
 	require('./test.get').setup(tests);
 	require('./test.delete').setup(tests);
-	//require('./test.stress').setup(tests);
+	require('./test.stress').setup(tests);
 
 };

@@ -18,6 +18,9 @@
 		"mime": ">= 1.2.4",
 		"optparse": ">= 1.0.3"
 	},
+	"devDependencies": {
+		"microtime": "0.3.1"
+	},
 	"licenses": [{
 		"type": "MIT",
 		"url": "https://raw.github.com/thisconnect/planet/master/LICENSE"

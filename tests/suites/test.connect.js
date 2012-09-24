@@ -10,13 +10,13 @@ Tests.describe('Socket.IO: Connect', function(it){
 		expect.perform(4);
 		var spy = new Spy();
 
-		var socket = io.connect('//:8999', {'force new connection': 1});
+		var socket = io.connect('//:8999', {'force new connection': true});
 
 		socket.on('connect', function(){
 			expect(spy.getErrorCount()).toBe(0);
 			expect(spy.getCallCount()).toBe(0);
 			spy();
-			this.disconnect();
+			socket.disconnect();
 		});
 
 		socket.on('disconnect', function(){
@@ -30,7 +30,7 @@ Tests.describe('Socket.IO: Connect', function(it){
 		expect.perform(4);
 		var spy = new Spy();
 
-		var socket = io.connect('//:8999', {'force new connection': 1});
+		var socket = io.connect('//:8999', {'force new connection': true});
 
 		socket.on('connect', function(){
 			spy();
@@ -41,7 +41,7 @@ Tests.describe('Socket.IO: Connect', function(it){
 			expect(data).toBeType('string');
 			expect(data).toBe('simple message');
 			spy();
-			this.disconnect();
+			socket.disconnect();
 		});
 
 		socket.on('disconnect', function(){
