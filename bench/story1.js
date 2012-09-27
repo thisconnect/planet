@@ -1,7 +1,7 @@
 var io = require('../node_modules/socket.io/node_modules/socket.io-client'),
 	microtime = require('microtime');
 
-var now = microtime.now, // in µs (or for ms use Date.now)
+var now = microtime.now, // microtime.now for µs (or Date.now for ms)
 	timestamp = 0,
 	logs = {};
 

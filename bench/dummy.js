@@ -1,6 +1,7 @@
 var io = require('../node_modules/socket.io/node_modules/socket.io-client');
 
 module.exports = function(i){
+
 	console.log(i);
 
 	var socket = io.connect('//:8999', {
@@ -10,6 +11,7 @@ module.exports = function(i){
 	});
 
 	socket.on('connect', function(){});
+	socket.on('error', function(){});
 	socket.on('get', function(){});
 	socket.on('put', function(){});
 	socket.on('post', function(){});
