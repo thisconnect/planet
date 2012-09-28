@@ -17,13 +17,22 @@ var log = {
 	}
 };
 
+console.log('measure execution and response time');
 spawn_story1(function(){
+	console.log('first client done');
 	spawn_story1(function(){
+		console.log('time is mearued relative to last action');
 		spawn_story1(function(){
+			console.log('spawning 200 dummy clients');
 			spawn_dummies(200, function(){
+				console.log('this took a while :)');
 				spawn_story1(function(){
+					console.log('measure with 200 other clients');
 					spawn_story1(function(){
+						console.log('almost done')
 						spawn_story1(function(){
+							console.log('first 3 results are single clients');
+							console.log('last 3 results with 200 connected clients');
 							console.log(log.read());
 							process.exit(0);
 						});
@@ -39,13 +48,13 @@ function error(msg){
 }
 
 function spawn_story1(fn){
-	var child = spawn('node', ['./story1.js']);
-	child.stderr.on('data', error);
-	child.stdout.on('data', function(data){
+	var client = spawn('node', ['./client.js']);
+	client.stderr.on('data', error);
+	client.stdout.on('data', function(data){
 		log.write(data);
 		//story1.kill();
 	});
-	child.on('exit', function(code){
+	client.on('exit', function(code){
 		if (typeof fn == 'function') fn(code);
 	});
 }
@@ -59,7 +68,6 @@ function spawn_dummies(amount, fn){
 	dummies.stdout.on('data', function(data){
 		count += data.trim().split('\n').length;
 		if (count < amount) return;
-		console.log('created', amount, 'dummy clients\n');
 		if (typeof fn == 'function') fn();
 	});
 	

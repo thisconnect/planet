@@ -2,11 +2,11 @@ if (this.window == null) io = require('../../node_modules/socket.io/node_modules
 
 exports.setup = function(tests){
 
-	require('./test.connect').setup(tests);
-	require('./test.post').setup(tests);
-	require('./test.put').setup(tests);
-	require('./test.get').setup(tests);
-	require('./test.delete').setup(tests);
-	require('./test.stress').setup(tests);
+	require('./client.connect').setup(tests);
+	require('./client.post').setup(tests);
+	require('./client.put').setup(tests);
+	require('./client.get').setup(tests);
+	require('./client.delete').setup(tests);
+	require('./client.stress').setup(tests);
 
 };
