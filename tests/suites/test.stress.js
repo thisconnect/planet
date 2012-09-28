@@ -16,7 +16,7 @@ Tests.describe('Planet: Stress test', function(it){
 
 		var local = {};
 
-		for (var i = 0; i < 99999; i++){
+		for (var i = 0; i < 19999; i++){
 			local[i] = Math.random();
 		};
 

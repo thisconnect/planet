@@ -10,7 +10,9 @@ Tests.describe('Socket.IO: Connect', function(it){
 		expect.perform(4);
 		var spy = new Spy();
 
-		var socket = io.connect('//:8999', {'force new connection': true});
+		var socket = io.connect('//:8999', {
+			'force new connection': true
+		});
 
 		socket.on('connect', function(){
 			expect(spy.getErrorCount()).toBe(0);
@@ -22,6 +24,14 @@ Tests.describe('Socket.IO: Connect', function(it){
 		socket.on('disconnect', function(){
 			expect(spy.getErrorCount()).toBe(0);
 			expect(spy.getCallCount()).toBe(1);
+		});
+
+		socket.on('connect_failed', function(){
+			throw new Error('client failed to connect');
+		});
+
+		socket.on('error', function(){
+			throw new Error('client error');
 		});
 	});
 
