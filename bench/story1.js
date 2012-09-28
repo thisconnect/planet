@@ -1,7 +1,8 @@
-var io = require('../node_modules/socket.io/node_modules/socket.io-client'),
-	microtime = require('microtime');
+var io = require('../node_modules/socket.io/node_modules/socket.io-client');
 
-var now = microtime.now, // microtime.now for µs (or Date.now for ms)
+// var microtime = require('microtime');
+
+var now = Date.now, // microtime.now for µs (or Date.now for ms)
 	timestamp = 0,
 	logs = {};
 
@@ -78,11 +79,11 @@ process.on('exit', function(){
 // Errors
 
 socket.on('connect_failed', function(){
-	process.stderr.write('ERROR (connect_failed)! \n');
+	process.stderr.write('socket failed to connect!\n');
 });
 
 socket.on('error', function(){
-	process.stderr.write('ERROR! \n');
+	process.stderr.write('socket error!\n');
 });
 
 // process.exit(0); // success = 0, error = 1

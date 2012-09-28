@@ -2,15 +2,16 @@ var io = require('../node_modules/socket.io/node_modules/socket.io-client');
 
 module.exports = function(i){
 
-	console.log(i);
-
 	var socket = io.connect('//:8999', {
 		'force new connection': 1,
 		'try multiple transports': false,
 		'reconnect': false
 	});
 
-	socket.on('connect', function(){});
+	socket.on('connect', function(){
+		console.log(i);
+	});
+	socket.on('connect_failed', function(){});
 	socket.on('error', function(){});
 	socket.on('get', function(){});
 	socket.on('put', function(){});
@@ -18,15 +19,10 @@ module.exports = function(i){
 	socket.on('delete', function(){});
 	socket.on('disconnect', function(){});
 
-	/*
-	// End
 
+	/*
 	socket.on('disconnect', function(){
 		process.exit(0);
-	});
-
-	process.on('exit', function(){
-		if (socket.socket.connected) socket.disconnect();
 	});
 
 	// Errors
