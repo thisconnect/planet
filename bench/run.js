@@ -32,7 +32,7 @@ spawn_story1(function(){
 						console.log('almost done')
 						spawn_story1(function(){
 							console.log('first 3 results are single clients');
-							console.log('last 3 results with 200 connected clients');
+							console.log('last 3 results tested with 200 connected clients');
 							console.log(log.read());
 							process.exit(0);
 						});
