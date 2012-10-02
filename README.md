@@ -39,7 +39,6 @@ socket.on('connect', function(){
 ```
 
 Browse the examples planet/examples/index.html
-(Chrome does not allow Websockets from filesystem)
 
 ```javascript
 var socket = io.connect('//localhost:8999');
@@ -95,11 +94,11 @@ Methods
 Events
 ------
 
-- *get(object)*
+- *get(data)*
 
-  Fired when handshake is successful and passes the current state.
+  Fired when handshake is successful, servers the current state.
 
-- *put(object)*
+- *put(data)*
 
   Fired when a put message is emitted by a client.
 
@@ -118,7 +117,7 @@ Events
 git submodule update --init --recursive
 ```
 
-Open http://localhost:8999/tests/ in a browser OR
+Run ./planet and run the tests from a server or cli
 
 ```bash
 node tests/runner.js
@@ -135,12 +134,15 @@ TODO
 - test for lot of data
 - test for huge data packets
 - remove hardcoded 220 client limit
+- cleanup lib directory
+- make io options configurable
+- api split delete into remove and delete
 
 
 #### Dependencies
 
 - [Socket.IO](http://socket.io/) 0.9.x
-- Optparse-js 1.0.3
+- Optparse-js 1.0.x
 
 
 
