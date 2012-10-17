@@ -25,7 +25,7 @@ Tests.describe('Planet: Stress test', function(it){
 		});
 
 		first.on('put', function(data){
-			this.disconnect();
+			first.disconnect();
 		});
 
 		first.on('disconnect', function(){
@@ -36,6 +36,9 @@ Tests.describe('Planet: Stress test', function(it){
 				expect(Object.keys(data).length).toBe(Object.keys(local).length);
 				expect(data).toBeType('object');
 				second.emit('delete');
+			});
+
+			second.on('delete', function(data){
 				second.disconnect();
 			});
 		});
