@@ -35,7 +35,8 @@ Tests.describe('Planet: Stress test', function(it){
 			second.on('get', function(data){
 				expect(Object.keys(data).length).toBe(Object.keys(local).length);
 				expect(data).toBeType('object');
-				this.disconnect();
+				second.emit('delete');
+				second.disconnect();
 			});
 		});
 	});
