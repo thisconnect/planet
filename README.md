@@ -137,6 +137,8 @@ TODO
 - cleanup lib directory
 - make io options configurable
 - api split delete into remove and delete
+- review cli api
+- tests for cli
 
 
 #### Dependencies
