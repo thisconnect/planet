@@ -8,7 +8,9 @@ Tests.setCallbacks({
 	}
 });
 
-// Import test cases
+require('./suites/server.utils').setup(Tests);
+
+// Import client api tests
 require('./suites/tests').setup(Tests);
 
 // Run tests
