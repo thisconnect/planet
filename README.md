@@ -13,16 +13,14 @@ Server
 ------
 
 ```bash
-cd bin
-./planet # -nouse-idle-notification -expose-gc
+planet # --host mydomain.com --port 8004
 ```
-
 
 Client
 ------
 
 ```javascript
-var socket = io.connect('//127.0.0.1:8999');
+var socket = io.connect('//mydomain.com:8004');
 
 socket.on('connect', function(){
 	var local = {};
@@ -41,7 +39,7 @@ socket.on('connect', function(){
 Browse the examples planet/examples/index.html
 
 ```javascript
-var socket = io.connect('//localhost:8999');
+var socket = io.connect('//mydomain.com:8999');
 
 socket.on('connect', function(){
 	var local = {};
@@ -125,10 +123,15 @@ node tests/runner.js
 
 (you might have to set ulimit -n 1024 if you want to connect with more than 200 clients)
 
+```bash
+node bench/run.js mydomain.com:8004
+```
+
 
 TODO
 ----
 
+- swap put and post
 - namespace with `.of('/planet')`
 - latency optimization
 - test for lot of data
@@ -145,7 +148,6 @@ TODO
 
 - [Socket.IO](http://socket.io/) 0.9.x
 - Optparse-js 1.0.x
-
 
 
 #### Dev Dependencies
