@@ -21,7 +21,7 @@ console.log('measure execution and response time');
 spawn_story1(function(){
 	console.log('first client done');
 	spawn_story1(function(){
-		console.log('time is mearued relative to last action');
+		console.log('time is measured relative to last action');
 		spawn_story1(function(){
 			console.log('spawning 200 dummy clients');
 			spawn_dummies(200, function(){
@@ -48,7 +48,7 @@ function error(msg){
 }
 
 function spawn_story1(fn){
-	var client = spawn('node', ['./client.js']);
+	var client = spawn('node', ['./client.js', process.argv[2] || '//:8999']);
 	client.stderr.on('data', error);
 	client.stdout.on('data', function(data){
 		log.write(data);
@@ -61,7 +61,7 @@ function spawn_story1(fn){
 
 function spawn_dummies(amount, fn){
 	var count = 0,
-		dummies = spawn('node', ['./dummies.js', amount]);
+		dummies = spawn('node', ['./dummies.js', amount, process.argv[2] || '//:8999']);
 
 	dummies.stderr.on('data', error);
 	dummies.stdout.setEncoding('utf8');

@@ -2,7 +2,7 @@ var io = require('../node_modules/socket.io/node_modules/socket.io-client');
 
 module.exports = function(i){
 
-	var socket = io.connect('//:8999', {
+	var socket = io.connect(process.argv[3] || '//:8999', {
 		'force new connection': 1,
 		'try multiple transports': false,
 		'reconnect': false
