@@ -3,9 +3,9 @@
 var port = 8999,
 	host = '127.0.0.1',
 	http = require('http'),
-	op = require('optparse');
+	optparse = require('optparse').OptionParser;
 
-var parser = new op.OptionParser([
+var parser = new optparse([
 	['-p', '--port PORT', 'The port to bind to (default: 8999)'],
 	['', '--host HOST', 'The host to connect to (default: 127.0.0.1)'],
 	['-h', '--help', 'Shows this help message']
