@@ -141,8 +141,7 @@ Tests.describe('Planet util: Merge', function(it){
 	it('should merge deeper', function(expect){
 		var o1 = {c: {c1: null, c2: false, c3: {cc1: 'o1cc1', cc2: 'o1cc2' }}},
 			o2 = {c: {c1: false, c2: null, c3: {cc1: 'o2cc1', cc3: 'o2cc3' }}},
-			e = {c: {c1: false, c2: null, c3: {cc1: 'o2cc1', cc2: 'o1cc2', cc3: 'o2cc3'}}},
-			e2 = {c: {c1: null, c2: false, c3: {cc1: 'o1cc1', cc3: 'o2cc3', cc2: 'o1cc2'}}};
+			e = {c: {c1: false, c2: null, c3: {cc1: 'o2cc1', cc2: 'o1cc2', cc3: 'o2cc3'}}};
 
 		var r = merge(o1, o2);
 		expect(r).toBeLike(e);
