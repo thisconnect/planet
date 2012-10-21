@@ -10,7 +10,9 @@ Tests.describe('Planet: Stress test', function(it){
 	it('should `put` then `get` lots of data', function(expect){
 		expect.perform(2);
 
-		var first = io.connect('//:8999', {'force new connection': true});
+		var first = io.connect('//:8999', {
+			'force new connection': true
+		});
 
 		first.emit('delete');
 
@@ -30,7 +32,9 @@ Tests.describe('Planet: Stress test', function(it){
 
 		first.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {'force new connection': true});
+			var second = io.connect('//:8999', {
+				'force new connection': true
+			});
 
 			second.on('get', function(data){
 				expect(Object.keys(data).length).toBe(Object.keys(local).length);
@@ -99,7 +103,9 @@ Tests.describe('Planet: Stress test', function(it){
 	it('should `get` by key', function(expect){
 		expect.perform(4);
 
-		var first = io.connect('//:8999', {'force new connection': true});
+		var first = io.connect('//:8999', {
+			'force new connection': true
+		});
 
 		first.on('connect', function(){
 			first.emit('put', { a: { b: { c: 0 } } });
@@ -111,7 +117,9 @@ Tests.describe('Planet: Stress test', function(it){
 
 		first.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {'force new connection': true});
+			var second = io.connect('//:8999', {
+				'force new connection': true
+			});
 
 			second.emit('get', 'a', function(data){
 				expect(data).toBeType('object');

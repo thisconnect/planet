@@ -10,7 +10,9 @@ Tests.describe('Planet API: Get', function(it){
 		expect.perform(5);
 		var spy = new Spy();
 
-		var socket = io.connect('//:8999', {'force new connection': true});
+		var socket = io.connect('//:8999', {
+			'force new connection': true
+		});
 
 		socket.on('connect', function(){
 			expect(spy.getErrorCount()).toBe(0);
@@ -22,7 +24,7 @@ Tests.describe('Planet API: Get', function(it){
 			expect(data).toBeType('object');
 			expect(spy.getCallCount()).toBe(1);
 			spy();
-			this.disconnect();
+			socket.disconnect();
 		});
 
 		socket.on('disconnect', function(){
@@ -34,10 +36,12 @@ Tests.describe('Planet API: Get', function(it){
 	it('should `get` the latest data', function(expect){
 		expect.perform(5);
 
-		var first = io.connect('//:8999', {'force new connection': true});
+		var first = io.connect('//:8999', {
+			'force new connection': true
+		});
 
 		first.on('connect', function(){
-			first.emit('put', { a: { b: { c: 123 } } });
+			first.emit('put', {a: {b: {c: 123}}});
 		});
 
 		first.on('put', function(data){
@@ -50,7 +54,9 @@ Tests.describe('Planet API: Get', function(it){
 
 		first.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {'force new connection': true});
+			var second = io.connect('//:8999', {
+				'force new connection': true
+			});
 
 			second.on('get', function(data){
 				expect(data).toBeType('object');
@@ -67,7 +73,9 @@ Tests.describe('Planet API: Get', function(it){
 	it('should emit `get` search a value by key', function(expect){
 		expect.perform(13);
 
-		var first = io.connect('//:8999', {'force new connection': true});
+		var first = io.connect('//:8999', {
+			'force new connection': true
+		});
 
 		first.on('connect', function(){
 			first.emit('put', {a: {b: {c: 0}}});
@@ -79,7 +87,9 @@ Tests.describe('Planet API: Get', function(it){
 
 		first.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {'force new connection': true});
+			var second = io.connect('//:8999', {
+				'force new connection': true
+			});
 
 			second.on('error', function(){
 				throw new Error('client error');
@@ -117,7 +127,9 @@ Tests.describe('Planet API: Get', function(it){
 	it('should return null for nonexistent or invalid keys', function(expect){
 		expect.perform(4);
 
-		var first = io.connect('//:8999', {'force new connection': true});
+		var first = io.connect('//:8999', {
+			'force new connection': true
+		});
 
 		first.on('connect', function(){
 			first.emit('put', {a: {b: {c: 0}}});
@@ -129,7 +141,9 @@ Tests.describe('Planet API: Get', function(it){
 
 		first.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {'force new connection': true});
+			var second = io.connect('//:8999', {
+				'force new connection': true
+			});
 
 			second.on('error', function(){
 				throw new Error('client error');
@@ -163,7 +177,9 @@ Tests.describe('Planet API: Get', function(it){
 		expect.perform(1);
 		var spy = new Spy();
 
-		var first = io.connect('//:8999', {'force new connection': true});
+		var first = io.connect('//:8999', {
+			'force new connection': true
+		});
 
 		first.on('connect', function(){
 			first.emit('put', {a: {b: {c: 0}}});
@@ -175,7 +191,9 @@ Tests.describe('Planet API: Get', function(it){
 
 		first.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {'force new connection': true});
+			var second = io.connect('//:8999', {
+				'force new connection': true
+			});
 
 			second.on('error', function(){
 				spy();

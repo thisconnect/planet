@@ -7,6 +7,7 @@ exports.setup = function(tests){
 	require('./client.put').setup(tests);
 	require('./client.get').setup(tests);
 	require('./client.delete').setup(tests);
+	require('./client.remove').setup(tests);
 	require('./client.stress').setup(tests);
 
 };

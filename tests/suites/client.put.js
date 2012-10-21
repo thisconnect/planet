@@ -9,7 +9,9 @@ Tests.describe('Planet API: Put', function(it){
 	it('should allow to put an object', function(expect){
 		expect.perform(17);
 
-		var socket = io.connect('//:8999', {'force new connection': true});
+		var socket = io.connect('//:8999', {
+			'force new connection': true
+		});
 
 		socket.on('connect', function(){
 			socket.emit('put', {
@@ -49,7 +51,9 @@ Tests.describe('Planet API: Put', function(it){
 	it('should allow reserved object properties and methods as key names', function(expect){
 		expect.perform(41);
 
-		var socket = io.connect('//:8999', {'force new connection': true});
+		var socket = io.connect('//:8999', {
+			'force new connection': true
+		});
 
 		socket.on('connect', function(){
 			socket.emit('put', {
@@ -128,7 +132,9 @@ Tests.describe('Planet API: Put', function(it){
 	it('should put data to all connected clients', function(expect){
 		expect.perform(30);
 
-		var first = io.connect('//:8999', {'force new connection': true});
+		var first = io.connect('//:8999', {
+			'force new connection': true
+		});
 
 		function puts(data){
 			expect(data).toBeType('object');
@@ -153,7 +159,9 @@ Tests.describe('Planet API: Put', function(it){
 
 		first.on('connect', function(){
 
-			var second = io.connect('//:8999', {'force new connection': true});
+			var second = io.connect('//:8999', {
+				'force new connection': true
+			});
 
 			second.on('put', puts);
 
@@ -174,7 +182,9 @@ Tests.describe('Planet API: Put', function(it){
 	it('should recursively merge objects into planet', function(expect){
 		expect.perform(28);
 
-		var socket = io.connect('//:8999', {'force new connection': true});
+		var socket = io.connect('//:8999', {
+			'force new connection': true
+		});
 
 		socket.on('connect', function(){
 			socket.emit('put', {
@@ -212,7 +222,9 @@ Tests.describe('Planet API: Put', function(it){
 
 		socket.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {'force new connection': true});
+			var second = io.connect('//:8999', {
+				'force new connection': true
+			});
 
 			second.on('get', function(data){
 				expect(data).toBeType('object');
@@ -253,7 +265,9 @@ Tests.describe('Planet API: Put', function(it){
 		expect.perform(13);
 
 		var storage = {},
-			socket = io.connect('//:8999', {'force new connection': true});
+			socket = io.connect('//:8999', {
+				'force new connection': true
+			});
 
 		socket.on('connect', function(){
 			socket.emit('put', {
@@ -299,7 +313,9 @@ Tests.describe('Planet API: Put', function(it){
 		expect.perform(21);
 		var spy = new Spy();
 
-		var socket = io.connect('//:8999', {'force new connection': true});
+		var socket = io.connect('//:8999', {
+			'force new connection': true
+		});
 
 		socket.on('connect', function(){
 			socket.emit('put');
