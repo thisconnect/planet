@@ -5,9 +5,9 @@ exports.setup = function(Tests){
 var Spy = require('../testigo/Source/lib/spy').Spy;
 
 
-Tests.describe('Planet: Stress test', function(it){
+Tests.describe('Planet: Stress Test', function(it){
 
-	it('should `put` then `get` lots of data', function(expect){
+	it('should `post` and `get` get a big object', function(expect){
 		expect.perform(2);
 
 		var first = io.connect('//:8999', {
@@ -38,6 +38,55 @@ Tests.describe('Planet: Stress test', function(it){
 
 			second.on('get', function(data){
 				expect(Object.keys(data).length).toBe(Object.keys(local).length);
+				expect(data).toBeType('object');
+				second.emit('delete');
+			});
+
+			second.on('delete', function(data){
+				second.disconnect();
+			});
+		});
+	});
+
+	it('should `put` many small packets and `get` it all', function(expect){
+		expect.perform(3);
+
+		var first = io.connect('//:8999', {
+			'force new connection': true
+		});
+
+		first.emit('delete');
+
+		var i = 0,
+			local = {},
+			returned = {};
+
+		first.on('connect', function(){
+			var start = new Date().getTime();
+
+			while (start + 1000 >= new Date().getTime()){
+				local['key-' + ++i] = Math.random();
+				first.emit('put', 'key-' + i, local['key-' + i]);
+			}
+			console.log('sent', i, 'messages during 1000ms');
+		});
+
+		first.on('put', function(key, value){
+			returned[key] = value;
+			if ('key-' + i == key) first.disconnect();
+		});
+
+		first.on('disconnect', function(){
+			var l = Object.keys(local).length;
+
+			expect(Object.keys(returned).length).toBe(l);
+
+			var second = io.connect('//:8999', {
+				'force new connection': true
+			});
+
+			second.on('get', function(data){
+				expect(Object.keys(data).length).toBe(l);
 				expect(data).toBeType('object');
 				second.emit('delete');
 			});
@@ -97,43 +146,6 @@ Tests.describe('Planet: Stress test', function(it){
 
 });
 
-
-
-
-	it('should `get` by key', function(expect){
-		expect.perform(4);
-
-		var first = io.connect('//:8999', {
-			'force new connection': true
-		});
-
-		first.on('connect', function(){
-			first.emit('put', { a: { b: { c: 0 } } });
-		});
-
-		first.on('put', function(data){
-			this.disconnect();
-		});
-
-		first.on('disconnect', function(){
-
-			var second = io.connect('//:8999', {
-				'force new connection': true
-			});
-
-			second.emit('get', 'a', function(data){
-				expect(data).toBeType('object');
-				expect(data.b).toBeType('object');
-				expect(data.b.c).toBeType('number');
-				expect(data.b.c).toBe(0);
-			});
-
-			second.emit('get', 'b', function(data){
-				expect(data).toBeNull();
-				this.disconnect();
-			});
-		});
-	});
 */
 
 });

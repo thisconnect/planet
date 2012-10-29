@@ -121,6 +121,11 @@ Run ./planet and run the tests from a server or cli
 node tests/runner.js
 ```
 
+### Benchmarks
+```bash
+node --stack_size=8192 planet # prevents exceeding maximum call stack size
+```
+
 (you might have to set ulimit -n 1024 if you want to connect with more than 200 clients)
 
 ```bash
@@ -133,12 +138,9 @@ TODO
 
 - namespace with `.of('/planet')`
 - latency optimization
-- test for lot of data
-- test for huge data packets
 - remove hardcoded 220 client limit
 - cleanup lib directory
 - make io options configurable
-- api split delete into remove and delete
 - review cli api
 - tests for cli
 - cleanup error messages

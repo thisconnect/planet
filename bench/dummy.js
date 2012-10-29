@@ -16,6 +16,7 @@ module.exports = function(i){
 	socket.on('get', function(){});
 	socket.on('put', function(){});
 	socket.on('post', function(){});
+	socket.on('remove', function(){});
 	socket.on('delete', function(){});
 	socket.on('disconnect', function(){});
 
