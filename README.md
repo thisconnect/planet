@@ -144,6 +144,7 @@ TODO
 - review cli api
 - tests for cli
 - cleanup error messages
+- array api
 
 
 #### Dependencies

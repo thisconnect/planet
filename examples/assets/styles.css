@@ -8,6 +8,7 @@ body, input, select, textarea {
 	font: 100%/1.25 Helvetica, sans-serif;
 }
 
+.clear { clear: both; }
 .clear:before, .clear:after { content: ""; display: table; }
 .clear:after { clear: both; }
 .clear{ zoom: 1; }
@@ -20,8 +21,6 @@ section {
 	padding: 0;
 	width: 250px;
 }
-
-.clear { clear: both; }
 
 #log,
 #lug {
@@ -44,7 +43,6 @@ hr {
 h1 {
 	font-size: 150%;
 	margin: 0 0 0.25em 0;
-	padding: 0.25em 16px 2px;
 }
 
 label {
@@ -71,6 +69,10 @@ label span {
 
 .group label:last-child {
 	margin-right: 0;
+}
+
+header .group {
+	padding: 0 16px;
 }
 
 input {
