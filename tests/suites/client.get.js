@@ -41,14 +41,14 @@ Tests.describe('Planet API: Get', function(it){
 		});
 
 		first.on('connect', function(){
-			first.emit('put', {a: {b: {c: 123}}});
+			first.emit('post', {a: {b: {c: 123}}});
 		});
 
-		first.on('put', function(data){
-			first.emit('post', ['a', 'b', 'c'], 321);
+		first.on('post', function(data){
+			first.emit('put', ['a', 'b', 'c'], 321);
 		});
 
-		first.on('post', function(key, value){
+		first.on('put', function(key, value){
 			this.disconnect();
 		});
 
@@ -78,10 +78,10 @@ Tests.describe('Planet API: Get', function(it){
 		});
 
 		first.on('connect', function(){
-			first.emit('put', {a: {b: {c: 0}}});
+			first.emit('post', {a: {b: {c: 0}}});
 		});
 
-		first.on('put', function(data){
+		first.on('post', function(data){
 			first.disconnect();
 		});
 
@@ -132,10 +132,10 @@ Tests.describe('Planet API: Get', function(it){
 		});
 
 		first.on('connect', function(){
-			first.emit('put', {a: {b: {c: 0}}});
+			first.emit('post', {a: {b: {c: 0}}});
 		});
 
-		first.on('put', function(data){
+		first.on('post', function(data){
 			first.disconnect();
 		});
 
@@ -182,10 +182,10 @@ Tests.describe('Planet API: Get', function(it){
 		});
 
 		first.on('connect', function(){
-			first.emit('put', {a: {b: {c: 0}}});
+			first.emit('post', {a: {b: {c: 0}}});
 		});
 
-		first.on('put', function(data){
+		first.on('post', function(data){
 			first.disconnect();
 		});
 

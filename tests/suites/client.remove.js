@@ -15,7 +15,7 @@ Tests.describe('Planet API: Remove', function(it){
 		});
 
 		first.on('connect', function(){
-			first.emit('put', {
+			first.emit('post', {
 				'key-a': 12,
 				'key-b': 'ok',
 				'key-c': null,
@@ -25,7 +25,7 @@ Tests.describe('Planet API: Remove', function(it){
 			});
 		});
 
-		first.on('put', function(data){
+		first.on('post', function(data){
 			first.emit('remove', 'key-a');
 			first.emit('remove', 'key-b');
 			first.emit('remove', 'key-c');
@@ -73,7 +73,7 @@ Tests.describe('Planet API: Remove', function(it){
 		});
 
 		first.on('connect', function(){
-			first.emit('put', {
+			first.emit('post', {
 				'key-a': {
 					'key-a': 12,
 					'key-b': 'ok',
@@ -85,7 +85,7 @@ Tests.describe('Planet API: Remove', function(it){
 			});
 		});
 
-		first.on('put', function(data){
+		first.on('post', function(data){
 			first.emit('remove', ['key-a', 'key-a']);
 			first.emit('remove', ['key-a', 'key-b']);
 			first.emit('remove', ['key-a', 'key-c']);
@@ -135,14 +135,14 @@ Tests.describe('Planet API: Remove', function(it){
 
 		first.on('connect', function(){
 			first.emit('delete');
-			first.emit('put', {
+			first.emit('post', {
 				'key-a': {
 					'key-a': 1
 				}
 			});
 		});
 
-		first.on('put', function(data){
+		first.on('post', function(data){
 			first.emit('remove', 'key-b');
 			first.emit('remove', ['key-b']);
 			first.emit('remove', ['key-a', 'key-b']);
@@ -208,10 +208,10 @@ Tests.describe('Planet API: Remove', function(it){
 		});
 
 		socket.on('connect', function(){
-			socket.emit('put', props);
+			socket.emit('post', props);
 		});
 
-		socket.on('put', function(data){
+		socket.on('post', function(data){
 			for (var key in props){
 				socket.emit('remove', key);
 			}
@@ -240,12 +240,12 @@ Tests.describe('Planet API: Remove', function(it){
 
 		first.on('connect', function(){
 			first.emit('delete');
-			first.emit('put', {
+			first.emit('post', {
 				'key-a': 1
 			});
 		});
 
-		first.on('put', function(data){
+		first.on('post', function(data){
 			first.emit('remove', 12);
 			first.emit('remove', null);
 			first.emit('remove', true);

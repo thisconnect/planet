@@ -23,10 +23,10 @@ Tests.describe('Planet: Stress test', function(it){
 		};
 
 		first.on('connect', function(){
-			first.emit('put', local);
+			first.emit('post', local);
 		});
 
-		first.on('put', function(data){
+		first.on('post', function(data){
 			first.disconnect();
 		});
 

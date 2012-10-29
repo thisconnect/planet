@@ -30,29 +30,29 @@ socket.on('connect', function(){
 socket.on('get', function(data){
 	log('on get');
 
-	// put some data
-	socket.emit('put', {'mice': 12});
-	log('put');
-});
-
-socket.on('put', function(){
-	log('on put');
-
-	// post a property
-	socket.emit('post', 'mice', 13);
+	// post some data
+	socket.emit('post', {'mice': 12});
 	log('post');
 });
 
 socket.on('post', function(){
 	log('on post');
 
-	// delete key
-	socket.emit('delete', 'mice');
-	log('delete');
+	// put a property
+	socket.emit('put', 'mice', 13);
+	log('put');
 });
 
-socket.on('delete', function(){
-	log('on delete');
+socket.on('put', function(){
+	log('on put');
+
+	// remove key
+	socket.emit('remove', 'mice');
+	log('remove');
+});
+
+socket.on('remove', function(){
+	log('on remove');
 
 	// disconnect
 	socket.disconnect();

@@ -6,311 +6,77 @@ var Spy = require('../testigo/Source/lib/spy').Spy;
 Tests.describe('Planet API: Put', function(it){
 
 
-	it('should allow to put an object', function(expect){
-		expect.perform(17);
+	it('should allow for `put` key value pairs', function(expect){
+		expect.perform(4);
 
 		var socket = io.connect('//:8999', {
 			'force new connection': true
 		});
 
 		socket.on('connect', function(){
-			socket.emit('put', {
-				'key-a': 12,
-				'key-b': 'ok',
-				'key-c': null,
-				'key-d': [],
-				'key-e': {},
-				'key-f': false,
-				'key-g': new Date
-			});
+			socket.emit('put', 'key-u', 123);
 		});
 
-		socket.on('put', function(data){
-			expect(data).toBeType('object');
-			expect(data).toHaveProperty('key-a');
-			expect(data).toHaveProperty('key-b');
-			expect(data).toHaveProperty('key-c');
-			expect(data).toHaveProperty('key-d');
-			expect(data).toHaveProperty('key-e');
-			expect(data).toHaveProperty('key-f');
-			expect(data).toHaveProperty('key-g');
-			expect(data['key-a']).toBeType('number');
-			expect(data['key-a']).toBe(12);
-			expect(data['key-b']).toBeType('string');
-			expect(data['key-b']).toBe('ok');
-			expect(data['key-c']).toBeNull();
-			expect(data['key-d']).toBeType('array');
-			expect(data['key-e']).toBeType('object');
-			expect(data['key-f']).toBeFalse();
-			expect(data['key-g']).toBeType('string');
+		socket.on('put', function(key, value){
+			expect(key).toBeType('string');
+			expect(key).toBe('key-u');
+			expect(value).toBeType('number');
+			expect(value).toBe(123);
 			this.disconnect();
 		});
 	});
 
 
-	it('should allow reserved object properties and methods as key names', function(expect){
-		expect.perform(41);
+	it('should `put` values with all possible types', function(expect){
+		expect.perform(22);
+		var spy = new Spy();
 
-		var socket = io.connect('//:8999', {
-			'force new connection': true
-		});
-
-		socket.on('connect', function(){
-			socket.emit('put', {
-				'prototype': null,
-				'create': null,
-				'defineProperty': null,
-				'defineProperties': null,
-				'getOwnPropertyDescriptor': null,
-				'keys': null,
-				'getOwnPropertyNames': null,
-				'getPrototypeOf': null,
-				'preventExtensions': null,
-				'isExtensible': null,
-				'seal': null,
-				'isSealed': null,
-				'freeze': null,
-				'isFrozen': null,
-				'hasOwnProperty': null,
-				'isPrototypeOf': null,
-				'propertyIsEnumerable': null,
-				'toLocaleString': null,
-				'toString': null,
-				'valueOf': null
-			});
-		});
-
-		socket.on('put', function(data){
-			expect(data).toBeType('object');
-			expect(data).toHaveProperty('prototype');
-			expect(data).toHaveProperty('create');
-			expect(data).toHaveProperty('defineProperty');
-			expect(data).toHaveProperty('defineProperties');
-			expect(data).toHaveProperty('getOwnPropertyDescriptor');
-			expect(data).toHaveProperty('keys');
-			expect(data).toHaveProperty('getOwnPropertyNames');
-			expect(data).toHaveProperty('getPrototypeOf');
-			expect(data).toHaveProperty('preventExtensions');
-			expect(data).toHaveProperty('isExtensible');
-			expect(data).toHaveProperty('seal');
-			expect(data).toHaveProperty('isSealed');
-			expect(data).toHaveProperty('freeze');
-			expect(data).toHaveProperty('isFrozen');
-			expect(data).toHaveProperty('hasOwnProperty');
-			expect(data).toHaveProperty('isPrototypeOf');
-			expect(data).toHaveProperty('propertyIsEnumerable');
-			expect(data).toHaveProperty('toLocaleString');
-			expect(data).toHaveProperty('toString');
-			expect(data).toHaveProperty('valueOf');
-
-			expect(data['prototype']).toBeNull();
-			expect(data['create']).toBeNull();
-			expect(data['defineProperty']).toBeNull();
-			expect(data['defineProperties']).toBeNull();
-			expect(data['getOwnPropertyDescriptor']).toBeNull();
-			expect(data['keys']).toBeNull();
-			expect(data['getOwnPropertyNames']).toBeNull();
-			expect(data['getPrototypeOf']).toBeNull();
-			expect(data['preventExtensions']).toBeNull();
-			expect(data['isExtensible']).toBeNull();
-			expect(data['seal']).toBeNull();
-			expect(data['isSealed']).toBeNull();
-			expect(data['freeze']).toBeNull();
-			expect(data['isFrozen']).toBeNull();
-			expect(data['hasOwnProperty']).toBeNull();
-			expect(data['isPrototypeOf']).toBeNull();
-			expect(data['propertyIsEnumerable']).toBeNull();
-			expect(data['toLocaleString']).toBeNull();
-			expect(data['toString']).toBeNull();
-			expect(data['valueOf']).toBeNull();
-
-			this.disconnect();
-		});
-	});
-
-
-	it('should put data to all connected clients', function(expect){
-		expect.perform(30);
-
-		var first = io.connect('//:8999', {
-			'force new connection': true
-		});
-
-		function puts(data){
-			expect(data).toBeType('object');
-			expect(data).toHaveProperty('key-a');
-			expect(data).toHaveProperty('key-b');
-			expect(data).toHaveProperty('key-c');
-			expect(data).toHaveProperty('key-d');
-			expect(data).toHaveProperty('key-e');
-			expect(data).toHaveProperty('key-f');
-			expect(data['key-a']).toBeType('number');
-			expect(data['key-a']).toBe(12);
-			expect(data['key-b']).toBeType('string');
-			expect(data['key-b']).toBe('ok');
-			expect(data['key-c']).toBeNull();
-			expect(data['key-d']).toBeType('array');
-			expect(data['key-e']).toBeType('object');
-			expect(data['key-f']).toBeFalse();
-			this.disconnect();
-		}
-
-		first.on('put', puts);
-
-		first.on('connect', function(){
-
-			var second = io.connect('//:8999', {
-				'force new connection': true
-			});
-
-			second.on('put', puts);
-
-			second.on('connect', function(){
-				first.emit('put', {
-					'key-a': 12,
-					'key-b': 'ok',
-					'key-c': null,
-					'key-d': [],
-					'key-e': {},
-					'key-f': false
-				});
-			});
-		});
-	});
-
-
-	it('should recursively merge objects into planet', function(expect){
-		expect.perform(28);
-
-		var socket = io.connect('//:8999', {
-			'force new connection': true
-		});
-
-		socket.on('connect', function(){
-			socket.emit('put', {
-				'key-a': 1,
-				'key-b': 'ok',
-				'key-e': {
-					'key-a': 2,
-					'key-b': 'ok',
-					'key-c': null,
-					'key-d': [],
-					'key-e': {}
-				}
-			});
-			socket.emit('put', {
-				'key-a': {
-					'a': []
-				},
-				'key-c': null,
-				'key-d': [],
-				'key-e': {
-					'key-a': null,
-					'key-c': false,
-					'key-d': {},
-					'key-e': []
-				}
-			});
-			socket.emit('put', {
-				'key-e': {
-					'key-f': 4
-				},
-				'key-f': 5
-			});
-			this.disconnect();
-		});
-
-		socket.on('disconnect', function(){
-
-			var second = io.connect('//:8999', {
-				'force new connection': true
-			});
-
-			second.on('get', function(data){
-				expect(data).toBeType('object');
-				expect(data).toHaveProperty('key-a');
-				expect(data).toHaveProperty('key-b');
-				expect(data).toHaveProperty('key-c');
-				expect(data).toHaveProperty('key-d');
-				expect(data).toHaveProperty('key-e');
-				expect(data).toHaveProperty('key-f');
-				expect(data['key-a']).toBeType('object');
-				expect(data['key-b']).toBeType('string');
-				expect(data['key-c']).toBeNull();
-				expect(data['key-d']).toBeType('array');
-				expect(data['key-e']).toBeType('object');
-				expect(data['key-f']).toBeType('number');
-				expect(data['key-a']).toHaveProperty('a');
-				expect(data['key-a']['a']).toBeType('array');
-				expect(data['key-e']).toHaveProperty('key-a');
-				expect(data['key-e']).toHaveProperty('key-b');
-				expect(data['key-e']).toHaveProperty('key-c');
-				expect(data['key-e']).toHaveProperty('key-d');
-				expect(data['key-e']).toHaveProperty('key-e');
-				expect(data['key-e']).toHaveProperty('key-f');
-				expect(data['key-e']['key-a']).toBeNull();
-				expect(data['key-e']['key-b']).toBe('ok');
-				expect(data['key-e']['key-c']).toBeFalse();
-				expect(data['key-e']['key-d']).toBeType('object');
-				expect(data['key-e']['key-e']).toBeType('array');
-				expect(data['key-e']['key-e'].length).toBe(0);
-				expect(data['key-f']).toBe(5);
-				this.disconnect();
-			});
-		});
-	});
-
-
-	it('should harminze strange keys', function(expect){
-		expect.perform(13);
-
-		var storage = {},
+		var container = {},
 			socket = io.connect('//:8999', {
 				'force new connection': true
 			});
 
 		socket.on('connect', function(){
-			socket.emit('put', {
-				'': 1,
-				1: null,
-				null: '',
-				undefined: {},
-				false: []
-			});
-			socket.emit('put', {
-				'': 2,
-				1: 'ok',
-				null: null,
-				undefined: [],
-				false: {}
-			});
+			socket.emit('put', 'key-a', 12);
+			socket.emit('put', 'key-b', '');
+			socket.emit('put', 'key-c', null);
+			socket.emit('put', 'key-d', []);
+			socket.emit('put', 'key-e', {});
+			socket.emit('put', 'key-f', false);
+			socket.emit('put', 'key-g', new Date());
 		});
 
-		socket.on('put', function(data){
-			storage = data;
-			if (data['1'] == 'ok') this.disconnect();
+		socket.on('put', function(key, value){
+			spy();
+			expect(key).toBeType('string');
+			container[key] = value;
+			if (7 == spy.getCallCount()) this.disconnect();
 		});
 
 		socket.on('disconnect', function(){
-			expect(storage).toBeType('object');
-			expect(storage).toHaveProperty('');
-			expect(storage).toHaveProperty('1');
-			expect(storage).toHaveProperty('null');
-			expect(storage).toHaveProperty('undefined');
-			expect(storage).toHaveProperty('false');
-			expect(storage['']).toBeType('number');
-			expect(storage['']).toBe(2);
-			expect(storage['1']).toBeType('string');
-			expect(storage['1']).toBe('ok');
-			expect(storage['null']).toBeNull();
-			expect(storage['undefined']).toBeType('array');
-			expect(storage['false']).toBeType('object');
+			expect(spy.getCallCount()).toBe(7);
+			expect(container).toHaveProperty('key-a');
+			expect(container).toHaveProperty('key-b');
+			expect(container).toHaveProperty('key-c');
+			expect(container).toHaveProperty('key-d');
+			expect(container).toHaveProperty('key-e');
+			expect(container).toHaveProperty('key-f');
+			expect(container['key-a']).toBeType('number');
+			expect(container['key-b']).toBeType('string');
+			expect(container['key-c']).toBeNull();
+			expect(container['key-d']).toBeType('array');
+			expect(container['key-e']).toBeType('object');
+			expect(container['key-f']).toBeType('boolean');
+			expect(container['key-a']).toBe(12);
+			expect(container['key-b']).toBe('');
+			expect(container['key-f']).toBeFalse();
+			expect(container['key-g']).toBeType('string');
 		});
 	});
 
 
-	it('should error for putting invalid data', function(expect){
-		expect.perform(21);
+	it('should allow for `put` the same key', function(expect){
+		expect.perform(22);
 		var spy = new Spy();
 
 		var socket = io.connect('//:8999', {
@@ -318,28 +84,107 @@ Tests.describe('Planet API: Put', function(it){
 		});
 
 		socket.on('connect', function(){
-			socket.emit('put');
-			socket.emit('put', 12);
-			socket.emit('put', '');
-			socket.emit('put', null);
-			socket.emit('put', []);
-			socket.emit('put', {}); // doesnt error
-			socket.emit('put', false);
-			socket.emit('put', true);
-			socket.emit('put', undefined);
-			socket.emit('put', new Date);
-			socket.emit('put', new String('lalala'));
+			socket.emit('put', ['a', 'b', 'c'], 10);
+			socket.emit('put', ['a', 'b', 'c'], 20);
+			socket.emit('put', 'a.b.c'.split('.'), 30);
 		});
 
-		socket.on('error', function(type, data){
+		socket.on('put', function(key, value){
 			spy();
-			expect(type).toBeType('string');
-			expect(type).toBe('put');
-			if (10 == spy.getCallCount()) this.disconnect();
+			expect(key).toBeType('array');
+			expect(value).toBeType('number');
+			expect(key.length).toBe(3);
+			expect(key[0]).toBe('a');
+			expect(key[1]).toBe('b');
+			expect(key[2]).toBe('c');
+			expect(value).toBe(10 * spy.getCallCount());
+			if (3 <= spy.getCallCount()) this.disconnect();
 		});
 
 		socket.on('disconnect', function(){
-			expect(spy.getCallCount()).toBe(10);
+			expect(spy.getCallCount()).toBe(3);
+		});
+	});
+
+
+	it('should allow `put` with reserved object props and methods as key names', function(expect){
+		expect.perform(47);
+		var spy = new Spy();
+
+		var arrayProtos = ['prototype', 'isArray', 'length', 'pop',
+			'push', 'reverse', 'shift', 'sort', 'splice', 'unshift',
+			'concat', 'join', 'slice', 'toString', 'indexOf', 'lastIndexOf',
+			'filter', 'forEach', 'every', 'map', 'some', 'reduce', 'reduceRight'];
+
+		var socket = io.connect('//:8999', {'force new connection': true});
+
+		socket.on('connect', function(){
+			arrayProtos.forEach(function(item){
+				socket.emit('put', item, false);
+			});
+		});
+
+		var indexOf = Array.prototype.indexOf;
+		socket.on('put', function(key, value){
+			spy();
+			expect(indexOf.call(arrayProtos, key)).not.toBe(-1);
+			expect(value).toBeFalse();
+			if (spy.getCallCount() >= 23) this.disconnect();
+		});
+
+		socket.on('disconnect', function(){
+			expect(spy.getCallCount()).toBe(23);
+		});
+	});
+
+
+	it('should `error` on corrupt `put` messages', function(expect){
+		expect.perform(15);
+		var spy = new Spy();
+
+		var socket = io.connect('//:8999', {
+			'force new connection': true
+		});
+
+		socket.on('connect', function(){
+			socket.emit('put', 789);
+			socket.emit('put', 0, 0);
+			socket.emit('put', false, 1);
+			socket.emit('put', [], 2);
+			socket.emit('put', {}, 3);
+			socket.emit('put', null, 4);
+			socket.emit('put', undefined, 5);
+			socket.emit('put', 'key-x'); // missing value
+			socket.emit('put', false);
+			socket.emit('put', []);
+			socket.emit('put', {});
+			socket.emit('put', null);
+			socket.emit('put', undefined);
+			socket.emit('put'); // or no data at all
+
+			// invalid path keys are ignored silently
+			socket.emit('put', [1], 1);
+			socket.emit('put', [false], 2);
+			socket.emit('put', [[]], 3);
+			socket.emit('put', [{}], 4);
+			socket.emit('put', [null], 5);
+			socket.emit('put', [undefined], 6);
+			socket.emit('put', ['a', 1], 1);
+			socket.emit('put', ['a', false], 2);
+			socket.emit('put', ['a', []], 3);
+			socket.emit('put', ['a', {}], 4);
+			socket.emit('put', ['a', null], 5);
+			socket.emit('put', ['a', undefined], 6);
+		});
+
+		socket.on('error', function(type, key, value){
+			expect(type).toBe('put');
+			spy();
+			if (spy.getCallCount() >= 14) this.disconnect();
+		});
+
+		socket.on('disconnect', function(){
+			expect(spy.getCallCount()).toBe(14);
 		});
 	});
 

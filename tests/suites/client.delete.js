@@ -14,13 +14,13 @@ Tests.describe('Planet API: Delete', function(it){
 		});
 
 		first.on('connect', function(){
-			first.emit('put', {
+			first.emit('post', {
 				'key-a': null,
 				'key-b': ''
 			});
 		});
 
-		first.on('put', function(data){
+		first.on('post', function(data){
 			first.emit('delete');
 		});
 

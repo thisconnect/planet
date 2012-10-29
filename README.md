@@ -131,7 +131,6 @@ node bench/run.js mydomain.com:8004
 TODO
 ----
 
-- swap put and post
 - namespace with `.of('/planet')`
 - latency optimization
 - test for lot of data

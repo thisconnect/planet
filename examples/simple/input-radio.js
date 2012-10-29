@@ -4,10 +4,10 @@
 		values = radios.get('value');
 
 	radios.addEvent('change', function(){
-		socket.emit('post', 'herb', this.get('value'));
+		socket.emit('put', 'herb', this.get('value'));
 	});
 
-	socket.on('post', function(key, value){
+	socket.on('put', function(key, value){
 		if (key == 'herb'){
 			radios[values.indexOf(value)].set('checked', true);
 		}

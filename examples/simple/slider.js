@@ -5,14 +5,14 @@
 	});
 
 	mySlider.addEvent('change', function(step){
-		socket.emit('post', 'slider', step);
+		socket.emit('put', 'slider', step);
 	});
 
 	mySlider.element.addEvent('mousedown', function(){
-		socket.emit('post', 'slider', mySlider.step);
+		socket.emit('put', 'slider', mySlider.step);
 	});
 
-	socket.on('post', function(key, value){
+	socket.on('put', function(key, value){
 		if (key == 'slider'){
 			mySlider.setKnobPosition(mySlider.toPosition(value));
 			mySlider.step = value;
