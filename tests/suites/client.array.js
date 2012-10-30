@@ -13,7 +13,7 @@ Tests.describe('Planet API: Array', function(it){
 			'force new connection': true
 		});
 
-		socket.once('get', function(){
+		socket.on('connect', function(){
 			socket.emit('post', {
 				'_a': ['a0', 'a1', 'a2'],
 				'_b': {
@@ -27,7 +27,6 @@ Tests.describe('Planet API: Array', function(it){
 		});
 
 		socket.on('post', function(){
-			
 			socket.emit('get', ['_a', 0], function(data){
 				expect(data).toBe('a0');
 			});
@@ -40,63 +39,64 @@ Tests.describe('Planet API: Array', function(it){
 			socket.emit('get', ['_d', 0, 'dd', 0], function(data){
 				expect(data).toBe('d0');
 			});
-			
 		});
 		
 	});
 
 
 	it('should `put` an element to an array', function(expect){
-		expect.perform(4);
+		expect.perform(5);
 
 		var socket = io.connect('//:8999', {
 			'force new connection': true
 		});
 
-		socket.once('get', function(){
+		socket.once('get', function(data){
 			socket.emit('post', {
-				'_a': ['a1', 'a2', 'a3'],
-				'_b': [['b1', 'b2'], ['b3', 'b4']],
-				'_c': {
+				'_f': ['a1', 'a2', 'a3'],
+				'_g': [['b1', 'b2'], ['b3', 'b4']],
+				'_h': {
 					'cc': ['cc1', 'cc2']
 				},
-				'_d': [{'dd': 'dd1'}, {'ddd': 'dd2'}],
-				'_e': [{'ee': ['ee1']}]
+				'_i': [{'dd': 'dd1'}, {'ddd': 'dd2'}],
+				'_j': [{'ee': ['ee1']}]
 			});
 		});
 
 		socket.on('post', function(data){
-			socket.emit('put', ['_a', 0], 'A1 (new)');
-			socket.emit('put', ['_b', 0, 0], 'B1 (new)');
-			socket.emit('put', ['_c', 'cc', 0], 'CC1 (new)');
-			socket.emit('put', ['_d', 0, 'dd'], 'DD1 (new)');
-			socket.emit('put', ['_e', 0, 'ee', 0], 'EE1 (new)');
+			socket.emit('put', ['_f', 0], 'F1 (new)');
+			socket.emit('put', ['_g', 0, 0], 'G1 (new)');
+			socket.emit('put', ['_h', 'cc', 0], 'HH1 (new)');
+			socket.emit('put', ['_i', 0, 'dd'], 'II1 (new)');
+			socket.emit('put', ['_j', 0, 'ee', 0], 'JJ1 (new)');
 
-			socket.send('test');
+			socket.send('go');
 		});
 
 		socket.on('message', function(msg){
-			if (msg != 'test') return;
+			if (msg != 'go') return;
 
-			socket.emit('get', ['_a', 0], function(data){
-				expect(data).toBe('A1 (new)');
+			socket.emit('get', ['_f', 0], function(data){
+				expect(data).toBe('F1 (new)');
 			});
+			socket.emit('get', '_g', function(data){
+				expect(data[0][0]).toBe('G1 (new)');
+			});
+			socket.emit('get', ['_h', 'cc'], function(data){
+				expect(data[0]).toBe('HH1 (new)');
+			});
+			socket.emit('get', ['_i', 0, 'dd'], function(data){
+				expect(data).toBe('II1 (new)');
+			});
+			socket.emit('get', ['_j', 0, 'ee', 0], function(data){
+				expect(data).toBe('JJ1 (new)');
+			});
+		});
 
-			socket.emit('get', '_b', function(data){
-				expect(data[0][0]).toBe('B1 (new)');
-			});
-
-			socket.emit('get', ['_c', 'cc'], function(data){
-				expect(data[0]).toBe('CC1 (new)');
-			});
-
-			socket.emit('get', ['_d', 0, 'dd'], function(data){
-				expect(data).toBe('DD1 (new)');
-			});
-
-			socket.emit('get', ['_e', 0, 'ee', 0], function(data){
-				expect(data).toBe('EE1 (new)');
-			});
+		socket.on('error', function(type, key, value){
+			console.log('\nerror', type, key, value);
+			// spy();
+			// if (spy.getCallCount() >= 14) this.disconnect();
 		});
 
 		socket.on('disconnect', function(){
