@@ -21,7 +21,9 @@ $$('input[type=text], input[type=number], input[type=range], textarea').each(fun
 	});
 
 	socket.emit('get', component, function(value){
-		input.set('value', value);
+		if (value != null){
+			input.set('value', value);
+		}
 	});
 
 });

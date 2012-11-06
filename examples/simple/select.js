@@ -13,7 +13,9 @@ $$('select:not([multiple])').each(function(select){
 	});
 
 	socket.emit('get', component, function(value){
-		select.set('value', value);
+		if (value != null){
+			select.set('value', value);
+		}
 	});
 
 });
