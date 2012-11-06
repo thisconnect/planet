@@ -20,11 +20,11 @@ Client
 ------
 
 ```javascript
-var socket = io.connect('//mydomain.com:8004');
+var socket = io.connect('//mydomain.com:8004'),
+	local = {};
 
 socket.on('connect', function(){
-	var local = {};
-	socket.once('get', function(data){
+	socket.emit('get', function(data){
 		local = data;
 	});
 	socket.on('post', function(key, value){
@@ -39,18 +39,17 @@ socket.on('connect', function(){
 Browse the examples planet/examples/index.html
 
 ```javascript
-var socket = io.connect('//mydomain.com:8999');
+var socket = io.connect('//mydomain.com:8999'),
+	local = {};
 
 socket.on('connect', function(){
-	var local = {};
-	socket.once('get', function(data){
+	socket.emit('get', function(data){
 		local = data;
 	});
 	socket.on('put', function(data){
 		for (var key in data){
 			local[key] = data[key];
 		}
-		console.log(local);
 	});
 	socket.emit('put', {
 		color: 'white',
@@ -64,13 +63,11 @@ socket.on('connect', function(){
 	});
 	socket.on('post', function(key, value){
 		local[key[0]][key[1]] = value;
-		console.log(local);
 	});
 	socket.emit('post', ['birds', 'penguins'], 13);
 	socket.emit('post', ['birds', 'woodpeckers'], 5);
 	socket.on('delete', function(key){
 		delete local[key[0]][key[1]];
-		console.log(local);
 	});
 	socket.emit('delete', ['birds', 'parrots']);
 });
@@ -84,7 +81,13 @@ Methods
 
 - *once(string, callback)*
 
-- *emit(string, data[, data])*
+- *emit(string, data[, data, callback])*
+
+  Emit: 'put', 'post', 'delete', 'remove', 'get' messages
+  
+	- *emit('get'[, key], callback*
+
+	  Gets data from planet.
 
 - *disconnect()*
 
@@ -92,9 +95,9 @@ Methods
 Events
 ------
 
-- *get(data)*
+- *connect()*
 
-  Fired when handshake is successful, servers the current state.
+  Fired when handshake is successful.
 
 - *put(data)*
 

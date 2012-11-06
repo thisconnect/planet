@@ -34,7 +34,7 @@ Tests.describe('Planet API: Delete', function(it){
 				'force new connection': true
 			});
 
-			second.on('get', function(data){
+			second.emit('get', function(data){
 				expect(data).toBeType('object');
 				expect(data).not.toHaveProperty('key-a');
 				expect(data).not.toHaveProperty('key-b');

@@ -19,11 +19,9 @@
 		}
 	});
 
-	socket.once('get', function(data){
-		if ('slider' in data){
-			mySlider.setKnobPosition(mySlider.toPosition(data.slider));
-			mySlider.step = data.slider;
-		}
+	socket.emit('get', 'slider', function(value){
+		mySlider.setKnobPosition(mySlider.toPosition(value));
+		mySlider.step = value;
 	});
 
 })();

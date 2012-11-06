@@ -36,7 +36,7 @@ Tests.describe('Planet: Stress Test', function(it){
 				'force new connection': true
 			});
 
-			second.on('get', function(data){
+			second.emit('get', function(data){
 				expect(Object.keys(local).length <= Object.keys(data).length).toBe(true);
 				expect(data).toBeType('object');
 				second.emit('delete');
@@ -48,7 +48,7 @@ Tests.describe('Planet: Stress Test', function(it){
 		});
 	});
 
-	it('should `put` many small packets and `get` it all', function(expect){
+	it('should `put` many keys/values and `get` them all', function(expect){
 		expect.perform(3);
 
 		var first = io.connect('//:8999', {
@@ -68,7 +68,7 @@ Tests.describe('Planet: Stress Test', function(it){
 				local['key-' + ++i] = Math.random();
 				first.emit('put', 'key-' + i, local['key-' + i]);
 			}
-			console.log('sent', i, 'messages during 1000ms');
+			console.log('sent', i, 'key/values during 1000ms');
 		});
 
 		first.on('put', function(key, value){
@@ -85,7 +85,7 @@ Tests.describe('Planet: Stress Test', function(it){
 				'force new connection': true
 			});
 
-			second.on('get', function(data){
+			second.emit('get', function(data){
 				expect(l <= Object.keys(data).length).toBe(true);
 				expect(data).toBeType('object');
 				second.emit('delete');

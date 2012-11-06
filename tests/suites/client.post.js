@@ -226,7 +226,7 @@ Tests.describe('Planet API: Post', function(it){
 				'force new connection': true
 			});
 
-			second.on('get', function(data){
+			second.emit('get', function(data){
 				expect(data).toBeType('object');
 				expect(data).toHaveProperty('key-a');
 				expect(data).toHaveProperty('key-b');

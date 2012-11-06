@@ -6,7 +6,7 @@ var Spy = require('../testigo/Source/lib/spy').Spy;
 Tests.describe('Planet API: Get', function(it){
 
 
-	it('should `get` a dump of the current state after `connect`', function(expect){
+	it('should `get` the current state', function(expect){
 		expect.perform(5);
 		var spy = new Spy();
 
@@ -18,13 +18,13 @@ Tests.describe('Planet API: Get', function(it){
 			expect(spy.getErrorCount()).toBe(0);
 			expect(spy.getCallCount()).toBe(0);
 			spy();
-		});
 
-		socket.on('get', function(data){
-			expect(data).toBeType('object');
-			expect(spy.getCallCount()).toBe(1);
-			spy();
-			socket.disconnect();
+			socket.emit('get', function(data){
+				expect(data).toBeType('object');
+				expect(spy.getCallCount()).toBe(1);
+				spy();
+				socket.disconnect();
+			});
 		});
 
 		socket.on('disconnect', function(){
@@ -58,7 +58,7 @@ Tests.describe('Planet API: Get', function(it){
 				'force new connection': true
 			});
 
-			second.on('get', function(data){
+			second.emit('get', function(data){
 				expect(data).toBeType('object');
 				expect(data.a).toBeType('object');
 				expect(data.a.b).toBeType('object');

@@ -12,10 +12,8 @@ $$('select:not([multiple])').each(function(select){
 		}
 	});
 
-	socket.once('get', function(data){
-		if (component in data){
-			select.set('value', data[component]);
-		}
+	socket.emit('get', component, function(value){
+		select.set('value', value);
 	});
 
 });
@@ -37,9 +35,9 @@ $$('select[multiple]').each(function(select){
 		}
 	});
 
-	socket.once('get', function(data){
-		if (component in data){
-			data[component].each(function(value, i){
+	socket.emit('get', component, function(values){
+		if (values != null){
+			values.each(function(value, i){
 				options[i].set('selected', value);
 			});
 		}

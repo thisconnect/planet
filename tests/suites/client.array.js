@@ -51,7 +51,7 @@ Tests.describe('Planet API: Array', function(it){
 			'force new connection': true
 		});
 
-		socket.once('get', function(data){
+		socket.emit('get', function(data){
 			socket.emit('post', {
 				'_f': ['a1', 'a2', 'a3'],
 				'_g': [['b1', 'b2'], ['b3', 'b4']],

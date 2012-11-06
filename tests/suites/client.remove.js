@@ -46,7 +46,7 @@ Tests.describe('Planet API: Remove', function(it){
 				'force new connection': true
 			});
 
-			second.on('get', function(data){
+			second.emit('get', function(data){
 				expect(spy.getCallCount()).toBe(6);
 				expect(data).toBeType('object');
 				expect(data).not.toHaveProperty('key-a');
@@ -108,7 +108,7 @@ Tests.describe('Planet API: Remove', function(it){
 				'force new connection': true
 			});
 
-			second.on('get', function(data){
+			second.emit('get', function(data){
 				expect(spy.getCallCount()).toBe(6);
 				expect(data).toBeType('object');
 				expect(data).toHaveProperty('key-a');
@@ -159,7 +159,7 @@ Tests.describe('Planet API: Remove', function(it){
 				'force new connection': true
 			});
 
-			second.on('get', function(data){
+			second.emit('get', function(data){
 				expect(spy.getCallCount()).toBe(3);
 				expect(data).toBeType('object');
 				expect(data).toHaveProperty('key-a');
@@ -266,7 +266,7 @@ Tests.describe('Planet API: Remove', function(it){
 				'force new connection': true
 			});
 
-			second.on('get', function(data){
+			second.emit('get', function(data){
 				expect(spy.getCallCount()).toBe(7);
 				expect(data).toBeType('object');
 				expect(data).toHaveProperty('key-a');

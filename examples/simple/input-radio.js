@@ -13,9 +13,9 @@
 		}
 	});
 
-	socket.once('get', function(data){
-		if ('herb' in data){
-			radios[values.indexOf(data['herb'])].set('checked', true);
+	socket.emit('get', 'herb', function(herb){
+		if (herb != null){
+			radios[values.indexOf(herb)].set('checked', true);
 		}
 	});
 

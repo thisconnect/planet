@@ -27,7 +27,7 @@ socket.on('connect', function(){
 	log('on connect');
 });
 
-socket.on('get', function(data){
+socket.emit('get', function(data){
 	log('on get');
 
 	// post some data

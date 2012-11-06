@@ -13,7 +13,7 @@ module.exports = function(i){
 	});
 	socket.on('connect_failed', function(){});
 	socket.on('error', function(){});
-	socket.on('get', function(){});
+	//socket.emit('get', function(data){});
 	socket.on('put', function(){});
 	socket.on('post', function(){});
 	socket.on('remove', function(){});
