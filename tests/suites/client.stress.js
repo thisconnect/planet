@@ -37,7 +37,7 @@ Tests.describe('Planet: Stress Test', function(it){
 			});
 
 			second.on('get', function(data){
-				expect(Object.keys(data).length).toBe(Object.keys(local).length);
+				expect(Object.keys(local).length <= Object.keys(data).length).toBe(true);
 				expect(data).toBeType('object');
 				second.emit('delete');
 			});
@@ -86,7 +86,7 @@ Tests.describe('Planet: Stress Test', function(it){
 			});
 
 			second.on('get', function(data){
-				expect(Object.keys(data).length).toBe(l);
+				expect(l <= Object.keys(data).length).toBe(true);
 				expect(data).toBeType('object');
 				second.emit('delete');
 			});
