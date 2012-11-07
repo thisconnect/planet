@@ -9,7 +9,7 @@ Tests.describe('Planet API: Delete', function(it){
 	it('should delete everything', function(expect){
 		expect.perform(4);
 
-		var first = io.connect('//:8999', {
+		var first = io.connect('//:8004', {
 			'force new connection': true
 		});
 
@@ -30,7 +30,7 @@ Tests.describe('Planet API: Delete', function(it){
 
 		first.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {
+			var second = io.connect('//:8004', {
 				'force new connection': true
 			});
 

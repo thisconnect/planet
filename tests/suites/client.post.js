@@ -9,7 +9,7 @@ Tests.describe('Planet API: Post', function(it){
 	it('should allow to post an object', function(expect){
 		expect.perform(17);
 
-		var socket = io.connect('//:8999', {
+		var socket = io.connect('//:8004', {
 			'force new connection': true
 		});
 
@@ -51,7 +51,7 @@ Tests.describe('Planet API: Post', function(it){
 	it('should allow reserved object properties and methods as key names', function(expect){
 		expect.perform(41);
 
-		var socket = io.connect('//:8999', {
+		var socket = io.connect('//:8004', {
 			'force new connection': true
 		});
 
@@ -132,7 +132,7 @@ Tests.describe('Planet API: Post', function(it){
 	it('should post data to all connected clients', function(expect){
 		expect.perform(30);
 
-		var first = io.connect('//:8999', {
+		var first = io.connect('//:8004', {
 			'force new connection': true
 		});
 
@@ -159,7 +159,7 @@ Tests.describe('Planet API: Post', function(it){
 
 		first.on('connect', function(){
 
-			var second = io.connect('//:8999', {
+			var second = io.connect('//:8004', {
 				'force new connection': true
 			});
 
@@ -182,7 +182,7 @@ Tests.describe('Planet API: Post', function(it){
 	it('should recursively merge objects into planet', function(expect){
 		expect.perform(28);
 
-		var socket = io.connect('//:8999', {
+		var socket = io.connect('//:8004', {
 			'force new connection': true
 		});
 
@@ -222,7 +222,7 @@ Tests.describe('Planet API: Post', function(it){
 
 		socket.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {
+			var second = io.connect('//:8004', {
 				'force new connection': true
 			});
 
@@ -265,7 +265,7 @@ Tests.describe('Planet API: Post', function(it){
 		expect.perform(13);
 
 		var storage = {},
-			socket = io.connect('//:8999', {
+			socket = io.connect('//:8004', {
 				'force new connection': true
 			});
 
@@ -313,7 +313,7 @@ Tests.describe('Planet API: Post', function(it){
 		expect.perform(21);
 		var spy = new Spy();
 
-		var socket = io.connect('//:8999', {
+		var socket = io.connect('//:8004', {
 			'force new connection': true
 		});
 

@@ -10,7 +10,7 @@ Tests.describe('Socket.IO: Connect', function(it){
 		expect.perform(4);
 		var spy = new Spy();
 
-		var socket = io.connect('//:8999', {
+		var socket = io.connect('//:8004', {
 			'force new connection': true
 		});
 
@@ -40,7 +40,7 @@ Tests.describe('Socket.IO: Connect', function(it){
 		expect.perform(4);
 		var spy = new Spy();
 
-		var socket = io.connect('//:8999', {
+		var socket = io.connect('//:8004', {
 			'force new connection': true
 		});
 

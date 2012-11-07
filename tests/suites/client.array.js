@@ -9,7 +9,7 @@ Tests.describe('Planet API: Array', function(it){
 	it('should `get` an element from an array', function(expect){
 		expect.perform(4);
 
-		var socket = io.connect('//:8999', {
+		var socket = io.connect('//:8004', {
 			'force new connection': true
 		});
 
@@ -47,7 +47,7 @@ Tests.describe('Planet API: Array', function(it){
 	it('should `put` an element to an array', function(expect){
 		expect.perform(5);
 
-		var socket = io.connect('//:8999', {
+		var socket = io.connect('//:8004', {
 			'force new connection': true
 		});
 

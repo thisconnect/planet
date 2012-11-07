@@ -10,7 +10,7 @@ Tests.describe('Planet API: Remove', function(it){
 		expect.perform(17);
 		var spy = new Spy();
 
-		var first = io.connect('//:8999', {
+		var first = io.connect('//:8004', {
 			'force new connection': true
 		});
 
@@ -42,7 +42,7 @@ Tests.describe('Planet API: Remove', function(it){
 
 		first.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {
+			var second = io.connect('//:8004', {
 				'force new connection': true
 			});
 
@@ -68,7 +68,7 @@ Tests.describe('Planet API: Remove', function(it){
 		expect.perform(28);
 		var spy = new Spy();
 
-		var first = io.connect('//:8999', {
+		var first = io.connect('//:8004', {
 			'force new connection': true
 		});
 
@@ -104,7 +104,7 @@ Tests.describe('Planet API: Remove', function(it){
 
 		first.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {
+			var second = io.connect('//:8004', {
 				'force new connection': true
 			});
 
@@ -129,7 +129,7 @@ Tests.describe('Planet API: Remove', function(it){
 		expect.perform(7);
 		var spy = new Spy();
 
-		var first = io.connect('//:8999', {
+		var first = io.connect('//:8004', {
 			'force new connection': true
 		});
 
@@ -155,7 +155,7 @@ Tests.describe('Planet API: Remove', function(it){
 
 		first.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {
+			var second = io.connect('//:8004', {
 				'force new connection': true
 			});
 
@@ -203,7 +203,7 @@ Tests.describe('Planet API: Remove', function(it){
 			'reduceRight': true
 		};
 
-		var socket = io.connect('//:8999', {
+		var socket = io.connect('//:8004', {
 			'force new connection': true
 		});
 
@@ -234,7 +234,7 @@ Tests.describe('Planet API: Remove', function(it){
 		expect.perform(6);
 		var spy = new Spy();
 
-		var first = io.connect('//:8999', {
+		var first = io.connect('//:8004', {
 			'force new connection': true
 		});
 
@@ -262,7 +262,7 @@ Tests.describe('Planet API: Remove', function(it){
 
 		first.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {
+			var second = io.connect('//:8004', {
 				'force new connection': true
 			});
 

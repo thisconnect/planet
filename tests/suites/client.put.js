@@ -9,7 +9,7 @@ Tests.describe('Planet API: Put', function(it){
 	it('should allow for `put` key value pairs', function(expect){
 		expect.perform(4);
 
-		var socket = io.connect('//:8999', {
+		var socket = io.connect('//:8004', {
 			'force new connection': true
 		});
 
@@ -32,7 +32,7 @@ Tests.describe('Planet API: Put', function(it){
 		var spy = new Spy();
 
 		var container = {},
-			socket = io.connect('//:8999', {
+			socket = io.connect('//:8004', {
 				'force new connection': true
 			});
 
@@ -79,7 +79,7 @@ Tests.describe('Planet API: Put', function(it){
 		expect.perform(22);
 		var spy = new Spy();
 
-		var socket = io.connect('//:8999', {
+		var socket = io.connect('//:8004', {
 			'force new connection': true
 		});
 
@@ -116,7 +116,7 @@ Tests.describe('Planet API: Put', function(it){
 			'concat', 'join', 'slice', 'toString', 'indexOf', 'lastIndexOf',
 			'filter', 'forEach', 'every', 'map', 'some', 'reduce', 'reduceRight'];
 
-		var socket = io.connect('//:8999', {'force new connection': true});
+		var socket = io.connect('//:8004', {'force new connection': true});
 
 		socket.on('connect', function(){
 			arrayProtos.forEach(function(item){
@@ -142,7 +142,7 @@ Tests.describe('Planet API: Put', function(it){
 		expect.perform(15);
 		var spy = new Spy();
 
-		var socket = io.connect('//:8999', {
+		var socket = io.connect('//:8004', {
 			'force new connection': true
 		});
 

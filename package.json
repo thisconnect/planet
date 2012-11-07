@@ -6,7 +6,7 @@
 	"keywords": ["concurrent", "collaborative", "realtime", "wave", "socket.io"],
 	"repository": "git://github.com/thisconnect/planet.git",
 	"homepage": "https://github.com/thisconnect/planet",
-	"main": "./lib/planet/planet",
+	"main": "./planet",
 	"bin": {
 		"planet": "./bin/planet"
 	},

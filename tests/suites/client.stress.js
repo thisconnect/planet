@@ -10,7 +10,7 @@ Tests.describe('Planet: Stress Test', function(it){
 	it('should `post` and `get` get a big object', function(expect){
 		expect.perform(2);
 
-		var first = io.connect('//:8999', {
+		var first = io.connect('//:8004', {
 			'force new connection': true
 		});
 
@@ -32,7 +32,7 @@ Tests.describe('Planet: Stress Test', function(it){
 
 		first.on('disconnect', function(){
 
-			var second = io.connect('//:8999', {
+			var second = io.connect('//:8004', {
 				'force new connection': true
 			});
 
@@ -51,7 +51,7 @@ Tests.describe('Planet: Stress Test', function(it){
 	it('should `put` many keys/values and `get` them all', function(expect){
 		expect.perform(3);
 
-		var first = io.connect('//:8999', {
+		var first = io.connect('//:8004', {
 			'force new connection': true
 		});
 
@@ -81,7 +81,7 @@ Tests.describe('Planet: Stress Test', function(it){
 
 			expect(Object.keys(returned).length).toBe(l);
 
-			var second = io.connect('//:8999', {
+			var second = io.connect('//:8004', {
 				'force new connection': true
 			});
 
@@ -109,7 +109,7 @@ Tests.describe('Planet: Stress Test', function(it){
 			count = 0;
 		
 		function connect(){
-			var socket = io.connect('//:8999', {
+			var socket = io.connect('//:8004', {
 				'force new connection': true,
 				'try multiple transports': false,
 				'reconnect': false

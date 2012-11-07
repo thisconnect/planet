@@ -1,12 +1,14 @@
 #! /usr/bin/env node
 
-var port = 8999,
+var port = 8004,
 	host = '127.0.0.1',
 	http = require('http'),
-	optparse = require('optparse').OptionParser;
+	io = require('socket.io'),
+	optparse = require('optparse').OptionParser,
+	Planet = require('../planet');
 
 var parser = new optparse([
-	['-p', '--port PORT', 'The port to bind to (default: 8999)'],
+	['-p', '--port PORT', 'The port to bind to (default: 8004)'],
 	['', '--host HOST', 'The host to connect to (default: 127.0.0.1)'],
 	['-h', '--help', 'Shows this help message']
 ]);
@@ -27,7 +29,18 @@ parser.on('*', function(opt, value){
 
 parser.parse(process.argv);
 
-var server = http.createServer(),
-	Planet = require('./../lib/planet/planet').Planet;
+var server = http.createServer();
 
-new Planet(server).listen(port, host);
+var socket = io.listen(server, {
+	'transports': ['websocket'],
+	'flash policy server': false,
+	'log level': 1//,
+	//'browser client': false,
+	//'browser client cache': true,
+	//'browser client minification': true,
+	//'browser client gzip': true
+});
+
+new Planet(socket);
+
+server.listen(port, host);
