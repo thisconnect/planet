@@ -1,37 +1,29 @@
-
-//var util = require('./lib/util');
-// var events = require('events').EventEmitter;
-
-var set = require('./lib/util').set,
+var Emitter = require('events').EventEmitter,
+	set = require('./lib/util').set,
 	get = require('./lib/util').get,
 	merge = require('./lib/util').merge,
-	isArray = require('./lib/util').isArray;
+	isArray = require('./lib/util').isArray,
+	log = require('util').log;
+
 
 function Planet(io, options){
+	if (!(this instanceof Planet)) return new Planet(io, options);
+
 	var server = this.$server = io.server;
 	this.$io = io;
-	// utils.uses.apply(this, [Planet.Logger, Planet.State]);
 	io.sockets.on('connection', this.onConnection.bind(this));
 	server.on('listening', this.onListening.bind(this));
 	server.on('clientError', this.onClientError.bind(this));
 }
 
-// Extensions
-// Planet.Logger = require('./lib/planet/modules/logger').Logger;
-// Planet.State  = require('./lib/planet/modules/state').State;
 
-// var toString = Object.prototype.toString;
-/*
-var isArray = Array.isArray ||
-	function(o){
-		return toString.call(o) === '[object Array]';
-	};*/
-
+// Planet.prototype = Object.create(Emitter.prototype);
 
 Planet.prototype = {
 
 	onListening: function(){
 		var location = this.$server.address();
+		log('Planet started at ' + [location.address, location.port].join(':'));
 		//this.emit('listening', this, location.address, location.port);
 	},
 
@@ -48,7 +40,7 @@ Planet.prototype = {
 		}
 		conn.on('message', this.onMessage.bind(this, conn));
 		conn.on('disconnect', this.onDisconnect.bind(this, conn));
-		this.onClientConnect(conn);
+		this.onConnect(conn);
 		//this.emit('clientConnect', this, conn);
 	},
 
@@ -74,7 +66,7 @@ Planet.prototype = {
 
 	state: {},
 
-	onClientConnect: function(conn){
+	onConnect: function(conn){
 		conn.on('post',   this.onPost.bind(this, conn));
 		conn.on('delete', this.onDelete.bind(this));
 		conn.on('put',    this.onPut.bind(this, conn));
@@ -155,5 +147,6 @@ Planet.prototype = {
 	}
 
 };
+
 
 module.exports = Planet;

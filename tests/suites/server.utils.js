@@ -1,6 +1,6 @@
 exports.setup = function(Tests){
 
-var merge = require('../../lib/planet/modules/state').State.merge;
+var merge = require('../../lib/util').merge;
 
 Tests.describe('Planet util: Merge', function(it){
 

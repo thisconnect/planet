@@ -132,7 +132,7 @@ node --stack_size=8192 planet # prevents exceeding maximum call stack size
 (you might have to set ulimit -n 1024 if you want to connect with more than 200 clients)
 
 ```bash
-node bench/run.js mydomain.com:8004
+node bench/run.js 127.0.0.1:8004
 ```
 
 
@@ -142,12 +142,12 @@ TODO
 - namespace with `.of('/planet')`
 - latency optimization
 - remove hardcoded 220 client limit
-- cleanup lib directory
 - make io options configurable
 - review cli api
 - tests for cli
 - cleanup error messages
 - array api
+- eventually use https://github.com/isaacs/nopt instead of optparse
 
 
 #### Dependencies
