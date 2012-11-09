@@ -38,6 +38,7 @@ Tests.describe('Planet API: Array', function(it){
 			});
 			socket.emit('get', ['_d', 0, 'dd', 0], function(data){
 				expect(data).toBe('d0');
+				socket.disconnect();
 			});
 		});
 		
@@ -90,6 +91,7 @@ Tests.describe('Planet API: Array', function(it){
 			});
 			socket.emit('get', ['_j', 0, 'ee', 0], function(data){
 				expect(data).toBe('JJ1 (new)');
+				socket.disconnect();
 			});
 		});
 
