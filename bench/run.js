@@ -23,9 +23,9 @@ spawn_story1(function(){
 	spawn_story1(function(){
 		console.log('time is measured relative to last action');
 		spawn_story1(function(){
-			console.log('spawning 200 dummy clients');
-			spawn_dummies(200, function(){
-				console.log('spawned 200 dummies');
+			console.log('spawning 199 dummy clients');
+			spawn_dummies(199, function(){
+				console.log('spawned 199 dummies');
 				spawn_story1(function(){
 					console.log('measure again but with 200 connected clients');
 					spawn_story1(function(){

@@ -8,9 +8,9 @@ var Emitter = require('events').EventEmitter,
 
 function Planet(io, options){
 	if (!(this instanceof Planet)) return new Planet(io, options);
-
 	var server = this.$server = io.server;
 	this.$io = io;
+	this.limit = options.limit || 200;
 	io.sockets.on('connection', this.onConnection.bind(this));
 	server.on('listening', this.onListening.bind(this));
 	server.on('clientError', this.onClientError.bind(this));
@@ -24,17 +24,17 @@ Planet.prototype = {
 	onListening: function(){
 		var location = this.$server.address();
 		log('Planet started at ' + [location.address, location.port].join(':'));
-		//this.emit('listening', this, location.address, location.port);
+		// this.emit('listening', this, location.address, location.port);
 	},
 
 	count: 0,
 
 	onConnection: function(conn){
 		this.count++;
-		//console.log(this.count, this.$server.connections);
-		if (this.$server.connections > 220) console.warn('ulimit', this.$server.connections, 256);
+		// console.log(this.count, this.$server.connections, this.limit);
+		// if (this.$server.connections > this.limit * 0.9) console.warn('limit', this.$server.connections, this.limit);
 
-		if (this.count > 220 || this.$server.connections > 256){
+		if (this.count > this.limit || this.$server.connections > this.limit){
 			this.count--;
 			return conn.disconnect();
 		}
@@ -50,8 +50,8 @@ Planet.prototype = {
 	},
 
 	onDisconnect: function(conn){
-		// console.log(this.count, this.$server.connections);
 		this.count--;
+		// console.log(this.count, this.$server.connections);
 		// this.emit('clientDisconnect', this, conn);
 	},
 

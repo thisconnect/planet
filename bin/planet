@@ -1,15 +1,18 @@
 #! /usr/bin/env node
 
-var port = 8004,
-	host = '127.0.0.1',
-	http = require('http'),
+var http = require('http'),
 	io = require('socket.io'),
 	optparse = require('optparse').OptionParser,
 	Planet = require('../planet');
 
+var port = 8004,
+	host = '127.0.0.1',
+	options = {};
+
 var parser = new optparse([
 	['-p', '--port PORT', 'The port to bind to (default: 8004)'],
 	['', '--host HOST', 'The host to connect to (default: 127.0.0.1)'],
+	['-l', '--limit [NUMBER]', 'Maximum concurrent client connections, a number lower than your ulimit (default: 200)'],
 	['-h', '--help', 'Shows this help message']
 ]);
 
@@ -19,6 +22,7 @@ parser.on('*', function(opt, value){
 	switch (opt){
 		case 'port': port = value || port; break;
 		case 'host': host = value || host; break;
+		case 'limit': options.limit = parseInt(value); break;
 		case 'help':
 			console.log(this.toString());
 			parser.halt();
@@ -41,6 +45,6 @@ var socket = io.listen(server, {
 	//'browser client gzip': true
 });
 
-new Planet(socket);
+new Planet(socket, options);
 
 server.listen(port, host);

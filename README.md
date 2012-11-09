@@ -121,7 +121,7 @@ git submodule update --init --recursive
 Run ./planet and run the tests from a server or cli
 
 ```bash
-node tests/runner.js
+node tests/run.js
 ```
 
 ### Benchmarks
@@ -141,8 +141,6 @@ TODO
 
 - namespace with `.of('/planet')`
 - latency optimization
-- remove hardcoded 220 client limit
-- make io options configurable
 - review cli api
 - tests for cli
 - cleanup error messages

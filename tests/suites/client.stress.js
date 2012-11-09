@@ -48,6 +48,7 @@ Tests.describe('Planet: Stress Test', function(it){
 		});
 	});
 
+
 	it('should `put` many keys/values and `get` them all', function(expect){
 		expect.perform(3);
 
@@ -97,10 +98,8 @@ Tests.describe('Planet: Stress Test', function(it){
 		});
 	});
 
-/*
-// ulimit -n 1024
 
-[4, 8, 16, 32, 64, 128].forEach(function(amount){
+[32, 64, 128].forEach(function(amount){
 
 	it('should `connect` ' + amount + ' clients then `disconnect`', function(expect){
 		expect.perform(2);
@@ -108,7 +107,7 @@ Tests.describe('Planet: Stress Test', function(it){
 		var sockets = [],
 			count = 0;
 		
-		function connect(){
+		(function connect(){
 			var socket = io.connect('//:8004', {
 				'force new connection': true,
 				'try multiple transports': false,
@@ -139,14 +138,12 @@ Tests.describe('Planet: Stress Test', function(it){
 			setTimeout(function(){
 				if (sockets.length < amount) connect();
 			}, 0);
-		}
+		})();
 
-		connect();
 	});
 
 });
 
-*/
 
 });
 

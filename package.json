@@ -3,7 +3,15 @@
 	"version": "0.8.0-dev",
 	"author": "Enrique Erne (http://mild.ch/)",
 	"description": "collaboratively edit anything",
-	"keywords": ["concurrent", "collaborative", "realtime", "wave", "socket.io"],
+	"keywords": [
+		"collaborative",
+		"comet",
+		"concurrent",
+		"realtime",
+		"socket.io",
+		"wave",
+		"websocket"
+	],
 	"repository": "git://github.com/thisconnect/planet.git",
 	"homepage": "https://github.com/thisconnect/planet",
 	"main": "./planet",
@@ -14,12 +22,11 @@
 		{"name": "Enrique Erne"}
 	],
 	"dependencies": {
-		"socket.io": ">= 0.9.5",
-		"mime": ">= 1.2.4",
+		"socket.io": ">= 0.9.10",
 		"optparse": ">= 1.0.3"
 	},
 	"devDependencies": {
-		"microtime": "0.3.1"
+		"microtime": ">= 0.3.1"
 	},
 	"licenses": [{
 		"type": "MIT",
