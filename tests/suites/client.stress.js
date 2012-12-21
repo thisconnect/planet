@@ -1,5 +1,3 @@
-if (!this.window) io = require('../../node_modules/socket.io/node_modules/socket.io-client');
-
 exports.setup = function(Tests){
 
 var Spy = require('../testigo/Source/lib/spy').Spy;

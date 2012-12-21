@@ -1,4 +1,4 @@
-if (this.window == null) io = require('../../node_modules/socket.io/node_modules/socket.io-client');
+if (this.window == null) io = require('socket.io-client');
 
 exports.setup = function(tests){
 

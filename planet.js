@@ -8,21 +8,23 @@ var Emitter = require('events').EventEmitter,
 
 function Planet(io, options){
 	if (!(this instanceof Planet)) return new Planet(io, options);
-	var server = this.$server = io.server;
-	this.$io = io;
 	this.limit = options.limit || 200;
-	io.sockets.on('connection', this.onConnection.bind(this));
-	server.on('listening', this.onListening.bind(this));
-	server.on('clientError', this.onClientError.bind(this));
-}
 
+	this.sockets = io.sockets
+		.on('connection', this.onConnection.bind(this));
+
+	this.server = io.server
+		.on('clientError', this.onError.bind(this))
+		.on('listening', this.onListening.bind(this));
+
+}
 
 // Planet.prototype = Object.create(Emitter.prototype);
 
 Planet.prototype = {
 
 	onListening: function(){
-		var location = this.$server.address();
+		var location = this.server.address();
 		log('Planet started at ' + [location.address, location.port].join(':'));
 		// this.emit('listening', this, location.address, location.port);
 	},
@@ -31,48 +33,41 @@ Planet.prototype = {
 
 	onConnection: function(conn){
 		this.count++;
-		// console.log(this.count, this.$server.connections, this.limit);
-		// if (this.$server.connections > this.limit * 0.9) console.warn('limit', this.$server.connections, this.limit);
-
-		if (this.count > this.limit || this.$server.connections > this.limit){
+		if (this.count > this.limit || this.server.connections > this.limit){
 			this.count--;
 			return conn.disconnect();
 		}
 		conn.on('message', this.onMessage.bind(this, conn));
 		conn.on('disconnect', this.onDisconnect.bind(this, conn));
-		this.onConnect(conn);
-		//this.emit('clientConnect', this, conn);
-	},
-
-	onMessage: function(conn, data){
-		this.$io.sockets.emit('message', data);
-		// this.emit('clientMessage', this, conn, data);
-	},
-
-	onDisconnect: function(conn){
-		this.count--;
-		// console.log(this.count, this.$server.connections);
-		// this.emit('clientDisconnect', this, conn);
-	},
-
-	onClientError: function(error){
-		console.log('clientError', error);
-	},
-
-	send: function(t, h, i, s){
-		this.$io.sockets.emit(t, h, i, s);
-		return this;
-	},
-
-	state: {},
-
-	onConnect: function(conn){
 		conn.on('post',   this.onPost.bind(this, conn));
 		conn.on('delete', this.onDelete.bind(this));
 		conn.on('put',    this.onPut.bind(this, conn));
 		conn.on('remove', this.onRemove.bind(this, conn));
 		conn.on('get',    this.onGet.bind(this, conn));
+		//this.emit('clientConnect', this, conn);
 	},
+
+	onMessage: function(conn, data){
+		this.sockets.emit('message', data);
+		// this.emit('clientMessage', this, conn, data);
+	},
+
+	onDisconnect: function(conn){
+		this.count--;
+		// log(this.count, this.server.connections);
+		// this.emit('clientDisconnect', this, conn);
+	},
+
+	onError: function(error){
+		log('error', error);
+	},
+
+	send: function(t, h, i, s){
+		this.sockets.emit(t, h, i, s);
+		return this;
+	},
+
+	state: {},
 
 	onPost: function(conn, data){
 		if (typeof data != 'object' 
@@ -109,6 +104,7 @@ Planet.prototype = {
 		if (typeof key == 'string'){
 			k = key;
 			o = this.state;
+
 		} else {
 			if (!isArray(key)
 				|| key.length == 0
