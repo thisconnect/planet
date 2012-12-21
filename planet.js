@@ -11,8 +11,8 @@ function Planet(io, options){
 	this.limit = options.limit || 200;
 
 	this.server = io.server
-		.on('clientError', this.onError.bind(this))
-		.on('listening', this.onListening.bind(this));
+		.on('listening', this.onListening.bind(this))
+		.on('clientError', this.onError.bind(this));
 
 	this.sockets = io.sockets
 		.on('connection', this.onConnection.bind(this));
@@ -25,6 +25,10 @@ Planet.prototype.onListening = function(){
 	var location = this.server.address();
 	log('Planet started at ' + [location.address, location.port].join(':'));
 	// this.emit('listening', this, location.address, location.port);
+};
+
+Planet.prototype.onError = function(error){
+	log('error', error);
 };
 
 Planet.prototype.count = 0;
@@ -56,12 +60,9 @@ Planet.prototype.onDisconnect = function(conn){
 	// this.emit('clientDisconnect', this, conn);
 };
 
-Planet.prototype.onError = function(error){
-	log('error', error);
-};
-
 Planet.prototype.send = function(t, h, i, s){
 	this.sockets.emit(t, h, i, s);
+	//this.sockets.emit.apply(this.sockets, arguments);
 	return this;
 };
 

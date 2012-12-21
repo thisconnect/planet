@@ -22,10 +22,11 @@
 		{"name": "Enrique Erne"}
 	],
 	"dependencies": {
-		"socket.io": ">= 0.9.10",
+		"socket.io": ">= 0.9.13",
 		"optparse": ">= 1.0.3"
 	},
 	"devDependencies": {
+		"socket.io-client": ">= 0.9.11",
 		"microtime": ">= 0.3.1"
 	},
 	"licenses": [{
