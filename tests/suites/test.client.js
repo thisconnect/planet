@@ -1,5 +1,3 @@
-if (this.window == null) io = require('socket.io-client');
-
 exports.setup = function(tests){
 
 	require('./client.connect').setup(tests);

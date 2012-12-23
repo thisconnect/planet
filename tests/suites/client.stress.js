@@ -67,7 +67,7 @@ Tests.describe('Planet: Stress Test', function(it){
 				local['key-' + ++i] = Math.random();
 				first.emit('put', 'key-' + i, local['key-' + i]);
 			}
-			console.log('sent', i, 'key/values during 1000ms');
+			console.log('\n...put', i, 'key/values during 1000ms');
 		});
 
 		first.on('put', function(key, value){
