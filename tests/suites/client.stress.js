@@ -97,7 +97,7 @@ Tests.describe('Planet: Stress Test', function(it){
 	});
 
 
-[32, 64, 128].forEach(function(amount){
+[32, 64].forEach(function(amount){
 
 	it('should `connect` ' + amount + ' clients then `disconnect`', function(expect){
 		expect.perform(2);

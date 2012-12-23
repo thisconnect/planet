@@ -10,10 +10,8 @@ Tests.setCallbacks({
 	}
 });
 
-require('./suites/server.utils').setup(Tests);
-
 // Import client api tests
-require('./suites/test.client').setup(Tests);
+require('./suites/test.server').setup(Tests);
 
 // Run tests
 Runner.run();

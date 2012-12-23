@@ -203,12 +203,8 @@ Custom Methods
 ### Tests
 
 ```bash
-git submodule update --init --recursive
-```
+git submodule update --init --recursive // install Testigo
 
-Run ./planet and run the tests from a server or cli
-
-```bash
 node tests/run.js
 ```
 
@@ -235,7 +231,7 @@ TODO
 - tests for cli
 - cleanup error messages
 - eventually use https://github.com/isaacs/nopt instead of optparse
-- eventually provide a client side script for merge, get and set modification
+- eventually provide a client side script for merge, get and set manipulation
 
 
 #### Dependencies
