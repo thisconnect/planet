@@ -36,13 +36,13 @@ parser.parse(process.argv);
 var server = http.createServer();
 
 var socket = io.listen(server, {
-	'transports': ['websocket'],
-	'flash policy server': false,
-	'log level': 1//,
-	//'browser client': false,
-	//'browser client cache': true,
-	//'browser client minification': true,
-	//'browser client gzip': true
+	'transports': ['websocket']
+	, 'flash policy server': false
+	, 'log level': 1
+	//, 'browser client': false
+	//, 'browser client cache': true
+	//, 'browser client minification': true
+	//, 'browser client gzip': true
 });
 
 new Planet(socket, options);
