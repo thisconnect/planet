@@ -30,6 +30,12 @@ Planet.prototype.send = function(t, h, i, s){
 	return this;
 };
 
+Planet.prototype.destroy = function(){
+	this.server.removeAllListeners();
+	this.sockets.removeAllListeners();
+	this.removeAllListeners();
+};
+
 function listen(){
 	var location = this.server.address();
 	log('Planet started at ' + [location.address, location.port].join(':'));
@@ -46,13 +52,13 @@ function connect(conn){
 		this.count--;
 		return conn.disconnect();
 	}
-	conn.on('message', message.bind(this, conn));
-	conn.on('disconnect', disconnect.bind(this, conn));
-	conn.on('post',   onPost.bind(this, conn));
-	conn.on('delete', onDelete.bind(this));
-	conn.on('put',    onPut.bind(this, conn));
-	conn.on('remove', onRemove.bind(this, conn));
-	conn.on('get',    onGet.bind(this, conn));
+	conn.on('message',		message.bind(this, conn));
+	conn.on('disconnect',	disconnect.bind(this, conn));
+	conn.on('post',			onPost.bind(this, conn));
+	conn.on('delete',		onDelete.bind(this));
+	conn.on('put',			onPut.bind(this, conn));
+	conn.on('remove',		onRemove.bind(this, conn));
+	conn.on('get',			onGet.bind(this, conn));
 	//this.emit('clientConnect', this, conn);
 }
 
