@@ -1,4 +1,4 @@
-exports.setup = function(Tests){
+exports.setup = function(Tests, io){
 
 var Spy = require('../testigo/Source/lib/spy').Spy;
 

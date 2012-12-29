@@ -1,4 +1,4 @@
-exports.setup = function(Tests){
+exports.setup = function(Tests, io){
 
 var Spy = require('../testigo/Source/lib/spy').Spy;
 
@@ -63,11 +63,11 @@ Tests.describe('Planet: Stress Test', function(it){
 		first.on('connect', function(){
 			var start = new Date().getTime();
 
-			while (start + 1000 >= new Date().getTime()){
+			while (start + 100 >= new Date().getTime()){
 				local['key-' + ++i] = Math.random();
 				first.emit('put', 'key-' + i, local['key-' + i]);
 			}
-			console.log('\n...put', i, 'key/values during 1000ms');
+			console.log('\n...put', i, 'key/values during 100ms');
 		});
 
 		first.on('put', function(key, value){

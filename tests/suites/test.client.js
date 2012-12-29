@@ -1,12 +1,12 @@
-exports.setup = function(tests){
+exports.setup = function(tests, io){
 
-	require('./client.connect').setup(tests);
-	require('./client.put').setup(tests);
-	require('./client.post').setup(tests);
-	require('./client.get').setup(tests);
-	require('./client.delete').setup(tests);
-	require('./client.remove').setup(tests);
-	require('./client.array').setup(tests);
-	require('./client.stress').setup(tests);
+	require('./client.connect').setup(tests, io);
+	require('./client.put').setup(tests, io);
+	require('./client.post').setup(tests, io);
+	require('./client.get').setup(tests, io);
+	require('./client.delete').setup(tests, io);
+	require('./client.remove').setup(tests, io);
+	require('./client.array').setup(tests, io);
+	require('./client.stress').setup(tests, io);
 
 };
