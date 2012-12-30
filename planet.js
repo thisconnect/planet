@@ -2,8 +2,7 @@ var Emitter = require('events').EventEmitter,
 	set = require('./lib/util').set,
 	get = require('./lib/util').get,
 	merge = require('./lib/util').merge,
-	isArray = require('./lib/util').isArray,
-	log = require('util').log;
+	isArray = require('./lib/util').isArray;
 
 
 function Planet(io, options){
@@ -23,12 +22,12 @@ Planet.prototype = Object.create(Emitter.prototype);
 
 Planet.prototype.state = {};
 Planet.prototype.count = 0;
-
+/*
 Planet.prototype.send = function(t, h, i, s){
 	this.sockets.emit(t, h, i, s);
 	//this.sockets.emit.apply(this.sockets, arguments);
 	return this;
-};
+};*/
 
 Planet.prototype.destroy = function(){
 	this.server.removeAllListeners();
@@ -38,12 +37,12 @@ Planet.prototype.destroy = function(){
 
 function listen(){
 	var location = this.server.address();
-	log('Planet started at ' + [location.address, location.port].join(':'));
-	this.emit('listening', this, location.address, location.port);
+	this.write = this.sockets.emit.bind(this.sockets);
+	this.emit('listening', location.address, location.port);
 }
 
 function error(error){
-	log('error', error);
+	console.log('error', error);
 }
 
 function connect(conn){
@@ -52,19 +51,19 @@ function connect(conn){
 		this.count--;
 		return conn.disconnect();
 	}
-	conn.on('message',		message.bind(this, conn));
-	conn.on('disconnect',	disconnect.bind(this, conn));
-	conn.on('post',			onPost.bind(this, conn));
-	conn.on('delete',		onDelete.bind(this));
-	conn.on('put',			onPut.bind(this, conn));
-	conn.on('remove',		onRemove.bind(this, conn));
-	conn.on('get',			onGet.bind(this, conn));
-	//this.emit('clientConnect', this, conn);
+	conn.on('message',    message.bind(this, conn));
+	conn.on('disconnect', disconnect.bind(this, conn));
+	conn.on('post',       onPost.bind(this, conn));
+	conn.on('delete',     onDelete.bind(this));
+	conn.on('put',        onPut.bind(this, conn));
+	conn.on('remove',     onRemove.bind(this, conn));
+	conn.on('get',        onGet.bind(this, conn));
+	this.emit('connect', this, conn);
 }
 
 function disconnect(conn){
 	this.count--;
-	// log(this.count, this.server.connections);
+	// console.log(this.count, this.server.connections);
 	// this.emit('clientDisconnect', this, conn);
 }
 
@@ -82,11 +81,11 @@ function onPost(conn, data){
 		return conn.emit('error', 'post', data);
 	}
 	merge(this.state, data);
-	this.send('post', data);
+	this.write('post', data);
 }
 
 function onDelete(){
-	this.send('delete');
+	this.write('delete');
 	this.state = {};
 }
 
@@ -100,7 +99,7 @@ function onPut(conn, key, value){
 	if (typeof key == 'string') this.state[key] = value;
 	else set(this.state, key, value);
 
-	this.send('put', key, value);
+	this.write('put', key, value);
 }
 
 function onRemove(conn, key){
@@ -129,7 +128,7 @@ function onRemove(conn, key){
 	}
 
 	delete o[k];
-	this.send('remove', key);
+	this.write('remove', key);
 }
 
 function onGet(conn, key, fn){

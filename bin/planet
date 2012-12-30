@@ -10,10 +10,10 @@ var port = 8004,
 	options = {};
 
 var parser = new optparse([
-	['-p', '--port PORT', 'The port to bind to (default: 8004)'],
-	['', '--host HOST', 'The host to connect to (default: 127.0.0.1)'],
-	['-l', '--limit [NUMBER]', 'Maximum concurrent client connections, a number lower than your ulimit (default: 200)'],
-	['-h', '--help', 'Shows this help message']
+	['-p', '--port PORT', 'The port to bind to (default: 8004)']
+	, ['', '--host HOST', 'The host to connect to (default: 127.0.0.1)']
+	, ['-l', '--limit [NUMBER]', 'Maximum concurrent client connections, a number lower than your ulimit (default: 200)']
+	, ['-h', '--help', 'Shows this help message']
 ]);
 
 parser.banner = 'Usage: planet [--port PORT] [--host HOST]';
@@ -33,6 +33,7 @@ parser.on('*', function(opt, value){
 
 parser.parse(process.argv);
 
+
 var server = http.createServer();
 
 var socket = io.listen(server, {
@@ -45,6 +46,9 @@ var socket = io.listen(server, {
 	//, 'browser client gzip': true
 });
 
-new Planet(socket, options);
+new Planet(socket, options)
+	.on('listening', function(location, port){
+		console.log('Planet started at ' + [location, port].join(':'));
+	});
 
 server.listen(port, host);

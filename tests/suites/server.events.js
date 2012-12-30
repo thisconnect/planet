@@ -9,16 +9,53 @@ var planet = require('../../planet'),
 
 exports.setup = function(Tests){
 
-	Tests.describe('Planet: Events', function(it){
+	Tests.describe('Planet Server: Events', function(it){
 
-		it('should allow client events', function(expect){
+		it('should allow some client events', function(expect){
 
 			var earth = planet(socket, {});
-			server.listen(8004, 'localhost');
+			server.listen(8201, 'localhost');
 
-			expect(earth).toBeAnInstanceOf(require('events').EventEmitter);
+			earth.on('listening', function(){
+				expect(earth).toBeAnInstanceOf(require('events').EventEmitter);
+			});
 
+			earth.on('connect', function(){
+				expect(this).toBe(earth);
+				console.log(arguments);
+				//earth.destroy();
+				//server.close();
+			});
 
+			earth.on('post', function(){
+			});
+
+			earth.on('put', function(){
+			});
+
+			earth.on('remove', function(){
+			});
+
+			earth.on('delete', function(){
+			});
+
+			earth.emit('get', function(){
+			});
+
+			var io = require('socket.io-client'),
+				client = io.connect('//localhost:8201', {
+					'force new connection': true
+				});
+
+			client.on('connect', function(){
+				expect(this).toBe(client);
+				//client.disconnect();
+			});
+
+			client.on('connect_failed', function(){
+				console.log('-----------------', 3);
+				//client.disconnect();
+			});
 		});
 	});
 

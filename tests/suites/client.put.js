@@ -138,7 +138,7 @@ Tests.describe('Planet API: Put', function(it){
 	});
 
 
-	it('should `error` on corrupt `put` messages', function(expect){
+	it('should `error` on corrupt `put` keys', function(expect){
 		expect.perform(15);
 		var spy = new Spy();
 

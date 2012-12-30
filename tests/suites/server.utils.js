@@ -2,7 +2,7 @@ exports.setup = function(Tests){
 
 var merge = require('../../lib/util').merge;
 
-Tests.describe('Planet util: Merge', function(it){
+Tests.describe('Planet Utils: Merge', function(it){
 
 	it('should be a function', function(expect){
 		expect(merge).toBeType('function');
