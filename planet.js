@@ -38,6 +38,7 @@ Planet.prototype.destroy = function(){
 function listen(){
 	var location = this.server.address();
 	this.write = this.sockets.emit.bind(this.sockets);
+	this.on('get', onGet.bind(this, null));
 	this.emit('listening', location.address, location.port);
 }
 
@@ -45,64 +46,67 @@ function error(error){
 	console.log('error', error);
 }
 
-function connect(conn){
+function connect(socket){
 	this.count++;
 	if (this.count > this.limit || this.server.connections > this.limit){
 		this.count--;
-		return conn.disconnect();
+		return socket.disconnect();
 	}
-	conn.on('message',    message.bind(this, conn));
-	conn.on('disconnect', disconnect.bind(this, conn));
-	conn.on('post',       onPost.bind(this, conn));
-	conn.on('delete',     onDelete.bind(this));
-	conn.on('put',        onPut.bind(this, conn));
-	conn.on('remove',     onRemove.bind(this, conn));
-	conn.on('get',        onGet.bind(this, conn));
-	this.emit('connect', this, conn);
+	socket.on('message',	message.bind(this, socket))
+		.on('disconnect',	disconnect.bind(this, socket))
+		.on('post',			onPost.bind(this, socket))
+		.on('delete',		onDelete.bind(this))
+		.on('put',			onPut.bind(this, socket))
+		.on('remove',		onRemove.bind(this, socket))
+		.on('get',			onGet.bind(this, socket));
+
+	this.emit('connection', socket);
 }
 
-function disconnect(conn){
+function disconnect(socket){
 	this.count--;
-	// console.log(this.count, this.server.connections);
-	// this.emit('clientDisconnect', this, conn);
+	this.emit('disconnect', socket);
 }
 
-function message(conn, data){
+function message(socket, data){
 	this.sockets.emit('message', data);
-	// this.emit('clientMessage', this, conn, data);
+	// this.emit('clientMessage', this, socket, data);
 }
 
 
-function onPost(conn, data){
+function onPost(socket, data){
 	if (typeof data != 'object' 
 		|| data == null
 		|| toString.call(data) != '[object Object]'
 	){
-		return conn.emit('error', 'post', data);
+		return socket.emit('error', 'post', data);
 	}
 	merge(this.state, data);
 	this.write('post', data);
+	this.emit('post', data);
 }
 
 function onDelete(){
 	this.write('delete');
 	this.state = {};
+	this.emit('delete');
 }
 
-function onPut(conn, key, value){
+function onPut(socket, key, value){
 	if (value === undefined
 		|| (typeof key != 'string' && !isArray(key))
 		|| (key.length != null && key.length == 0)
 	){
-		return conn.emit('error', 'put', key, value);
+		return socket.emit('error', 'put', key, value);
 	}
 	if (typeof key == 'string') this.state[key] = value;
 	else set(this.state, key, value);
 
 	this.write('put', key, value);
+	this.emit('put', key, value);
 }
 
-function onRemove(conn, key){
+function onRemove(socket, key){
 	var k, o;
 
 	if (typeof key == 'string'){
@@ -116,7 +120,7 @@ function onRemove(conn, key){
 				return typeof item != 'string';
 			})
 		){
-			return conn.emit('error', 'remove', key);
+			return socket.emit('error', 'remove', key);
 		}
 		k = key.pop();
 		o = get(this.state, key);
@@ -124,26 +128,29 @@ function onRemove(conn, key){
 	}
 
 	if (!(k in o)){
-		return conn.emit('error', 'remove', key);
+		return socket.emit('error', 'remove', key);
 	}
 
 	delete o[k];
 	this.write('remove', key);
+	this.emit('remove', key);
 }
 
-function onGet(conn, key, fn){
+function onGet(socket, key, fn){
 	if (typeof key == 'function') fn = key;
 	else if (typeof fn != 'function'
 		|| key == null
 		|| (key.length == 0 && isArray(key))
 		|| toString.call(key) == '[object Object]'
 	){
-		return conn.emit('error', 'get', key, fn);
+		return socket.emit('error', 'get', key, fn);
 	}
 	if (typeof key == 'number') fn(null); // todo array
-	return (typeof key == 'string' ? fn(this.state[key])
-		: isArray(key) ? fn(get(this.state, key))
-		: fn(this.state)
+	return (typeof key == 'string'
+		? fn(this.state[key])
+		: isArray(key)
+			? fn(get(this.state, key))
+			: fn(this.state)
 	);
 }
 

@@ -65,12 +65,14 @@ exports.setup = function(Tests){
 			var spawn = require('child_process').spawn;
 
 			var child = spawn('./bin/planet', ['--port', 8103]);
+
 			child.stdout.on('data', function(data){
 				data = data.toString();
 				expect(data).toMatch(/Planet started/);
 				expect(data).toMatch(/8103/);
 				child.kill();
 			});
+
 			child.stderr.on('data', function(error){
 				console.log('error', error.toString());
 			});
