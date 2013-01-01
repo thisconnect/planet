@@ -37,7 +37,14 @@ Planet.prototype.destroy = function(){
 
 function listen(){
 	var location = this.server.address();
-	this.write = this.sockets.emit.bind(this.sockets);
+	this.send = this.sockets.emit.bind(this.sockets);
+
+	this.post = onPost.bind(this, null);
+	this.put = onPut.bind(this, null);
+	this.remove = onRemove.bind(this, null);
+	this.del = onDelete.bind(this, null);
+	this.get = onGet.bind(this, null);
+
 	this.on('get', onGet.bind(this, null));
 	this.emit('listening', location.address, location.port);
 }
@@ -69,7 +76,7 @@ function disconnect(socket){
 }
 
 function message(socket, data){
-	this.sockets.emit('message', data);
+	this.send('message', data);
 	// this.emit('clientMessage', this, socket, data);
 }
 
@@ -82,12 +89,12 @@ function onPost(socket, data){
 		return socket.emit('error', 'post', data);
 	}
 	merge(this.state, data);
-	this.write('post', data);
+	this.send('post', data);
 	this.emit('post', data);
 }
 
 function onDelete(){
-	this.write('delete');
+	this.send('delete');
 	this.state = {};
 	this.emit('delete');
 }
@@ -102,7 +109,7 @@ function onPut(socket, key, value){
 	if (typeof key == 'string') this.state[key] = value;
 	else set(this.state, key, value);
 
-	this.write('put', key, value);
+	this.send('put', key, value);
 	this.emit('put', key, value);
 }
 
@@ -132,7 +139,7 @@ function onRemove(socket, key){
 	}
 
 	delete o[k];
-	this.write('remove', key);
+	this.send('remove', key);
 	this.emit('remove', key);
 }
 

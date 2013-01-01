@@ -11,39 +11,54 @@ exports.setup = function(Tests){
 
 	Tests.describe('Planet Server: Events', function(it){
 
-		it('should receive client events', function(expect){
+		it('should receive events sent by client', function(expect){
 
 			var earth = planet(socket, {});
 			server.listen(8201, 'localhost');
 
+
+			expect(earth).toBeAnInstanceOf(require('events').EventEmitter);
+
 			earth.on('listening', function(){
-				expect(earth).toBeAnInstanceOf(require('events').EventEmitter);
+				expect(this).toBeAnInstanceOf(planet);
+				expect(this).toBe(earth);
 			});
 
 			earth.on('connection', function(socket){
+				expect(this).toBeAnInstanceOf(planet);
 				expect(this).toBe(earth);
 			});
 
 			earth.on('post', function(data){
+				expect(this).toBeAnInstanceOf(planet);
+				expect(this).toBe(earth);
 				expect(data).toBeType('object');
 			});
 
 			earth.on('put', function(key, value){
+				expect(this).toBeAnInstanceOf(planet);
+				expect(this).toBe(earth);
 				expect(key).toBeType('array');
-				expect(value).toBeType('number');
 				expect(key).toBeSimilar(['bag', 'milk']);
+				expect(value).toBeType('number');
 				expect(value).toBe(2);
 			});
 
 			earth.on('remove', function(key){
+				expect(this).toBeAnInstanceOf(planet);
+				expect(this).toBe(earth);
 				expect(key).toBeType('array');
 				expect(key).toBeSimilar(['bag', 'eggs']);
+
 				earth.emit('get', 'bag', function(data){
-					expect(data).toBeSimilar({milk: 2});
+					expect(data).toBeSimilar({'milk': 2});
 				});
 			});
 
 			earth.on('delete', function(){
+				expect(this).toBeAnInstanceOf(planet);
+				expect(this).toBe(earth);
+
 				earth.emit('get', function(data){
 					expect(data).toBeSimilar({});
 				});
@@ -51,9 +66,10 @@ exports.setup = function(Tests){
 
 			earth.on('disconnect', function(socket){
 				expect(this).toBeAnInstanceOf(planet);
+				expect(this).toBe(earth);
 				expect(socket).toBeType('object');
-				earth.destroy();
-				server.close();
+				//earth.destroy();
+				//server.close();
 			});
 
 			// client
@@ -91,14 +107,14 @@ exports.setup = function(Tests){
 
 		});
 
-		it('should emit client events', function(expect){
+		it('should receive events sent by server', function(expect){
 
 			var earth = planet(socket, {});
 			server.listen(8201, 'localhost');
 
 			earth.on('listening', function(){
 
-				// client
+				// test on the client
 				var io = require('socket.io-client'),
 					client = io.connect('//localhost:8201', {
 						'force new connection': true
@@ -107,13 +123,10 @@ exports.setup = function(Tests){
 				client.on('connect', function(){
 
 					client.on('post', function(data){
-					console.log('--------------------', 1);
 						expect(data).toBeType('object');
-						expect().toBe();
 					});
 
-					client.on('put', function(key, data){
-					console.log('--------------------', 2);
+					client.on('put', function(key, value){
 						expect(key).toBeType('array');
 						expect(value).toBeType('number');
 						expect(key).toBeSimilar(['bag', 'eggs']);
@@ -121,38 +134,70 @@ exports.setup = function(Tests){
 					});
 
 					client.on('remove', function(key){
-					console.log('--------------------', 3);
 						expect(key).toBeType('array');
 						expect(key).toBeSimilar(['bag', 'milk']);
-						earth.emit('get', 'bag', function(data){
-							expect(data).toBeSimilar({eggs: 4});
-						});
 					});
 
 					client.on('delete', function(){
 						client.emit('get', function(data){
 							expect(data).toBeSimilar({});
+							client.disconnect();
 						});
-						client.disconnect();
 					});
 				});
+
+				// test on the server
+				earth.on('post', function(data){
+					expect(data).toBeType('object');
+				});
+
+				earth.on('put', function(key, value){
+					expect(key).toBeType('array');
+					expect(value).toBeType('number');
+					expect(key).toBeSimilar(['bag', 'eggs']);
+					expect(value).toBe(4);
+				});
+
+				earth.on('remove', function(key){
+					expect(key).toBeType('array');
+					expect(key).toBeSimilar(['bag', 'milk']);
+				});
+
+				earth.on('delete', function(){
+					earth.emit('get', function(data){
+						expect(data).toBeSimilar({});
+					});
+				});
+
 			});
 
-			earth.on('connection', function(){
-				earth.emit('post', {
-					bag: {
-						milk: 3,
-						eggs: 5
+			// server
+			earth.on('connection', function(socket){
+				earth.post({
+					'bag': {
+						'milk': 3,
+						'eggs': 5
 					},
-					box: [6, 7]
+					'box': [6, 7]
 				});
-				earth.emit('put', ['bag', 'eggs'], 4);
-				earth.emit('remove', ['bag', 'milk']);
+				earth.put(['bag', 'eggs'], 4);
 
 				earth.on('remove', function(){
-					console.log('--------------------', 4);
-					earth.emit('delete');
+					earth.get(function(data){
+						expect(data).toBeLike({
+							'bag': {'eggs': 4},
+							'box': [6, 7]
+						});
+					});
+					earth.get('bag', function(data){
+						expect(data).toBeLike({'eggs': 4});
+					});
+					earth.emit('get', 'bag', function(data){
+						expect(data).toBeLike({'eggs': 4});
+						earth.del();
+					});
 				});
+				earth.remove(['bag', 'milk']);
 			});
 
 			earth.on('disconnect', function(socket){
@@ -161,6 +206,7 @@ exports.setup = function(Tests){
 			});
 
 		});
+
 	});
 
 };
