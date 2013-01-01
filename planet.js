@@ -59,8 +59,7 @@ function connect(socket){
 		this.count--;
 		return socket.disconnect();
 	}
-	socket.on('message',	message.bind(this, socket))
-		.on('disconnect',	disconnect.bind(this, socket))
+	socket.on('disconnect',	disconnect.bind(this, socket))
 		.on('post',			onPost.bind(this, socket))
 		.on('delete',		onDelete.bind(this))
 		.on('put',			onPut.bind(this, socket))
@@ -74,12 +73,6 @@ function disconnect(socket){
 	this.count--;
 	this.emit('disconnect', socket);
 }
-
-function message(socket, data){
-	this.send('message', data);
-	// this.emit('clientMessage', this, socket, data);
-}
-
 
 function onPost(socket, data){
 	if (typeof data != 'object' 

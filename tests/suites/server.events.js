@@ -68,8 +68,6 @@ exports.setup = function(Tests){
 				expect(this).toBeAnInstanceOf(planet);
 				expect(this).toBe(earth);
 				expect(socket).toBeType('object');
-				//earth.destroy();
-				//server.close();
 			});
 
 			// client

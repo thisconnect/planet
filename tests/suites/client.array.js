@@ -71,12 +71,6 @@ Tests.describe('Planet API: Array', function(it){
 			socket.emit('put', ['_i', 0, 'dd'], 'II1 (new)');
 			socket.emit('put', ['_j', 0, 'ee', 0], 'JJ1 (new)');
 
-			socket.send('go');
-		});
-
-		socket.on('message', function(msg){
-			if (msg != 'go') return;
-
 			socket.emit('get', ['_f', 0], function(data){
 				expect(data).toBe('F1 (new)');
 			});

@@ -228,7 +228,6 @@ TODO
   and disalow posting/putting inexistent keys)
 - latency optimization
 - review cli api
-- tests for cli
 - cleanup error messages
 - eventually use https://github.com/isaacs/nopt instead of optparse
 - eventually provide a client side script for merge, get and set manipulation
