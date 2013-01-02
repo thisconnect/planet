@@ -9,6 +9,8 @@ function Planet(io, options){
 	options = options || {};
 	if (!(this instanceof Planet)) return new Planet(io, options);
 	this.limit = options.limit || 200;
+	this.state = {};
+	this.count = 0;
 
 	this.server = io.server
 		.on('listening', listen.bind(this))
@@ -21,8 +23,6 @@ function Planet(io, options){
 
 Planet.prototype = Object.create(Emitter.prototype);
 
-Planet.prototype.state = {};
-Planet.prototype.count = 0;
 /*
 Planet.prototype.send = function(t, h, i, s){
 	this.sockets.emit(t, h, i, s);
