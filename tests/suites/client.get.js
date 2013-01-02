@@ -3,7 +3,7 @@ exports.setup = function(Tests, io){
 var Spy = require('../testigo/Source/lib/spy').Spy;
 
 
-Tests.describe('Planet API: Get', function(it){
+Tests.describe('Planet Client API: Get', function(it){
 
 
 	it('should `get` the current state', function(expect){

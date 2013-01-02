@@ -9,7 +9,7 @@ var planet = require('../../planet'),
 
 exports.setup = function(Tests){
 
-	Tests.describe('Planet Server: Events', function(it){
+	Tests.describe('Planet Server API: Events', function(it){
 
 		it('should receive events sent by client', function(expect){
 

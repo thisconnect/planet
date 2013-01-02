@@ -3,7 +3,7 @@ exports.setup = function(Tests, io){
 var Spy = require('../testigo/Source/lib/spy').Spy;
 
 
-Tests.describe('Planet API: Post', function(it){
+Tests.describe('Planet Client API: Post', function(it){
 
 
 	it('should allow to post an object', function(expect){

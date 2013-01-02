@@ -3,7 +3,7 @@ exports.setup = function(Tests, io){
 var Spy = require('../testigo/Source/lib/spy').Spy;
 
 
-Tests.describe('Planet API: Array', function(it){
+Tests.describe('Planet Client API: Array', function(it){
 
 
 	it('should `get` an element from an array', function(expect){

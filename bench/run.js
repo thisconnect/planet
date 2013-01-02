@@ -52,7 +52,6 @@ function spawn_story1(fn){
 	client.stderr.on('data', error);
 	client.stdout.on('data', function(data){
 		log.write(data);
-		//story1.kill();
 	});
 	client.on('exit', function(code){
 		if (typeof fn == 'function') fn(code);

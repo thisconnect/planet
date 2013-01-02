@@ -3,7 +3,7 @@ exports.setup = function(Tests, io){
 var Spy = require('../testigo/Source/lib/spy').Spy;
 
 
-Tests.describe('Planet API: Put', function(it){
+Tests.describe('Planet Client API: Put', function(it){
 
 
 	it('should allow for `put` key value pairs', function(expect){

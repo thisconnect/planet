@@ -3,7 +3,7 @@ exports.setup = function(Tests, io){
 var Spy = require('../testigo/Source/lib/spy').Spy;
 
 
-Tests.describe('Planet API: Delete', function(it){
+Tests.describe('Planet Client API: Delete', function(it){
 
 
 	it('should delete everything', function(expect){
