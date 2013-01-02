@@ -6,6 +6,7 @@ var Emitter = require('events').EventEmitter,
 
 
 function Planet(io, options){
+	options = options || {};
 	if (!(this instanceof Planet)) return new Planet(io, options);
 	this.limit = options.limit || 200;
 

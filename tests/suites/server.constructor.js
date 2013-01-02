@@ -12,7 +12,7 @@ exports.setup = function(Tests){
 			var server = http.createServer(),
 				socket = io.listen(server, {'log level': 1});
 
-			var mercury = new planet(socket, {});
+			var mercury = new planet(socket);
 
 			server.listen(8101, '127.0.0.1');
 
