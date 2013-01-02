@@ -48,6 +48,31 @@ exports.setup = function(Tests){
 			});
 		});
 
+		it('should start planet without a http server', function(expect){
+
+			var socket = io.listen(8103, {
+				'log level': 1
+			});
+
+			planet(socket, {})
+				.on('listening', function(location, port){
+					expect(port).toBe(8103);
+
+					require('socket.io-client')
+						.connect('//:8103')
+						.on('connect', function(){
+							this.disconnect();
+						});
+				})
+				.on('connection', function(socket){
+					expect(socket).toBeType('object');
+				})
+				.on('disconnect', function(socket){
+					expect(socket).toBeType('object');
+					this.destroy();
+				});
+		});
+
 		it('should return planet cli help', function(expect){
 
 			var exec = require('child_process').exec;
@@ -64,12 +89,12 @@ exports.setup = function(Tests){
 
 			var spawn = require('child_process').spawn;
 
-			var child = spawn('./bin/planet', ['--port', 8103]);
+			var child = spawn('./bin/planet', ['--port', 8104]);
 
 			child.stdout.on('data', function(data){
 				data = data.toString();
 				expect(data).toMatch(/Planet started/);
-				expect(data).toMatch(/8103/);
+				expect(data).toMatch(/8104/);
 				child.kill();
 			});
 
