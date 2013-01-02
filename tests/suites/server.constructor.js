@@ -5,7 +5,7 @@ var planet = require('../../planet'),
 
 exports.setup = function(Tests){
 
-	Tests.describe('Planet Server: Constructor', function(it){
+	Tests.describe('Planet Server API: Constructor', function(it){
 
 		it('should start new planet', function(expect){
 
@@ -73,6 +73,60 @@ exports.setup = function(Tests){
 				});
 		});
 
+
+		it('should run the readme.md example', function(expect){
+			// server
+			var planet = require('planet'),
+				socket = require('socket.io').listen(8104, {
+					'log level': 1
+				});
+
+			var venus = new planet(socket);
+
+			var io = require('socket.io-client');
+
+			// client 1
+			io.connect('//:8104')
+				.on('put', function(key, value){
+					// console.log(key, value);
+				})
+				.on('post', function(data){
+					// console.log(data);
+					expect(data).toHaveProperty('sugar');
+					expect(data).toHaveProperty('milk');
+					expect(data.sugar).toBe(1);
+					expect(data.milk).toBe(0);
+					this.disconnect();
+				});
+
+			// client 2	
+			io.connect('//:8104', {'force new connection': true})
+				.on('connect', function(){
+					this.emit('post', {
+						sugar: 1,
+						milk: 0
+					});
+
+					this.emit('put', 'sugar', 2);
+					this.emit('put', 'milk', 100);
+
+					this.emit('get', function(data){
+						// console.log(data);
+						expect(data).toHaveProperty('sugar');
+						expect(data).toHaveProperty('milk');
+						expect(data.sugar).toBe(2);
+						expect(data.milk).toBe(100);
+						this.disconnect();
+					});
+				})
+				.on('disconnect', function(){
+					venus.destroy();
+					socket.server.close();
+				});
+
+		});
+
+
 		it('should return planet cli help', function(expect){
 
 			var exec = require('child_process').exec;
@@ -89,12 +143,12 @@ exports.setup = function(Tests){
 
 			var spawn = require('child_process').spawn;
 
-			var child = spawn('./bin/planet', ['--port', 8104]);
+			var child = spawn('./bin/planet', ['--port', 8105]);
 
 			child.stdout.on('data', function(data){
 				data = data.toString();
 				expect(data).toMatch(/Planet started/);
-				expect(data).toMatch(/8104/);
+				expect(data).toMatch(/8105/);
 				child.kill();
 			});
 

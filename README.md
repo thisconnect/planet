@@ -12,17 +12,65 @@ and has been proven to work reliably in other projects.
 Planet is inspired by the [netpd](http://www.netpd.org/) approach.
 
 Methods:
-  - *post* - recursively merges any objects into the current state
-  - *put* - sets data at a specific location
-  - *remove* - deletes a property at given key (string) or path (array)
-  - *get* - fetches a property at given key or path
-  - *delete* - resets the current state and removes everything
 
-Planet is optimized to edit structured data (nested objects, arrays, strings, numbers) 
-and does not require to do [OT](http://en.wikipedia.org/wiki/Operational_transformation).
+  - `post` - recursively merges any objects into the current state
+
+  - `put` - sets data at a specific location
+
+  - `remove` - deletes a property at given key (string) or path (array)
+
+  - `get` - fetches a property at given key or path
+
+  - `delete` - resets the current state and removes everything
+
+Planet is optimized to edit structured data (nested objects, arrays,
+strings, numbers) and does not require to do 
+[OT](http://en.wikipedia.org/wiki/Operational_transformation).
 If you are looking for text editing have a look at 
 [ShareJS](https://github.com/josephg/ShareJS).
 
+Example
+-------
+
+```javascript
+// server
+var planet = require('planet'),
+	socket = require('socket.io').listen(8080);
+
+new planet(socket);
+
+// client
+var io = require('socket.io-client');
+
+// user 1
+io.connect('//:8080')
+	.on('put', function(key, value){
+		console.log(key, value);
+		// 'sugar' 1
+		// 'milk' 0
+	})
+	.on('post', function(data){
+		console.log(data);
+		// {'sugar': 1, 'milk': 0}
+	});
+
+// user 2	
+io.connect('//:8080', {'force new connection': true})
+	.on('connect', function(){
+		this.emit('post', {
+			'sugar': 1,
+			'milk': 0
+		});
+
+		this.emit('put', 'sugar', 2);
+		this.emit('put', 'milk', 100);
+
+		this.emit('get', function(data){
+			console.log(data);
+			// {'sugar': 2, 'milk': 100}
+		});
+	});
+```
 
 Install
 -------
