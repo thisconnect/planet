@@ -46,7 +46,7 @@ function listen(){
 	this.del = onDelete.bind(this, null);
 	this.get = onGet.bind(this, null);
 
-	this.on('get', onGet.bind(this, null));
+	// this.on('get', onGet.bind(this, null));
 	this.emit('listening', location.address, location.port);
 }
 

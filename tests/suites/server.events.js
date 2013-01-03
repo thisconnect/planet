@@ -50,7 +50,7 @@ exports.setup = function(Tests){
 				expect(key).toBeType('array');
 				expect(key).toBeSimilar(['bag', 'eggs']);
 
-				earth.emit('get', 'bag', function(data){
+				earth.get('bag', function(data){
 					expect(data).toBeSimilar({'milk': 2});
 				});
 			});
@@ -59,7 +59,7 @@ exports.setup = function(Tests){
 				expect(this).toBeAnInstanceOf(planet);
 				expect(this).toBe(earth);
 
-				earth.emit('get', function(data){
+				earth.get(function(data){
 					expect(data).toBeSimilar({});
 				});
 			});
@@ -162,7 +162,7 @@ exports.setup = function(Tests){
 				});
 
 				earth.on('delete', function(){
-					earth.emit('get', function(data){
+					earth.get(function(data){
 						expect(data).toBeSimilar({});
 					});
 				});
@@ -188,9 +188,6 @@ exports.setup = function(Tests){
 						});
 					});
 					earth.get('bag', function(data){
-						expect(data).toBeLike({'eggs': 4});
-					});
-					earth.emit('get', 'bag', function(data){
 						expect(data).toBeLike({'eggs': 4});
 						earth.del();
 					});
