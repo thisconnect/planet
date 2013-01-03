@@ -72,7 +72,7 @@ exports.setup = function(Tests){
 
 			// client
 			var io = require('socket.io-client'),
-				client = io.connect('//localhost:8201', {
+				client = io.connect('//:8201', {
 					'force new connection': true
 				});
 
@@ -114,7 +114,7 @@ exports.setup = function(Tests){
 
 				// test on the client
 				var io = require('socket.io-client'),
-					client = io.connect('//localhost:8201', {
+					client = io.connect('//:8201', {
 						'force new connection': true
 					});
 
