@@ -2,32 +2,33 @@
 
 Collaboratively edit JSON-style data using 
 [Socket.IO](https://github.com/LearnBoost/socket.io) by
-synchronizing all modifications of an shared/planetary object.
+synchronizing all operations on a planetary shared object.
 
-Every client will receive all modifications in the exact order 
-as they are incoming to the Planet server. This greatly simplifies
-concurent editing and does not require locking nor OT.
+All connected clients will receive each operation in
+exactly the same order as they are incoming to the Planet server.
 This approach guarantees the exact same state on all clients
-and has been proven to work reliably in other projects.
-Planet is inspired by the [netpd](http://www.netpd.org/) approach.
+and has been proven to work reliably in other projects such as
+[netpd](http://www.netpd.org/).
 
-Methods:
+Operations:
 
-  - `post` - recursively merges any objects into the current state
+  - `put` - sets a property at location key (string) or path (array)
 
-  - `put` - sets data at a specific location
+  - `remove` - deletes a property at given location
 
-  - `remove` - deletes a property at given key (string) or path (array)
+  - `post` - recursively merges an object into the current state
 
-  - `get` - fetches a property at given key or path
+  - `delete` - removes everything
 
-  - `delete` - resets the current state and removes everything
+  - `get` - fetches a property at given location
 
-Planet is optimized to edit structured data (nested objects, arrays,
-strings, numbers) and does not require to do 
+Planet is optimized to edit structured data (nested objects,
+arrays, strings, numbers, booleans) and does not require  
 [OT](http://en.wikipedia.org/wiki/Operational_transformation).
 If you are looking for text editing have a look at 
 [ShareJS](https://github.com/josephg/ShareJS).
+
+
 
 Example
 -------
@@ -72,6 +73,330 @@ io.connect('//:8080', {'force new connection': true})
 	});
 ```
 
+
+
+Planet Events
+-------------
+
+Events are fired on both the server and the client side.
+Each operation will be received in exactly the same
+order as they are incoming to the server. This includes the client
+that is emitting the operation. See also a list of available
+[Socket.IO Events](https://github.com/LearnBoost/socket.io/wiki/Exposed-events).
+
+
+
+### Event: put
+
+Fires when a value (string, number, array, object, boolean)
+is put at a given location, key (string) or path (array).
+The value will overwrite the location and not be merged.
+
+```js
+earth.on('put', function(key, value){ });
+```
+
+##### Arguments:
+
+1. Key (string or array) - the location to put the value.
+2. Value (string, number, object, array, boolean, null).
+
+
+
+### Event: remove
+
+Removes a property at given location.
+
+```js
+earth.on('remove', function(key){ });
+```
+
+##### Arguments:
+
+1. Key (string or array) - the property to remove.
+
+
+
+### Event: post
+
+Fires when an object is merged into the current state. 
+Arrays are not treated as objects and will not be merged.
+
+```js
+earth.on('post', function(data){ });
+```
+
+##### Arguments:
+
+1. Data (object) - the object to merge into the current state.
+
+
+
+### Event: delete
+
+Deletes the complete state.
+
+```js
+earth.on('delete', function(){ });
+```
+
+
+
+Client API
+----------
+
+Planet uses [Socket.IO](https://github.com/LearnBoost/socket.io) 
+custom events to communicate with the planet server. Only the standard
+[Socket.IO-Client](https://github.com/LearnBoost/socket.io-client)
+script is required on the client side.
+
+### Browser
+```html
+<script src="//localhost:8080/socket.io/socket.io.js"></script>
+```
+
+### Node.js
+```js
+var io = require('socket.io-client');
+```
+
+
+
+### Method: connect
+
+Connects to the planet.
+
+```js
+var earth = io.connect('//:8080', options);
+```
+
+##### Arguments:
+
+1. URI (string) - the location to remove.
+2. Options (object) - See 
+[Socket.IO-Client](https://github.com/LearnBoost/socket.io-client).
+
+
+
+### Method: disconnect
+
+Disconnects from the planet.
+
+```js
+earth.disconnect();
+```
+
+
+
+### Method: on
+
+Adds a listener.
+
+```js
+earth.on('remove', function(key){ });
+```
+
+#### Arguments:
+
+1. Event (string) - the operation to listen to.
+2. Callback (function).
+
+
+
+### Method: once
+
+Adds a one time listener, which is removed after 
+the first time the event is fired.
+
+```js
+earth.once('put', function(key, value){ });
+```
+
+#### Arguments:
+
+1. Event (string) - the operation to listen to.
+2. Callback (function).
+
+
+
+### Method: emit
+
+Emits planet operations: 'put', 'remove', 'post', 'delete', 'get'
+
+```js
+earth.emit('post', {'bag': {'eggs': 6, 'milk': 100}});
+earth.emit('post', {'bag': {'sugar': 20}});
+earth.emit('put', ['bag', 'eggs'], 5);
+earth.emit('remove', ['bag', 'milk']);
+earth.emit('get', 'bag', function(data){
+	console.log(data);
+	// {'bag': {'eggs': 5, 'sugar': 20}}
+	earth.emit('delete');
+});
+```
+
+
+
+### Emit: post
+
+Merges an object into the current state.
+
+```js
+earth.emit('post', {'key': 'value'});
+```
+
+
+
+### Emit: put
+
+Sets a property at location key (string) or path (array)
+
+```js
+earth.emit('put', 'bag', {'sugar': 20});
+earth.emit('put', ['bag', 'eggs'], 12);
+```
+
+
+
+### Emit: remove
+
+Deletes a property at given location.
+
+```js
+earth.emit('remove', 'key');
+earth.emit('remove', ['bag', 'eggs']);
+```
+
+
+
+### Emit: delete
+
+Deletes everything.
+
+```js
+earth.emit('delete');
+```
+
+
+
+### Emit: get
+
+Asynchronously fetches data, optionally at location
+key (string) or path (array). Returns the whole state
+if key is omitted.
+
+```js
+earth.emit('get', function(data){ });
+earth.emit('get', 'bag', function(value){ });
+earth.emit('get', ['bag', 'eggs'], function(value){ });
+```
+
+
+
+### Events
+
+All Planet Events (see above) are available on the client
+side as well as the
+[Socket.IO Client Events](https://github.com/LearnBoost/socket.io-client).
+
+
+
+Server API
+----------
+
+Require Socket.IO
+
+```js
+var Planet = require('planet'),
+	socket = require('socket.io').listen(8080, 'localhost');
+```
+
+
+
+### Constructor: Planet
+
+```js
+var earth = new Planet(socket, options);
+```
+
+The `new` keyword is optional.
+
+##### Arguments:
+
+1. Socket (io) - the socket.io instance returned from io.listen().
+2. Options (object) - the configuration object.
+
+##### Options:
+
+  - `limit` - the maximum amount of concurent client connections.
+  Defaults to 200
+
+
+
+### Method: post
+
+Merges an object into the current state.
+
+```js
+earth.post({'key': 'value'});
+```
+
+
+
+### Method: put
+
+Sets a property at location key (string) or path (array)
+
+```js
+earth.put('bag', {'sugar': 20});
+earth.put(['bag', 'eggs'], 12);
+```
+
+
+
+### Method: remove
+
+Deletes a property at given location.
+
+```js
+earth.remove('key');
+earth.remove(['bag', 'eggs']);
+```
+
+
+
+### Method: delete
+
+Deletes everything.
+
+```js
+earth.del();
+```
+
+
+
+### Method: get
+
+Asynchronously fetches data, optionally at location
+key (string) or path (array). Returns the whole state
+if key is omitted.
+
+```js
+earth.get(function(data){ });
+earth.get('bag', function(value){ });
+earth.get(['bag', 'eggs'], function(value){ });
+```
+
+
+
+### Events
+
+All Planet Events (see above) are available on the server
+as well as the
+[Socket.IO Events](https://github.com/LearnBoost/socket.io/wiki/Exposed-events).
+
+
+
 Install
 -------
 
@@ -89,163 +414,6 @@ planet
 cd bin/
 ./planet
 ```
-
-Client Examples
----------------
-
-Run the server and browse planet/examples/
-
-
-```javascript
-var local = {},
-	socket = io.connect('//mydomain.com:8080');
-
-socket.on('connect', function(){
-	// fetch the current state
-	socket.emit('get', function(data){
-		local = data;
-	});
-
-	// listen for any client putting data onto the planet
-	socket.on('put', function(key, value){
-		local[key] = value;
-		console.log('the state has been modified', local);
-	});
-
-	// put data to all clients
-	socket.emit('put', 'time', new Date());
-	socket.emit('put', 'color', '#00d');
-
-	// delete everything
-	socket.emit('delete');
-});
-```
-
-```javascript
-var local = {},
-	socket = io.connect('//mydomain.com:8080');
-
-socket.on('connect', function(){
-	socket.emit('get', function(data){
-		local = data;
-	});
-
-	// listen to incoming objects
-	socket.on('post', function(){
-		for (var key in data){
-			local[key] = data[key];
-		}
-	});
-
-	// post an object
-	socket.emit('post', {
-		color: 'white',
-		time: new Date(),
-		birds: {
-			doves: 34,
-			owls: 4,
-			parrots: 3,
-			penguins: 12
-		}
-	});
-
-	// expects key to be a path
-	socket.on('put', function(key, value){
-		local[key[0]][key[1]] = value;
-	});
-
-	// put data at specific path (array)
-	socket.emit('put', ['birds', 'penguins'], 13);
-	socket.emit('put', ['birds', 'woodpeckers'], 5);
-
-	// listen for removeing keys
-	socket.on('remove', function(key){
-		delete local[key[0]][key[1]];
-	});
-
-	// removes a property at path (array)
-	socket.emit('remove', ['birds', 'parrots']);
-});
-```
-
-
-Client API
-----------
-
-Planet uses [Socket.IO](https://github.com/LearnBoost/socket.io) 
-custom events to communicate with the planet server. 
-Only the standard [Socket.IO-Client](https://github.com/LearnBoost/socket.io-client)
-script is required on the client side. Client side deep mergining
-has to be implemented manually at the moment. 
-
-- *connect(uri, options)*
-
-- *on(string, callback)*
-
-  Client events: 'connect', 'disconnect'
-  Planet custom events: 'post', 'delete', 'put', 'remove'
-
-- *once(string, callback)*
-
-  Same events as above
-
-- *emit(string[, data, callback])*
-
-  Emit custom methods: 'post', 'get', 'delete', 'put', 'remove'
-
-- *disconnect()*
-
-
-Client Events
--------------
-
-Standard Socket.IO events.
-
-- *connect()*
-
-  Fired when handshake is successful.
-
-- *disconnect()*
-
-  Fired when the client disconnects.
-
-
-Custom Events/Methods
----------------------
-
-List of commands that are both:
-  - Methods that are sent via emit()
-  - Events that are subscribed with on()/once()
-
-Every connected client will receive the all commands in exactly the same order.
-This includes the client that is emitting the command.
-
-- *post(object)*
-
-  Sends an object and recursively merges it into the current state. 
-  Arrays are not treated as objects and will not be merged.
-
-- *put(key/path, data)*
-
-  Puts data (strings, numbers, array, objects) at a given key (string) or path (array).
-  The value will overwrite the current data and not be merged.
-
-- *remove(key/path)*
-
-  Removes a property at given key (string) or path (array).
-
-- *delete()*
-
-  Deletes the complete state.
-
-
-Custom Methods
---------------
-
-- *get([key/path, ]callback(data))*
-
-  Asynchronously fetches a data at key (string) or path (array).
-  Returns the whole state if no key is omitted.
 
 
 ### Tests
