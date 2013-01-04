@@ -10,6 +10,11 @@ This approach guarantees the exact same state on all clients
 and has been proven to work reliably in other projects such as
 [netpd](http://www.netpd.org/).
 
+Planet is optimized to edit JSON style data and does not require  
+[OT](http://en.wikipedia.org/wiki/Operational_transformation).
+If you are looking for rich text editing have a look at 
+[ShareJS](https://github.com/josephg/ShareJS).
+
 
 
 ### Operations
@@ -20,7 +25,6 @@ and has been proven to work reliably in other projects such as
   - `remove` - Deletes a value at specified location.
 
   - `post` - Recursively merges data into the state.
-    Arrays are not treated as objects and will not be merged.
 
   - `delete` - Deletes the state.
 
@@ -35,11 +39,15 @@ and has been proven to work reliably in other projects such as
   - `operation` - The custom events that can be used to
     modify the planetary shared object.
 
+  - `value` - Can be of type string, number, object,
+    array, boolean or null.
+
   - `location` - Is a property specified by a key (string) 
     or path (array).
 
-  - `value` - Can be of type string, number, object,
-    array, boolean or null.
+  - `path` - A path is an array of strings to specify
+    a property in an object. Additinally a path can
+	contain numbers to refer to an element within an array.
 
   - `data` - Refers always to an object.
 
@@ -49,10 +57,13 @@ and has been proven to work reliably in other projects such as
 
 
 
-Planet is optimized to edit JSON style data and does not require  
-[OT](http://en.wikipedia.org/wiki/Operational_transformation).
-If you are looking for rich text editing have a look at 
-[ShareJS](https://github.com/josephg/ShareJS).
+### Arrays
+
+Arrays are not treated as objects and will not be merged
+by `post` operations. The elements of an array
+can be individually fetched by `get` or set by `put`
+opernations. Removing single elements from an array is
+not yet specified.
 
 
 
@@ -98,6 +109,7 @@ io.connect('//:8080', {'force new connection': true})
 		});
 	});
 ```
+
 
 
 Install
@@ -240,6 +252,7 @@ earth.emit('post', {'bag': {'sugar': 20}});
 earth.emit('put', 'bag', null);
 earth.emit('put', 'bag', {'sugar': 20});
 earth.emit('put', ['bag', 'eggs'], 12);
+earth.emit('put', ['todo-list', 0], 'My first thing todo');
 ```
 
 
@@ -267,6 +280,7 @@ earth.emit('delete');
 earth.emit('get', function(data){ });
 earth.emit('get', 'bag', function(value){ });
 earth.emit('get', ['bag', 'eggs'], function(value){ });
+earth.emit('get', ['todo-list', 0], function(value){ });
 ```
 
 
@@ -331,6 +345,7 @@ earth.post({'key': 'value'});
 ```js
 earth.put('bag', {'sugar': 20});
 earth.put(['bag', 'eggs'], 12);
+earth.put(['todo-list', 0], 'My first thing todo');
 ```
 
 
@@ -358,8 +373,8 @@ earth.del();
 earth.get(function(data){ });
 earth.get('bag', function(value){ });
 earth.get(['bag', 'eggs'], function(value){ });
+earth.get(['todo-list', 0], function(value){ });
 ```
-
 
 
 
