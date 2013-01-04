@@ -168,7 +168,7 @@ earth.disconnect();
 
 ### Method: on
 
-Adds a listener for planet operations: 'put', 'remove', 'merge', 'delete', 'get'.
+Adds a listener for planet operations: `put`, `remove`, `merge`, `delete`, `get`.
 See also the standard 
 [Socket.IO Client Events](https://github.com/LearnBoost/socket.io-client#events).
 
