@@ -67,6 +67,13 @@ not yet specified.
 
 
 
+### String
+
+Single characters of a string value can be manipulated
+with `put` or read with `get`.
+
+
+
 Example
 -------
 
