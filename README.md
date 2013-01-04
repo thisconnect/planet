@@ -10,27 +10,10 @@ This approach guarantees the exact same state on all clients
 and has been proven to work reliably in other projects such as
 [netpd](http://www.netpd.org/).
 
-Planet is optimized to edit JSON style data and does not require  
+Planet is optimized to edit JSON style data and does not require
 [OT](http://en.wikipedia.org/wiki/Operational_transformation).
 If you are looking for rich text editing have a look at 
 [ShareJS](https://github.com/josephg/ShareJS).
-
-
-
-### Operations
-
-  - `put` - Sets a value at a specific location.
-    The value will be overwritten and not be merged.
-
-  - `remove` - Deletes a value at specified location.
-
-  - `merge` - Recursively merges data into the state.
-
-  - `delete` - Deletes the state.
-
-  - `get` - Asynchronously fetches values from the state,
-    optionally at a specified location. Returns the whole
-	state if no location is passed.
 
 
 
@@ -54,6 +37,23 @@ If you are looking for rich text editing have a look at
   - `state` - The current content of the planet
     that can be manipulated by the operations or
 	read with `get`.
+
+
+
+### Operations
+
+  - `put` - Sets a value at a specific location.
+    The value will be overwritten and not be merged.
+
+  - `remove` - Deletes a value at specified location.
+
+  - `merge` - Recursively merges data into the state.
+
+  - `delete` - Deletes the state.
+
+  - `get` - Asynchronously fetches values from the state,
+    optionally at a specified location. Returns the whole
+	state if no location is passed.
 
 
 
@@ -120,70 +120,22 @@ npm install planet
 ```
 
 
-Planet Operations
------------------
-
-Operations are fired as Socket.IO custom events
-on both the server and the client side.
-
-
-
-### Event: put
-
-```js
-earth.on('put', function(key, value){ });
-```
-
-##### Arguments:
-
-1. Key (string or array) - the location to put a value.
-2. Value (string, number, object, array, boolean, null).
-
-
-
-### Event: remove
-
-```js
-earth.on('remove', function(key){ });
-```
-
-##### Arguments:
-
-1. Key (string or array) - the location to delete.
-
-
-
-### Event: merge
-
-```js
-earth.on('merge', function(data){ });
-```
-
-##### Arguments:
-
-1. Data (object) - the object to merge into the current state.
-
-
-
-### Event: delete
-
-```js
-earth.on('delete', function(){ });
-```
-
-
 
 Client API
 ----------
 
-Include the Socket.IO client.
+
 
 ### Browser
+
 ```html
 <script src="//localhost:8080/socket.io/socket.io.js"></script>
 ```
 
+
+
 ### Node.js
+
 ```js
 var io = require('socket.io-client');
 ```
@@ -192,23 +144,18 @@ var io = require('socket.io-client');
 
 ### Method: connect
 
-Connects to the planet - See 
-[Socket.IO-Client](https://github.com/LearnBoost/socket.io-client#ioconnect).
-
 ```js
-var earth = io.connect(uri, options);
+var earth = io.connect('//:8004', options);
 ```
 
-##### Arguments:
+##### Arguments
 
-1. URI (string) - i.e. '//:8004'
+1. URI (string)
 2. Options (object) - the configuration object.
 
 
 
 ### Method: disconnect
-
-Closes the connection to the planet.
 
 ```js
 earth.disconnect();
@@ -233,25 +180,16 @@ the first time the event is fired.
 
 ### Method: emit
 
-Emits planet operations: 'put', 'remove', 'merge', 'delete', 'get'
-
-
-
-### Emit: merge
-
-```js
-earth.emit('merge', {'bag': {'eggs': 6, 'milk': 100}});
-earth.emit('merge', {'bag': {'sugar': 20}});
-```
+Emits the following Planet operations: `put`, `remove`, `merge`, `delete`, `get`.
 
 
 
 ### Emit: put
 
 ```js
-earth.emit('put', 'bag', null);
-earth.emit('put', 'bag', {'sugar': 20});
-earth.emit('put', ['bag', 'eggs'], 12);
+earth.emit('put', 'bag', null); // {'bag': null}
+earth.emit('put', 'bag', {'sugar': 20}); // {'bag': {'sugar': 20}}
+earth.emit('put', ['bag', 'eggs'], 12); // {'bag': {'sugar': 20, 'eggs': 12}}
 earth.emit('put', ['todo-list', 0], 'My first thing todo');
 ```
 
@@ -262,6 +200,15 @@ earth.emit('put', ['todo-list', 0], 'My first thing todo');
 ```js
 earth.emit('remove', 'key');
 earth.emit('remove', ['bag', 'eggs']);
+```
+
+
+
+### Emit: merge
+
+```js
+earth.emit('merge', {'bag': {'eggs': 6, 'milk': 100}});
+earth.emit('merge', {'bag': {'sugar': 20}});
 ```
 
 
@@ -305,12 +252,12 @@ var earth = new Planet(socket, options);
 
 The `new` keyword is optional.
 
-##### Arguments:
+##### Arguments
 
 1. Socket - socket server.
 2. Options (object) - the configuration object.
 
-##### Options:
+##### Options
 
   - `limit` - the maximum amount of concurent client connections.
   Defaults to 200
@@ -377,6 +324,58 @@ earth.get(['todo-list', 0], function(value){ });
 ```
 
 
+Planet Operations
+-----------------
+
+Operations are fired as Socket.IO custom events
+on both the server and the client side.
+
+
+
+### Event: put
+
+```js
+earth.on('put', function(key, value){ });
+```
+
+##### Arguments
+
+1. Key (string or array) - the location to put a value.
+2. Value (string, number, object, array, boolean, null).
+
+
+
+### Event: remove
+
+```js
+earth.on('remove', function(key){ });
+```
+
+##### Arguments
+
+1. Key (string or array) - the location to delete.
+
+
+
+### Event: merge
+
+```js
+earth.on('merge', function(data){ });
+```
+
+##### Arguments
+
+1. Data (object) - the object to merge into the current state.
+
+
+
+### Event: delete
+
+```js
+earth.on('delete', function(){ });
+```
+
+
 
 CLI API
 -------
@@ -387,7 +386,7 @@ or `cd bin && ./planet`
 
 
 
-### CLI: Options
+### CLI Options
 
   - `-p`, `--port [NUMBER]` - The port to bind to (default: 8004)  
 
@@ -411,13 +410,13 @@ node tests/run.js
 
 ### Benchmarks
 
-Start the Planet
+Start the Planet.
 
 ```bash
 node --stack_size=8192 planet # prevents exceeding maximum call stack size
 ```
 
-(you might have to set ulimit -n 1024 if you want to connect with more than 200 clients)
+Set `ulimit -n 1024` if you want to connect with more than 200 clients.
 
 ```bash
 node bench/run.js 127.0.0.1:8004
@@ -428,13 +427,13 @@ node bench/run.js 127.0.0.1:8004
 TODO
 ----
 
-- strict (option for disallowing auto-creation of putting keys)
-- predefined model (option for predefining a data structure 
+- Strict (option for disallowing auto-creation of putting keys)
+- Predefined model (option for predefining a data structure 
   and disalow merging/putting inexistent keys)
-- latency optimization
-- cleanup error messages
-- eventually use https://github.com/isaacs/nopt instead of optparse
-- eventually provide a client side script for merge, get and set manipulation
+- Latency optimization
+- Cleanup error messages
+- Eventually use https://github.com/isaacs/nopt instead of optparse
+- Eventually provide a client side script for merge, get and set manipulation
 
 
 
