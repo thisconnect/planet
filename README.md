@@ -91,6 +91,15 @@ new planet(socket);
 
 
 
+Install
+-------
+
+```bash
+npm install planet
+```
+
+
+
 ### Client
 
 ```javascript
@@ -111,15 +120,6 @@ io.connect('//:8080')
 			// {'sugar': 2, 'milk': 100}
 		});
 	});
-```
-
-
-
-Install
--------
-
-```bash
-npm install planet
 ```
 
 
@@ -263,7 +263,7 @@ The `new` keyword is optional.
 ##### Options
 
   - `limit` - the maximum amount of concurent client connections.
-  Defaults to 200
+  Defaults to 200.
 
 
 
@@ -385,20 +385,20 @@ CLI API
 
 To run Planet form a command-line interface install
 Planet globally `npm install planet -g`
-or `cd bin && ./planet`
+or `cd bin && ./planet`.
 
 
 
 ### CLI Options
 
-  - `-p`, `--port [NUMBER]` - The port to bind to (default: 8004)  
+  - `-p`, `--port [NUMBER]` - The port to bind to (default: 8004).
 
-  - `--host [STRING]` - The host to connect to (default: 127.0.0.1)
+  - `--host [STRING]` - The host to connect to (default: 127.0.0.1).
 
   - `-l`,  `--limit [NUMBER]` - Maximum concurrent client connections,
-    a number lower than your ulimit (default: 200)
+    a number lower than your ulimit (default: 200).
 
-  - `-h`, `--help` - Shows this help message
+  - `-h`, `--help` - Shows this help message.
 
 
 
@@ -406,7 +406,7 @@ Tests
 -----
 
 ```bash
-git submodule update --init --recursive // install [Testigo](https://github.com/keeto/testigo)
+git submodule update --init --recursive // installs Testigo
 
 node tests/run.js
 ```
