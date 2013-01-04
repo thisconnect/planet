@@ -74,6 +74,15 @@ with `put` or read with `get`.
 
 
 
+Install
+-------
+
+```bash
+npm install planet
+```
+
+
+
 Example
 -------
 
@@ -87,15 +96,6 @@ var planet = require('planet'),
 	socket = require('socket.io').listen(8080);
 
 new planet(socket);
-```
-
-
-
-Install
--------
-
-```bash
-npm install planet
 ```
 
 
