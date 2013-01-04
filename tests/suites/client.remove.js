@@ -231,7 +231,7 @@ Tests.describe('Planet Client API: Remove', function(it){
 
 
 	it('should not allow removing invalid keys', function(expect){
-		expect.perform(6);
+		expect.perform(8);
 		var spy = new Spy();
 
 		var first = io.connect('//:8004', {
@@ -241,7 +241,8 @@ Tests.describe('Planet Client API: Remove', function(it){
 		first.on('connect', function(){
 			first.emit('delete');
 			first.emit('post', {
-				'key-a': 1
+				'key-a': 1,
+				'key-b': [0, 1, 2, 3, 4]
 			});
 		});
 
@@ -252,12 +253,13 @@ Tests.describe('Planet Client API: Remove', function(it){
 			first.emit('remove', false);
 			first.emit('remove', []);
 			first.emit('remove', [null, false, {}]);
+			first.emit('remove', ['key-b', 2]); // array not yet supported
 			first.emit('remove', {});
 		});
 
 		first.on('error', function(type, key){
 			spy();
-			if (spy.getCallCount() == 7) first.disconnect();
+			if (spy.getCallCount() == 8) first.disconnect();
 		});
 
 		first.on('disconnect', function(){
@@ -267,12 +269,14 @@ Tests.describe('Planet Client API: Remove', function(it){
 			});
 
 			second.emit('get', function(data){
-				expect(spy.getCallCount()).toBe(7);
+				expect(spy.getCallCount()).toBe(8);
 				expect(data).toBeType('object');
 				expect(data).toHaveProperty('key-a');
 				expect(data['key-a']).toBeType('number');
 				expect(data['key-a']).toBe(1);
-				expect(Object.keys(data).length).toBe(1);
+				expect(data['key-b']).toBeType('array');
+				expect(data['key-b'][2]).toBe(2);
+				expect(Object.keys(data).length).toBe(2);
 				second.disconnect();
 			});
 		});
