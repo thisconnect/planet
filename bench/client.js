@@ -30,13 +30,13 @@ socket.on('connect', function(){
 socket.emit('get', function(data){
 	log('on get');
 
-	// post some data
-	socket.emit('post', {'mice': 12});
-	log('post');
+	// merge some data
+	socket.emit('merge', {'mice': 12});
+	log('merge');
 });
 
-socket.on('post', function(){
-	log('on post');
+socket.on('merge', function(){
+	log('on merge');
 
 	// put a property
 	socket.emit('put', 'mice', 13);

@@ -40,9 +40,9 @@ function listen(){
 	var location = this.server.address();
 	this.send = this.sockets.emit.bind(this.sockets);
 
-	this.post = onPost.bind(this, null);
 	this.put = onPut.bind(this, null);
 	this.remove = onRemove.bind(this, null);
+	this.merge = onMerge.bind(this, null);
 	this.del = onDelete.bind(this, null);
 	this.get = onGet.bind(this, null);
 
@@ -61,10 +61,10 @@ function connect(socket){
 		return socket.disconnect();
 	}
 	socket.on('disconnect',	disconnect.bind(this, socket))
-		.on('post',			onPost.bind(this, socket))
-		.on('delete',		onDelete.bind(this))
 		.on('put',			onPut.bind(this, socket))
 		.on('remove',		onRemove.bind(this, socket))
+		.on('merge',		onMerge.bind(this, socket))
+		.on('delete',		onDelete.bind(this))
 		.on('get',			onGet.bind(this, socket));
 
 	this.emit('connection', socket);
@@ -75,16 +75,16 @@ function disconnect(socket){
 	this.emit('disconnect', socket);
 }
 
-function onPost(socket, data){
+function onMerge(socket, data){
 	if (typeof data != 'object' 
 		|| data == null
 		|| toString.call(data) != '[object Object]'
 	){
-		return socket.emit('error', 'post', data);
+		return socket.emit('error', 'merge', data);
 	}
 	merge(this.state, data);
-	this.send('post', data);
-	this.emit('post', data);
+	this.send('merge', data);
+	this.emit('merge', data);
 }
 
 function onDelete(){

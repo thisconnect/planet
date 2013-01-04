@@ -29,7 +29,7 @@ exports.setup = function(Tests){
 				expect(this).toBe(earth);
 			});
 
-			earth.on('post', function(data){
+			earth.on('merge', function(data){
 				expect(this).toBeAnInstanceOf(planet);
 				expect(this).toBe(earth);
 				expect(data).toBeType('object');
@@ -78,7 +78,7 @@ exports.setup = function(Tests){
 
 			client.on('connect', function(){
 
-				client.emit('post', {
+				client.emit('merge', {
 					bag: {
 						milk: 1,
 						eggs: 6
@@ -86,7 +86,7 @@ exports.setup = function(Tests){
 					box: [1, 2, 3, 4, 5, 6]
 				});
 
-				client.on('post', function(data){
+				client.on('merge', function(data){
 					client.emit('put', ['bag', 'milk'], 2);
 				});
 
@@ -120,7 +120,7 @@ exports.setup = function(Tests){
 
 				client.on('connect', function(){
 
-					client.on('post', function(data){
+					client.on('merge', function(data){
 						expect(data).toBeType('object');
 					});
 
@@ -145,7 +145,7 @@ exports.setup = function(Tests){
 				});
 
 				// test on the server
-				earth.on('post', function(data){
+				earth.on('merge', function(data){
 					expect(data).toBeType('object');
 				});
 
@@ -171,7 +171,7 @@ exports.setup = function(Tests){
 
 			// server
 			earth.on('connection', function(socket){
-				earth.post({
+				earth.merge({
 					'bag': {
 						'milk': 3,
 						'eggs': 5

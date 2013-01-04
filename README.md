@@ -24,7 +24,7 @@ If you are looking for rich text editing have a look at
 
   - `remove` - Deletes a value at specified location.
 
-  - `post` - Recursively merges data into the state.
+  - `merge` - Recursively merges data into the state.
 
   - `delete` - Deletes the state.
 
@@ -60,7 +60,7 @@ If you are looking for rich text editing have a look at
 ### Arrays
 
 Arrays are not treated as objects and will not be merged
-by `post` operations. The elements of an array
+by `merge` operations. The elements of an array
 can be individually fetched by `get` or set by `put`
 opernations. Removing single elements from an array is
 not yet specified.
@@ -87,7 +87,7 @@ io.connect('//:8080')
 		// 'sugar' 1
 		// 'milk' 0
 	})
-	.on('post', function(data){
+	.on('merge', function(data){
 		console.log(data);
 		// {'sugar': 1, 'milk': 0}
 	});
@@ -95,7 +95,7 @@ io.connect('//:8080')
 // user 2	
 io.connect('//:8080', {'force new connection': true})
 	.on('connect', function(){
-		this.emit('post', {
+		this.emit('merge', {
 			'sugar': 1,
 			'milk': 0
 		});
@@ -153,10 +153,10 @@ earth.on('remove', function(key){ });
 
 
 
-### Event: post
+### Event: merge
 
 ```js
-earth.on('post', function(data){ });
+earth.on('merge', function(data){ });
 ```
 
 ##### Arguments:
@@ -218,7 +218,7 @@ earth.disconnect();
 
 ### Method: on
 
-Adds a listener for planet operations: 'put', 'remove', 'post', 'delete', 'get'.
+Adds a listener for planet operations: 'put', 'remove', 'merge', 'delete', 'get'.
 See also the standard 
 [Socket.IO Client Events](https://github.com/LearnBoost/socket.io-client#events).
 
@@ -233,15 +233,15 @@ the first time the event is fired.
 
 ### Method: emit
 
-Emits planet operations: 'put', 'remove', 'post', 'delete', 'get'
+Emits planet operations: 'put', 'remove', 'merge', 'delete', 'get'
 
 
 
-### Emit: post
+### Emit: merge
 
 ```js
-earth.emit('post', {'bag': {'eggs': 6, 'milk': 100}});
-earth.emit('post', {'bag': {'sugar': 20}});
+earth.emit('merge', {'bag': {'eggs': 6, 'milk': 100}});
+earth.emit('merge', {'bag': {'sugar': 20}});
 ```
 
 
@@ -319,7 +319,7 @@ The `new` keyword is optional.
 
 ### Method: on
 
-Adds a listener for Planet operations: 'put', 'remove', 'post', 'delete', 'get'.
+Adds a listener for Planet operations: 'put', 'remove', 'merge', 'delete', 'get'.
 See also the standard 
 [Socket.IO Server Events](https://github.com/LearnBoost/socket.io/wiki/Exposed-events).
 
@@ -332,10 +332,10 @@ the first time the event is fired.
 
 
 
-### Method: post
+### Method: merge
 
 ```js
-earth.post({'key': 'value'});
+earth.merge({'key': 'value'});
 ```
 
 
@@ -430,7 +430,7 @@ TODO
 
 - strict (option for disallowing auto-creation of putting keys)
 - predefined model (option for predefining a data structure 
-  and disalow posting/putting inexistent keys)
+  and disalow merging/putting inexistent keys)
 - latency optimization
 - cleanup error messages
 - eventually use https://github.com/isaacs/nopt instead of optparse

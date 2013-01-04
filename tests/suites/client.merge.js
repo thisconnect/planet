@@ -3,10 +3,10 @@ exports.setup = function(Tests, io){
 var Spy = require('../testigo/Source/lib/spy').Spy;
 
 
-Tests.describe('Planet Client API: Post', function(it){
+Tests.describe('Planet Client API: Merge', function(it){
 
 
-	it('should allow to post an object', function(expect){
+	it('should allow to merge an object', function(expect){
 		expect.perform(17);
 
 		var socket = io.connect('//:8004', {
@@ -14,7 +14,7 @@ Tests.describe('Planet Client API: Post', function(it){
 		});
 
 		socket.on('connect', function(){
-			socket.emit('post', {
+			socket.emit('merge', {
 				'key-a': 12,
 				'key-b': 'ok',
 				'key-c': null,
@@ -25,7 +25,7 @@ Tests.describe('Planet Client API: Post', function(it){
 			});
 		});
 
-		socket.on('post', function(data){
+		socket.on('merge', function(data){
 			expect(data).toBeType('object');
 			expect(data).toHaveProperty('key-a');
 			expect(data).toHaveProperty('key-b');
@@ -56,7 +56,7 @@ Tests.describe('Planet Client API: Post', function(it){
 		});
 
 		socket.on('connect', function(){
-			socket.emit('post', {
+			socket.emit('merge', {
 				'prototype': null,
 				'create': null,
 				'defineProperty': null,
@@ -80,7 +80,7 @@ Tests.describe('Planet Client API: Post', function(it){
 			});
 		});
 
-		socket.on('post', function(data){
+		socket.on('merge', function(data){
 			expect(data).toBeType('object');
 			expect(data).toHaveProperty('prototype');
 			expect(data).toHaveProperty('create');
@@ -129,14 +129,14 @@ Tests.describe('Planet Client API: Post', function(it){
 	});
 
 
-	it('should post data to all connected clients', function(expect){
+	it('should send data to merge to all connected clients', function(expect){
 		expect.perform(30);
 
 		var first = io.connect('//:8004', {
 			'force new connection': true
 		});
 
-		function posts(data){
+		function merges(data){
 			expect(data).toBeType('object');
 			expect(data).toHaveProperty('key-a');
 			expect(data).toHaveProperty('key-b');
@@ -155,7 +155,7 @@ Tests.describe('Planet Client API: Post', function(it){
 			this.disconnect();
 		}
 
-		first.on('post', posts);
+		first.on('merge', merges);
 
 		first.on('connect', function(){
 
@@ -163,10 +163,10 @@ Tests.describe('Planet Client API: Post', function(it){
 				'force new connection': true
 			});
 
-			second.on('post', posts);
+			second.on('merge', merges);
 
 			second.on('connect', function(){
-				first.emit('post', {
+				first.emit('merge', {
 					'key-a': 12,
 					'key-b': 'ok',
 					'key-c': null,
@@ -187,7 +187,7 @@ Tests.describe('Planet Client API: Post', function(it){
 		});
 
 		socket.on('connect', function(){
-			socket.emit('post', {
+			socket.emit('merge', {
 				'key-a': 1,
 				'key-b': 'ok',
 				'key-e': {
@@ -198,7 +198,7 @@ Tests.describe('Planet Client API: Post', function(it){
 					'key-e': {}
 				}
 			});
-			socket.emit('post', {
+			socket.emit('merge', {
 				'key-a': {
 					'a': []
 				},
@@ -211,7 +211,7 @@ Tests.describe('Planet Client API: Post', function(it){
 					'key-e': []
 				}
 			});
-			socket.emit('post', {
+			socket.emit('merge', {
 				'key-e': {
 					'key-f': 4
 				},
@@ -261,7 +261,7 @@ Tests.describe('Planet Client API: Post', function(it){
 	});
 
 
-	it('should harminze strange keys', function(expect){
+	it('should harmoninze strange keys', function(expect){
 		expect.perform(13);
 
 		var storage = {},
@@ -270,14 +270,14 @@ Tests.describe('Planet Client API: Post', function(it){
 			});
 
 		socket.on('connect', function(){
-			socket.emit('post', {
+			socket.emit('merge', {
 				'': 1,
 				1: null,
 				null: '',
 				undefined: {},
 				false: []
 			});
-			socket.emit('post', {
+			socket.emit('merge', {
 				'': 2,
 				1: 'ok',
 				null: null,
@@ -286,7 +286,7 @@ Tests.describe('Planet Client API: Post', function(it){
 			});
 		});
 
-		socket.on('post', function(data){
+		socket.on('merge', function(data){
 			storage = data;
 			if (data['1'] == 'ok') this.disconnect();
 		});
@@ -309,7 +309,7 @@ Tests.describe('Planet Client API: Post', function(it){
 	});
 
 
-	it('should error for postting invalid data', function(expect){
+	it('should error for merging invalid data', function(expect){
 		expect.perform(21);
 		var spy = new Spy();
 
@@ -318,23 +318,23 @@ Tests.describe('Planet Client API: Post', function(it){
 		});
 
 		socket.on('connect', function(){
-			socket.emit('post');
-			socket.emit('post', 12);
-			socket.emit('post', '');
-			socket.emit('post', null);
-			socket.emit('post', []);
-			socket.emit('post', {}); // doesnt error
-			socket.emit('post', false);
-			socket.emit('post', true);
-			socket.emit('post', undefined);
-			socket.emit('post', new Date);
-			socket.emit('post', new String('lalala'));
+			socket.emit('merge');
+			socket.emit('merge', 12);
+			socket.emit('merge', '');
+			socket.emit('merge', null);
+			socket.emit('merge', []);
+			socket.emit('merge', {}); // doesnt error
+			socket.emit('merge', false);
+			socket.emit('merge', true);
+			socket.emit('merge', undefined);
+			socket.emit('merge', new Date);
+			socket.emit('merge', new String('lalala'));
 		});
 
 		socket.on('error', function(type, data){
 			spy();
 			expect(type).toBeType('string');
-			expect(type).toBe('post');
+			expect(type).toBe('merge');
 			if (10 == spy.getCallCount()) this.disconnect();
 		});
 

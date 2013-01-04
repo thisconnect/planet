@@ -170,9 +170,9 @@ socket.on('put', function(data){
 	}).inject('lug', 'top');
 });
 
-socket.on('post', function(key, value){
+socket.on('merge', function(key, value){
 	new Element('li', {
-		text: 'post: ' + key + ' ' + JSON.stringify(value)
+		text: 'merge: ' + key + ' ' + JSON.stringify(value)
 	}).inject('lug', 'top');
 });
 

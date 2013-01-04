@@ -15,7 +15,7 @@ Tests.describe('Planet Client API: Remove', function(it){
 		});
 
 		first.on('connect', function(){
-			first.emit('post', {
+			first.emit('merge', {
 				'key-a': 12,
 				'key-b': 'ok',
 				'key-c': null,
@@ -25,7 +25,7 @@ Tests.describe('Planet Client API: Remove', function(it){
 			});
 		});
 
-		first.on('post', function(data){
+		first.on('merge', function(data){
 			first.emit('remove', 'key-a');
 			first.emit('remove', 'key-b');
 			first.emit('remove', 'key-c');
@@ -73,7 +73,7 @@ Tests.describe('Planet Client API: Remove', function(it){
 		});
 
 		first.on('connect', function(){
-			first.emit('post', {
+			first.emit('merge', {
 				'key-a': {
 					'key-a': 12,
 					'key-b': 'ok',
@@ -85,7 +85,7 @@ Tests.describe('Planet Client API: Remove', function(it){
 			});
 		});
 
-		first.on('post', function(data){
+		first.on('merge', function(data){
 			first.emit('remove', ['key-a', 'key-a']);
 			first.emit('remove', ['key-a', 'key-b']);
 			first.emit('remove', ['key-a', 'key-c']);
@@ -135,14 +135,14 @@ Tests.describe('Planet Client API: Remove', function(it){
 
 		first.on('connect', function(){
 			first.emit('delete');
-			first.emit('post', {
+			first.emit('merge', {
 				'key-a': {
 					'key-a': 1
 				}
 			});
 		});
 
-		first.on('post', function(data){
+		first.on('merge', function(data){
 			first.emit('remove', 'key-b');
 			first.emit('remove', ['key-b']);
 			first.emit('remove', ['key-a', 'key-b']);
@@ -208,10 +208,10 @@ Tests.describe('Planet Client API: Remove', function(it){
 		});
 
 		socket.on('connect', function(){
-			socket.emit('post', props);
+			socket.emit('merge', props);
 		});
 
-		socket.on('post', function(data){
+		socket.on('merge', function(data){
 			for (var key in props){
 				socket.emit('remove', key);
 			}
@@ -240,13 +240,13 @@ Tests.describe('Planet Client API: Remove', function(it){
 
 		first.on('connect', function(){
 			first.emit('delete');
-			first.emit('post', {
+			first.emit('merge', {
 				'key-a': 1,
 				'key-b': [0, 1, 2, 3, 4]
 			});
 		});
 
-		first.on('post', function(data){
+		first.on('merge', function(data){
 			first.emit('remove', 12);
 			first.emit('remove', null);
 			first.emit('remove', true);

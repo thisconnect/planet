@@ -5,7 +5,7 @@ var Spy = require('../testigo/Source/lib/spy').Spy;
 
 Tests.describe('Planet: Stress Test', function(it){
 
-	it('should `post` and `get` get a big object', function(expect){
+	it('should `merge` and `get` get a big object', function(expect){
 		expect.perform(2);
 
 		var first = io.connect('//:8004', {
@@ -21,10 +21,10 @@ Tests.describe('Planet: Stress Test', function(it){
 		};
 
 		first.on('connect', function(){
-			first.emit('post', local);
+			first.emit('merge', local);
 		});
 
-		first.on('post', function(data){
+		first.on('merge', function(data){
 			first.disconnect();
 		});
 

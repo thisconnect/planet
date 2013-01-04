@@ -14,7 +14,7 @@ Tests.describe('Planet Client API: Array', function(it){
 		});
 
 		socket.on('connect', function(){
-			socket.emit('post', {
+			socket.emit('merge', {
 				'_a': ['a0', 'a1', 'a2'],
 				'_b': {
 					'bb': ['b0', 'b1', 'b2']
@@ -26,7 +26,7 @@ Tests.describe('Planet Client API: Array', function(it){
 			});
 		});
 
-		socket.on('post', function(){
+		socket.on('merge', function(){
 			socket.emit('get', ['_a', 0], function(data){
 				expect(data).toBe('a0');
 			});
@@ -53,7 +53,7 @@ Tests.describe('Planet Client API: Array', function(it){
 		});
 
 		socket.emit('get', function(data){
-			socket.emit('post', {
+			socket.emit('merge', {
 				'_f': ['a1', 'a2', 'a3'],
 				'_g': [['b1', 'b2'], ['b3', 'b4']],
 				'_h': {
@@ -64,7 +64,7 @@ Tests.describe('Planet Client API: Array', function(it){
 			});
 		});
 
-		socket.on('post', function(data){
+		socket.on('merge', function(data){
 			socket.emit('put', ['_f', 0], 'F1 (new)');
 			socket.emit('put', ['_g', 0, 0], 'G1 (new)');
 			socket.emit('put', ['_h', 'cc', 0], 'HH1 (new)');

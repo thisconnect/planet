@@ -41,10 +41,10 @@ Tests.describe('Planet Client API: Get', function(it){
 		});
 
 		first.on('connect', function(){
-			first.emit('post', {a: {b: {c: 123}}});
+			first.emit('merge', {a: {b: {c: 123}}});
 		});
 
-		first.on('post', function(data){
+		first.on('merge', function(data){
 			first.emit('put', ['a', 'b', 'c'], 321);
 		});
 
@@ -78,10 +78,10 @@ Tests.describe('Planet Client API: Get', function(it){
 		});
 
 		first.on('connect', function(){
-			first.emit('post', {a: {b: {c: 0}}});
+			first.emit('merge', {a: {b: {c: 0}}});
 		});
 
-		first.on('post', function(data){
+		first.on('merge', function(data){
 			first.disconnect();
 		});
 
@@ -132,10 +132,10 @@ Tests.describe('Planet Client API: Get', function(it){
 		});
 
 		first.on('connect', function(){
-			first.emit('post', {a: {b: {c: 0}}});
+			first.emit('merge', {a: {b: {c: 0}}});
 		});
 
-		first.on('post', function(data){
+		first.on('merge', function(data){
 			first.disconnect();
 		});
 
@@ -182,10 +182,10 @@ Tests.describe('Planet Client API: Get', function(it){
 		});
 
 		first.on('connect', function(){
-			first.emit('post', {a: {b: {c: 0}}});
+			first.emit('merge', {a: {b: {c: 0}}});
 		});
 
-		first.on('post', function(data){
+		first.on('merge', function(data){
 			first.disconnect();
 		});
 

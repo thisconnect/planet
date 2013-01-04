@@ -14,13 +14,13 @@ Tests.describe('Planet Client API: Delete', function(it){
 		});
 
 		first.on('connect', function(){
-			first.emit('post', {
+			first.emit('merge', {
 				'key-a': null,
 				'key-b': ''
 			});
 		});
 
-		first.on('post', function(data){
+		first.on('merge', function(data){
 			first.emit('delete');
 		});
 

@@ -90,7 +90,7 @@ exports.setup = function(Tests){
 				.on('put', function(key, value){
 					// console.log(key, value);
 				})
-				.on('post', function(data){
+				.on('merge', function(data){
 					// console.log(data);
 					expect(data).toHaveProperty('sugar');
 					expect(data).toHaveProperty('milk');
@@ -102,7 +102,7 @@ exports.setup = function(Tests){
 			// client 2	
 			io.connect('//:8104', {'force new connection': true})
 				.on('connect', function(){
-					this.emit('post', {
+					this.emit('merge', {
 						sugar: 1,
 						milk: 0
 					});
