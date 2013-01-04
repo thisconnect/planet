@@ -77,30 +77,26 @@ with `put` or read with `get`.
 Example
 -------
 
+
+
+### Server
+
 ```javascript
 // server
 var planet = require('planet'),
 	socket = require('socket.io').listen(8080);
 
 new planet(socket);
+```
 
-// client
+
+
+### Client
+
+```javascript
 var io = require('socket.io-client');
-
-// user 1
+	
 io.connect('//:8080')
-	.on('put', function(key, value){
-		console.log(key, value);
-		// 'sugar' 1
-		// 'milk' 0
-	})
-	.on('merge', function(data){
-		console.log(data);
-		// {'sugar': 1, 'milk': 0}
-	});
-
-// user 2	
-io.connect('//:8080', {'force new connection': true})
 	.on('connect', function(){
 		this.emit('merge', {
 			'sugar': 1,
