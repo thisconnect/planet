@@ -269,7 +269,7 @@ The `new` keyword is optional.
 
 ### Method: on
 
-Adds a listener for Planet operations: 'put', 'remove', 'merge', 'delete', 'get'.
+Adds a listener for Planet operations: `put`, `remove`, `merge`, `delete`, `get`.
 See also the standard 
 [Socket.IO Server Events](https://github.com/LearnBoost/socket.io/wiki/Exposed-events).
 
