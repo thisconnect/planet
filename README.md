@@ -405,8 +405,17 @@ or `cd bin && ./planet`.
 Tests
 -----
 
+Running tests requires the installation of 
+[Testigo](https://github.com/keeto/testigo).
+
 ```bash
-git submodule update --init --recursive // installs Testigo
+git submodule update --init --recursive
+
+node tests/run.js
+```
+
+```bash
+git submodule update --init --recursive
 
 node tests/run.js
 ```
