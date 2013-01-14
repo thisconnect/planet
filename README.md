@@ -91,7 +91,6 @@ Example
 ### Server
 
 ```javascript
-// server
 var planet = require('planet'),
 	socket = require('socket.io').listen(8080);
 
@@ -103,33 +102,28 @@ new planet(socket);
 ### Client
 
 ```javascript
-var io = require('socket.io-client');
-	
 io.connect('//:8080')
-	.on('connect', function(){
-		this.emit('merge', {
-			'sugar': 1,
-			'milk': 0
-		});
-
-		this.emit('put', 'sugar', 2);
-		this.emit('put', 'milk', 100);
-
-		this.emit('get', function(data){
-			console.log(data);
-			// {'sugar': 2, 'milk': 100}
-		});
+.on('connect', function(){
+	this.emit('merge', {
+		'sugar': 1,
+		'milk': 0
 	});
+
+	this.emit('put', 'sugar', 2);
+	this.emit('put', 'milk', 100);
+
+	this.emit('get', function(data){
+		console.log(data);
+		// {'sugar': 2, 'milk': 100}
+	});
+});
 ```
 
 
-
-Client API
-----------
-
+Include the Client
+------------------
 
 
-### Browser
 
 ```html
 <script src="//localhost:8080/socket.io/socket.io.js"></script>
@@ -137,11 +131,15 @@ Client API
 
 
 
-### Node.js
-
 ```js
+// or within Node.js 
 var io = require('socket.io-client');
 ```
+
+
+
+Client API
+----------
 
 
 
@@ -168,9 +166,8 @@ earth.disconnect();
 
 ### Method: on
 
-Adds a listener for planet operations: `put`, `remove`, `merge`, `delete`, `get`.
-See also the standard 
-[Socket.IO Client Events](https://github.com/LearnBoost/socket.io-client#events).
+Adds a listener for planet operations: `put`, `remove`, `merge`, `delete`, `get` and
+the [Socket.IO Client Events](https://github.com/LearnBoost/socket.io-client#events).
 
 
 
@@ -439,6 +436,7 @@ node bench/run.js 127.0.0.1:8004
 TODO
 ----
 
+- api change: put to set
 - Strict (option for disallowing auto-creation of putting keys)
 - Predefined model (option for predefining a data structure 
   and disalow merging/putting inexistent keys)
