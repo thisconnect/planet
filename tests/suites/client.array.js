@@ -46,7 +46,7 @@ Tests.describe('Planet Client API: Array', function(it){
 
 
 	it('should `put` an element to an array', function(expect){
-		expect.perform(5);
+		expect.perform(11);
 
 		var socket = io.connect('//:8004', {
 			'force new connection': true
@@ -70,6 +70,7 @@ Tests.describe('Planet Client API: Array', function(it){
 			socket.emit('put', ['_h', 'cc', 0], 'HH1 (new)');
 			socket.emit('put', ['_i', 0, 'dd'], 'II1 (new)');
 			socket.emit('put', ['_j', 0, 'ee', 0], 'JJ1 (new)');
+			socket.emit('put', ['_j', 0, 'ee', 1], 'JJ2 (new)');
 
 			socket.emit('get', ['_f', 0], function(data){
 				expect(data).toBe('F1 (new)');
@@ -77,14 +78,26 @@ Tests.describe('Planet Client API: Array', function(it){
 			socket.emit('get', '_g', function(data){
 				expect(data[0][0]).toBe('G1 (new)');
 			});
+			socket.emit('get', '_g', function(data){
+				expect(data[0][0]).toBe('G1 (new)');
+				expect(data[0][1]).toBe('b2');
+				expect(data[1][0]).toBe('b3');
+				expect(data[1][1]).toBe('b4');
+			});
 			socket.emit('get', ['_h', 'cc'], function(data){
 				expect(data[0]).toBe('HH1 (new)');
 			});
 			socket.emit('get', ['_i', 0, 'dd'], function(data){
 				expect(data).toBe('II1 (new)');
 			});
+			socket.emit('get', ['_i', 1, 'ddd'], function(data){
+				expect(data).toBe('dd2');
+			});
 			socket.emit('get', ['_j', 0, 'ee', 0], function(data){
 				expect(data).toBe('JJ1 (new)');
+			});
+			socket.emit('get', ['_j', 0, 'ee', 1], function(data){
+				expect(data).toBe('JJ2 (new)');
 				socket.disconnect();
 			});
 		});
