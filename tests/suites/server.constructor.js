@@ -32,12 +32,14 @@ exports.setup = function(Tests){
 
 		});
 
-		it('should start planet', function(expect){
+		it('should create a new instance when called without the `new` operator', function(expect){
 
 			var server = http.createServer(),
 				socket = io.listen(server, {'log level': 1});
 
-			var venus = planet(socket, {});
+			var venus = planet(socket);
+
+			expect(venus).toBeAnInstanceOf(planet);
 
 			server.listen(8102);
 
@@ -54,7 +56,7 @@ exports.setup = function(Tests){
 				'log level': 1
 			});
 
-			planet(socket, {})
+			planet(socket)
 				.on('listening', function(location, port){
 					expect(port).toBe(8103);
 
