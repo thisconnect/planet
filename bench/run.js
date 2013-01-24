@@ -1,76 +1,183 @@
-var spawn = require('child_process').spawn;
+var Benchmark = require('benchmark'),
+	Planet = require('../'),
+	socket = require('socket.io').listen(8082, {
+		'log level': 1
+	}),
+	io = require('socket.io-client'),
+	spawn = require('child_process').spawn;
 
-process.chdir(__dirname);
+var planet = Planet(socket);
 
-var log = {
-	storage: {},
-	store: function(what, that){
-		if (!(what in this.storage)) this.storage[what] = [];
-		this.storage[what].push(that);
-	},
-	write: function(data){
-		data = JSON.parse(data);
-		for (key in data) this.store(key, data[key]);
-	},
-	read: function(){
-		return this.storage;
-	}
-};
+var maxTime = 4;
 
-console.log('measure execution and response time');
-spawn_story1(function(){
-	console.log('first client done');
-	spawn_story1(function(){
-		console.log('time is measured relative to last action');
-		spawn_story1(function(){
-			console.log('spawning 199 dummy clients');
-			spawn_dummies(199, function(){
-				console.log('spawned 199 dummies');
-				spawn_story1(function(){
-					console.log('measure again but with 200 connected clients');
-					spawn_story1(function(){
-						console.log('almost done')
-						spawn_story1(function(){
-							console.log('first 3 results are single clients');
-							console.log('last 3 results tested with 200 connected clients');
-							console.log(log.read());
-							process.exit(0);
-						});
-					});
-				});
-			});
+planet.on('listening', function(){
+	
+	test()
+	.on('complete', function(){
+		var count = 0,
+			dummies = spawn('node', [__dirname + '/dummies.js', 199, '//:8082']);
+
+		process.on('exit', function(){
+			dummies.kill();
 		});
-	});
+		dummies.stderr.on('data', function(error){ console.log('ERROR!!', error.toString()); });
+		dummies.stdout.setEncoding('utf8');
+		dummies.stdout.on('data', function(data){
+			count += data.trim().split('\n').length;
+			if (count < 199) return;
+			console.log('connects 199 dummy clients');
+			
+			test()
+			.on('complete', function(){
+				planet.get(function(data){
+					console.log(JSON.stringify(data));
+					process.exit();
+				});
+			})
+			.run();
+		});
+	})
+	.run();
+	
 });
 
-function error(msg){
-	console.log('ERROR', msg.toString().trim());
-}
 
-function spawn_story1(fn){
-	var client = spawn('node', ['./client.js', process.argv[2] || '//:8004']);
-	client.stderr.on('data', error);
-	client.stdout.on('data', function(data){
-		log.write(data);
-	});
-	client.on('exit', function(code){
-		if (typeof fn == 'function') fn(code);
-	});
-}
+function test(){
 
-function spawn_dummies(amount, fn){
-	var count = 0,
-		dummies = spawn('node', ['./dummies.js', amount, process.argv[2] || '//:8004']);
+	var client = io.connect('//:8082');
 
-	dummies.stderr.on('data', error);
-	dummies.stdout.setEncoding('utf8');
-	dummies.stdout.on('data', function(data){
-		count += data.trim().split('\n').length;
-		if (count < amount) return;
-		if (typeof fn == 'function') fn();
-	});
+	return Benchmark.Suite()
+	.on('cycle', function(cycle){
+		console.log(String(cycle.target));
+	})
+
+	.add('Server.merge: simple object', {
+		'maxTime': maxTime,
+		'fn': function(){
+			planet.merge({ key: 'value'});
+		}
+	})
+	.add('Server.merge: nested object', {
+		'maxTime': maxTime,
+		'fn': function(){
+			planet.merge({ a: { b: { c: { d: { e: 0 } } } } });
+		}
+	})
+	.add('Server.merge: complex object', {
+		'maxTime': maxTime,
+		'fn': function(){
+			planet.merge({
+				key: 'foo',
+				a: { b: { c: { d: { e: 1 } } } },
+				b: [[[[[1]]]]]
+			});
+		}
+	})
+
+	.add('Server.put: key string', {
+		'maxTime': maxTime,
+		'fn': function(){
+			planet.put('key', 'bar');
+		}
+	})
+	.add('Server.put: path number', {
+		'maxTime': maxTime,
+		'fn': function(){
+			planet.put(['a', 'b', 'c', 'd', 'e'], 2);
+		}
+	})
+	.add('Server.put: key nested array', {
+		'maxTime': maxTime,
+		'fn': function(){
+			planet.put('b', [[[[[2]]]]]);
+		}
+	})
+	.add('Server.put: array path number', {
+		'maxTime': maxTime,
+		'fn': function(){
+			planet.put(['b', 0, 0, 0, 0, 0], 3);
+		}
+	})
+
+	.add('Server.get (async)', {
+		'maxTime': maxTime,
+		'defer': true,
+		'fn': function(deferred){
+			planet.get(function(){
+				deferred.resolve();
+			});
+		}
+	})
+	.add('Server.get key (async)', {
+		'maxTime': maxTime,
+		'defer': true,
+		'fn': function(deferred){
+			planet.get('key', function(){
+				deferred.resolve();
+			});
+		}
+	})
+	.add('Server.get path (async)', {
+		'maxTime': maxTime,
+		'defer': true,
+		'fn': function(deferred){
+			planet.get(['a', 'b', 'c', 'd', 'e'], function(){
+				deferred.resolve();
+			});
+		}
+	})
+	.add('Server.get path array (async)', {
+		'maxTime': maxTime,
+		'defer': true,
+		'fn': function(deferred){
+			planet.get(['b', 0, 0, 0, 0, 0], function(value){
+				deferred.resolve();
+			});
+		}
+	})
 	
-	process.on('exit', function(){
-		dummies.kill();
+	.add('Client.merge: complex object (async)', {
+		'maxTime': maxTime,
+		'defer': true,
+		'fn': function(deferred){
+			client.once('merge', function(){
+				deferred.resolve();
+			});
+			client.emit('merge', {
+				key: 'foo',
+				a: { b: { c: { d: { e: 1 } } } },
+				b: [[[[[1]]]]]
+			});
+		}
+	})
+	.add('Client.put: array path number (async)', {
+		'maxTime': maxTime,
+		'defer': true,
+		'fn': function(deferred){
+			client.once('put', function(){
+				deferred.resolve();
+			});
+			client.emit('put', ['b', 0, 0, 0, 0, 0], 3);
+		}
+	})
+	.add('Client.get path (async)', {
+		'maxTime': maxTime,
+		'defer': true,
+		'fn': function(deferred){
+			client.emit('get', ['a', 'b', 'c', 'd', 'e'], function(){
+				deferred.resolve();
+			});
+		}
+	})
+	.add('Client.get path array (async)', {
+		'maxTime': maxTime,
+		'defer': true,
+		'fn': function(deferred){
+			client.emit('get', ['b', 0, 0, 0, 0, 0], function(value){
+				deferred.resolve();
+			});
+		}
 	});
+
+
 }
