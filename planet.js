@@ -23,6 +23,8 @@ function Planet(io, options){
 
 Planet.prototype = Object.create(Emitter.prototype);
 
+Planet.prototype.version = require('./package').version;
+
 /*
 Planet.prototype.send = function(t, h, i, s){
 	this.sockets.emit(t, h, i, s);
