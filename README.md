@@ -411,15 +411,11 @@ git submodule update --init --recursive
 node tests/run.js
 ```
 
-```bash
-git submodule update --init --recursive
 
-node tests/run.js
-```
 
 ### Benchmarks
 
-Start the Planet.
+
 
 ```bash
 node --stack_size=8192 planet # prevents exceeding maximum call stack size
@@ -456,7 +452,7 @@ TODO
 
 #### Dev Dependencies
 
-- microtime 0.3.1
+- [Benchmark.js](http://benchmarkjs.com/)
 - [Testigo](https://github.com/keeto/testigo)
 
 
