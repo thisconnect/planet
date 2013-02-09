@@ -47,7 +47,7 @@ Tests.describe('Planet: Stress Test', function(it){
 	});
 
 
-	it('should `put` many keys/values and `get` them all', function(expect){
+	it('should `set` many keys/values and `get` them all', function(expect){
 		expect.perform(3);
 
 		var first = io.connect('//:8004', {
@@ -65,12 +65,12 @@ Tests.describe('Planet: Stress Test', function(it){
 
 			while (start + 100 >= new Date().getTime()){
 				local['key-' + ++i] = Math.random();
-				first.emit('put', 'key-' + i, local['key-' + i]);
+				first.emit('set', 'key-' + i, local['key-' + i]);
 			}
-			console.log('\n...put', i, 'key/values during 100ms');
+			console.log('\n...set', i, 'key/values during 100ms');
 		});
 
-		first.on('put', function(key, value){
+		first.on('set', function(key, value){
 			returned[key] = value;
 			if ('key-' + i == key) first.disconnect();
 		});

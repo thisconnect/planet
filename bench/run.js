@@ -74,28 +74,28 @@ function test(){
 		}
 	})
 
-	.add('Server.put: key string', {
+	.add('Server.set: key string', {
 		'maxTime': maxTime,
 		'fn': function(){
-			planet.put('key', 'bar');
+			planet.set('key', 'bar');
 		}
 	})
-	.add('Server.put: path number', {
+	.add('Server.set: path number', {
 		'maxTime': maxTime,
 		'fn': function(){
-			planet.put(['a', 'b', 'c', 'd', 'e'], 2);
+			planet.set(['a', 'b', 'c', 'd', 'e'], 2);
 		}
 	})
-	.add('Server.put: key nested array', {
+	.add('Server.set: key nested array', {
 		'maxTime': maxTime,
 		'fn': function(){
-			planet.put('b', [[[[[2]]]]]);
+			planet.set('b', [[[[[2]]]]]);
 		}
 	})
-	.add('Server.put: array path number', {
+	.add('Server.set: array path number', {
 		'maxTime': maxTime,
 		'fn': function(){
-			planet.put(['b', 0, 0, 0, 0, 0], 3);
+			planet.set(['b', 0, 0, 0, 0, 0], 3);
 		}
 	})
 
@@ -150,14 +150,14 @@ function test(){
 			});
 		}
 	})
-	.add('Client.put: array path number (async)', {
+	.add('Client.set: array path number (async)', {
 		'maxTime': maxTime,
 		'defer': true,
 		'fn': function(deferred){
-			client.once('put', function(){
+			client.once('set', function(){
 				deferred.resolve();
 			});
-			client.emit('put', ['b', 0, 0, 0, 0, 0], 3);
+			client.emit('set', ['b', 0, 0, 0, 0, 0], 3);
 		}
 	})
 	.add('Client.get: path (async)', {

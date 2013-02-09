@@ -164,15 +164,15 @@ socket.on('get', function(data){
 	}).inject('lug', 'top');
 });
 
-socket.on('put', function(data){
+socket.on('set', function(data){
 	new Element('li', {
-		text: 'put: ' + JSON.stringify(data)
+		text: 'set: ' + key + ' ' + JSON.stringify(value)
 	}).inject('lug', 'top');
 });
 
 socket.on('merge', function(key, value){
 	new Element('li', {
-		text: 'merge: ' + key + ' ' + JSON.stringify(value)
+		text: 'merge: ' + JSON.stringify(data)
 	}).inject('lug', 'top');
 });
 

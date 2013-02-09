@@ -35,7 +35,7 @@ exports.setup = function(Tests){
 				expect(data).toBeType('object');
 			});
 
-			earth.on('put', function(key, value){
+			earth.on('set', function(key, value){
 				expect(this).toBeAnInstanceOf(planet);
 				expect(this).toBe(earth);
 				expect(key).toBeType('array');
@@ -87,10 +87,10 @@ exports.setup = function(Tests){
 				});
 
 				client.on('merge', function(data){
-					client.emit('put', ['bag', 'milk'], 2);
+					client.emit('set', ['bag', 'milk'], 2);
 				});
 
-				client.on('put', function(key, data){
+				client.on('set', function(key, data){
 					client.emit('remove', ['bag', 'eggs']);
 				});
 
@@ -124,7 +124,7 @@ exports.setup = function(Tests){
 						expect(data).toBeType('object');
 					});
 
-					client.on('put', function(key, value){
+					client.on('set', function(key, value){
 						expect(key).toBeType('array');
 						expect(value).toBeType('number');
 						expect(key).toBeSimilar(['bag', 'eggs']);
@@ -149,7 +149,7 @@ exports.setup = function(Tests){
 					expect(data).toBeType('object');
 				});
 
-				earth.on('put', function(key, value){
+				earth.on('set', function(key, value){
 					expect(key).toBeType('array');
 					expect(value).toBeType('number');
 					expect(key).toBeSimilar(['bag', 'eggs']);
@@ -178,7 +178,7 @@ exports.setup = function(Tests){
 					},
 					'box': [6, 7]
 				});
-				earth.put(['bag', 'eggs'], 4);
+				earth.set(['bag', 'eggs'], 4);
 
 				earth.on('remove', function(){
 					earth.get(function(data){

@@ -14,7 +14,7 @@ module.exports = function(i){
 	socket.on('connect_failed', function(){});
 	socket.on('error', function(){});
 	//socket.emit('get', function(data){});
-	socket.on('put', function(){});
+	socket.on('set', function(){});
 	socket.on('merge', function(){});
 	socket.on('remove', function(){});
 	socket.on('delete', function(){});

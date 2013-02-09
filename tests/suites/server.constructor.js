@@ -89,7 +89,7 @@ exports.setup = function(Tests){
 
 			// client 1
 			io.connect('//:8104')
-				.on('put', function(key, value){
+				.on('set', function(key, value){
 					// console.log(key, value);
 				})
 				.on('merge', function(data){
@@ -109,8 +109,8 @@ exports.setup = function(Tests){
 						milk: 0
 					});
 
-					this.emit('put', 'sugar', 2);
-					this.emit('put', 'milk', 100);
+					this.emit('set', 'sugar', 2);
+					this.emit('set', 'milk', 100);
 
 					this.emit('get', function(data){
 						// console.log(data);

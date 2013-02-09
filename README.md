@@ -42,7 +42,7 @@ If you are looking for rich text editing have a look at
 
 ### Operations
 
-  - `put` - Sets a value at a specific location.
+  - `set` - Sets a value at a specific location.
     The value will be overwritten and not be merged.
 
   - `remove` - Deletes a value at specified location.
@@ -60,17 +60,16 @@ If you are looking for rich text editing have a look at
 ### Arrays
 
 Arrays are not treated as objects and will not be merged
-by `merge` operations. The elements of an array
-can be individually fetched by `get` or set by `put`
-opernations. Removing single elements from an array is
-not yet specified.
+by `merge` operations. The elements of an array can be
+`set` or fetched by `get` opernations. Removing single
+elements from an array is not yet specified.
 
 
 
 ### String
 
 Single characters of a string value can be manipulated
-with `put` or read with `get`.
+with `set` or read with `get`.
 
 
 
@@ -109,8 +108,8 @@ io.connect('//:8080')
 		'milk': 0
 	});
 
-	this.emit('put', 'sugar', 2);
-	this.emit('put', 'milk', 100);
+	this.emit('set', 'sugar', 2);
+	this.emit('set', 'milk', 100);
 
 	this.emit('get', function(data){
 		console.log(data);
@@ -166,7 +165,7 @@ earth.disconnect();
 
 ### Method: on
 
-Adds a listener for planet operations: `put`, `remove`, `merge`, `delete`, `get` and
+Adds a listener for planet operations: `set`, `remove`, `merge`, `delete`, `get` and
 the [Socket.IO Client Events](https://github.com/LearnBoost/socket.io-client#events).
 
 
@@ -180,17 +179,17 @@ the first time the event is fired.
 
 ### Method: emit
 
-Emits the following Planet operations: `put`, `remove`, `merge`, `delete`, `get`.
+Emits the following Planet operations: `set`, `remove`, `merge`, `delete`, `get`.
 
 
 
-### Emit: put
+### Emit: set
 
 ```js
-earth.emit('put', 'bag', null); // {'bag': null}
-earth.emit('put', 'bag', {'sugar': 20}); // {'bag': {'sugar': 20}}
-earth.emit('put', ['bag', 'eggs'], 12); // {'bag': {'sugar': 20, 'eggs': 12}}
-earth.emit('put', ['todo-list', 0], 'My first thing todo');
+earth.emit('set', 'bag', null); // {'bag': null}
+earth.emit('set', 'bag', {'sugar': 20}); // {'bag': {'sugar': 20}}
+earth.emit('set', ['bag', 'eggs'], 12); // {'bag': {'sugar': 20, 'eggs': 12}}
+earth.emit('set', ['todo-list', 0], 'My first thing todo');
 ```
 
 
@@ -266,7 +265,7 @@ The `new` keyword is optional.
 
 ### Method: on
 
-Adds a listener for Planet operations: `put`, `remove`, `merge`, `delete`, `get`.
+Adds a listener for Planet operations: `set`, `remove`, `merge`, `delete`, `get`.
 See also the standard 
 [Socket.IO Server Events](https://github.com/LearnBoost/socket.io/wiki/Exposed-events).
 
@@ -287,12 +286,12 @@ earth.merge({'key': 'value'});
 
 
 
-### Method: put
+### Method: set
 
 ```js
-earth.put('bag', {'sugar': 20});
-earth.put(['bag', 'eggs'], 12);
-earth.put(['todo-list', 0], 'My first thing todo');
+earth.set('bag', {'sugar': 20});
+earth.set(['bag', 'eggs'], 12);
+earth.set(['todo-list', 0], 'My first thing todo');
 ```
 
 
@@ -332,15 +331,15 @@ on both the server and the client side.
 
 
 
-### Event: put
+### Event: set
 
 ```js
-earth.on('put', function(key, value){ });
+earth.on('set', function(key, value){ });
 ```
 
 ##### Arguments
 
-1. Key (string or array) - the location to put a value.
+1. Key (string or array) - the location to set a value.
 2. Value (string, number, object, array, boolean, null).
 
 
@@ -432,10 +431,9 @@ node bench/run.js 127.0.0.1:8004
 TODO
 ----
 
-- api change: put to set
-- Strict (option for disallowing auto-creation of putting keys)
+- Strict (option for disallowing auto-creation of setting keys at new location)
 - Predefined model (option for predefining a data structure 
-  and disalow merging/putting inexistent keys)
+  and disalow merging/setting inexistent keys)
 - Latency optimization
 - Cleanup error messages
 - Eventually use https://github.com/isaacs/nopt instead of optparse

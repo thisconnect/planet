@@ -3,10 +3,10 @@ $$('input[type=checkbox]').each(function(checkbox){
 	var component = checkbox.get('name') + '.' + checkbox.get('value');
 
 	checkbox.addEvent('change', function(){
-		socket.emit('put', component, this.get('checked'));
+		socket.emit('set', component, this.get('checked'));
 	});
 
-	socket.on('put', function(key, value){
+	socket.on('set', function(key, value){
 		if (key == component){
 			checkbox.set('checked', value);
 		}

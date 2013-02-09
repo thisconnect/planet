@@ -42,7 +42,7 @@ function listen(){
 	var location = this.server.address();
 	this.send = this.sockets.emit.bind(this.sockets);
 
-	this.put = onPut.bind(this, null);
+	this.set = onSet.bind(this, null);
 	this.remove = onRemove.bind(this, null);
 	this.merge = onMerge.bind(this, null);
 	this.del = onDelete.bind(this, null);
@@ -63,7 +63,7 @@ function connect(socket){
 		return socket.disconnect();
 	}
 	socket.on('disconnect',	disconnect.bind(this, socket))
-		.on('put',			onPut.bind(this, socket))
+		.on('set',			onSet.bind(this, socket))
 		.on('remove',		onRemove.bind(this, socket))
 		.on('merge',		onMerge.bind(this, socket))
 		.on('delete',		onDelete.bind(this))
@@ -95,18 +95,18 @@ function onDelete(){
 	this.emit('delete');
 }
 
-function onPut(socket, key, value){
+function onSet(socket, key, value){
 	if (value === undefined
 		|| (typeof key != 'string' && !isArray(key))
 		|| (key.length != null && key.length == 0)
 	){
-		return socket.emit('error', 'put', key, value);
+		return socket.emit('error', 'set', key, value);
 	}
 	if (typeof key == 'string') this.state[key] = value;
 	else set(this.state, key, value);
 
-	this.send('put', key, value);
-	this.emit('put', key, value);
+	this.send('set', key, value);
+	this.emit('set', key, value);
 }
 
 function onRemove(socket, key){

@@ -3,10 +3,10 @@ exports.setup = function(Tests, io){
 var Spy = require('../testigo/Source/lib/spy').Spy;
 
 
-Tests.describe('Planet Client API: Put', function(it){
+Tests.describe('Planet Client API: Set', function(it){
 
 
-	it('should allow for `put` key value pairs', function(expect){
+	it('should allow for `set` key value pairs', function(expect){
 		expect.perform(4);
 
 		var socket = io.connect('//:8004', {
@@ -14,10 +14,10 @@ Tests.describe('Planet Client API: Put', function(it){
 		});
 
 		socket.on('connect', function(){
-			socket.emit('put', 'key-u', 123);
+			socket.emit('set', 'key-u', 123);
 		});
 
-		socket.on('put', function(key, value){
+		socket.on('set', function(key, value){
 			expect(key).toBeType('string');
 			expect(key).toBe('key-u');
 			expect(value).toBeType('number');
@@ -27,7 +27,7 @@ Tests.describe('Planet Client API: Put', function(it){
 	});
 
 
-	it('should `put` values with all possible types', function(expect){
+	it('should `set` values with all possible types', function(expect){
 		expect.perform(22);
 		var spy = new Spy();
 
@@ -37,16 +37,16 @@ Tests.describe('Planet Client API: Put', function(it){
 			});
 
 		socket.on('connect', function(){
-			socket.emit('put', 'key-a', 12);
-			socket.emit('put', 'key-b', '');
-			socket.emit('put', 'key-c', null);
-			socket.emit('put', 'key-d', []);
-			socket.emit('put', 'key-e', {});
-			socket.emit('put', 'key-f', false);
-			socket.emit('put', 'key-g', new Date());
+			socket.emit('set', 'key-a', 12);
+			socket.emit('set', 'key-b', '');
+			socket.emit('set', 'key-c', null);
+			socket.emit('set', 'key-d', []);
+			socket.emit('set', 'key-e', {});
+			socket.emit('set', 'key-f', false);
+			socket.emit('set', 'key-g', new Date());
 		});
 
-		socket.on('put', function(key, value){
+		socket.on('set', function(key, value){
 			spy();
 			expect(key).toBeType('string');
 			container[key] = value;
@@ -75,7 +75,7 @@ Tests.describe('Planet Client API: Put', function(it){
 	});
 
 
-	it('should allow for `put` the same key', function(expect){
+	it('should allow for `set` the same key', function(expect){
 		expect.perform(22);
 		var spy = new Spy();
 
@@ -84,12 +84,12 @@ Tests.describe('Planet Client API: Put', function(it){
 		});
 
 		socket.on('connect', function(){
-			socket.emit('put', ['a', 'b', 'c'], 10);
-			socket.emit('put', ['a', 'b', 'c'], 20);
-			socket.emit('put', 'a.b.c'.split('.'), 30);
+			socket.emit('set', ['a', 'b', 'c'], 10);
+			socket.emit('set', ['a', 'b', 'c'], 20);
+			socket.emit('set', 'a.b.c'.split('.'), 30);
 		});
 
-		socket.on('put', function(key, value){
+		socket.on('set', function(key, value){
 			spy();
 			expect(key).toBeType('array');
 			expect(value).toBeType('number');
@@ -107,7 +107,7 @@ Tests.describe('Planet Client API: Put', function(it){
 	});
 
 
-	it('should allow `put` with reserved object props and methods as key names', function(expect){
+	it('should allow `set` with reserved object props and methods as key names', function(expect){
 		expect.perform(47);
 		var spy = new Spy();
 
@@ -120,12 +120,12 @@ Tests.describe('Planet Client API: Put', function(it){
 
 		socket.on('connect', function(){
 			arrayProtos.forEach(function(item){
-				socket.emit('put', item, false);
+				socket.emit('set', item, false);
 			});
 		});
 
 		var indexOf = Array.prototype.indexOf;
-		socket.on('put', function(key, value){
+		socket.on('set', function(key, value){
 			spy();
 			expect(indexOf.call(arrayProtos, key)).not.toBe(-1);
 			expect(value).toBeFalse();
@@ -138,7 +138,7 @@ Tests.describe('Planet Client API: Put', function(it){
 	});
 
 
-	it('should `error` on corrupt `put` keys', function(expect){
+	it('should `error` on corrupt `set` keys', function(expect){
 		expect.perform(15);
 		var spy = new Spy();
 
@@ -147,38 +147,38 @@ Tests.describe('Planet Client API: Put', function(it){
 		});
 
 		socket.on('connect', function(){
-			socket.emit('put', 789);
-			socket.emit('put', 0, 0);
-			socket.emit('put', false, 1);
-			socket.emit('put', [], 2);
-			socket.emit('put', {}, 3);
-			socket.emit('put', null, 4);
-			socket.emit('put', undefined, 5);
-			socket.emit('put', 'key-x'); // missing value
-			socket.emit('put', false);
-			socket.emit('put', []);
-			socket.emit('put', {});
-			socket.emit('put', null);
-			socket.emit('put', undefined);
-			socket.emit('put'); // or no data at all
+			socket.emit('set', 789);
+			socket.emit('set', 0, 0);
+			socket.emit('set', false, 1);
+			socket.emit('set', [], 2);
+			socket.emit('set', {}, 3);
+			socket.emit('set', null, 4);
+			socket.emit('set', undefined, 5);
+			socket.emit('set', 'key-x'); // missing value
+			socket.emit('set', false);
+			socket.emit('set', []);
+			socket.emit('set', {});
+			socket.emit('set', null);
+			socket.emit('set', undefined);
+			socket.emit('set'); // or no data at all
 
 			// invalid path keys are ignored silently
-			socket.emit('put', [1], 1);
-			socket.emit('put', [false], 2);
-			socket.emit('put', [[]], 3);
-			socket.emit('put', [{}], 4);
-			socket.emit('put', [null], 5);
-			socket.emit('put', [undefined], 6);
-			socket.emit('put', ['a', 1], 1);
-			socket.emit('put', ['a', false], 2);
-			socket.emit('put', ['a', []], 3);
-			socket.emit('put', ['a', {}], 4);
-			socket.emit('put', ['a', null], 5);
-			socket.emit('put', ['a', undefined], 6);
+			socket.emit('set', [1], 1);
+			socket.emit('set', [false], 2);
+			socket.emit('set', [[]], 3);
+			socket.emit('set', [{}], 4);
+			socket.emit('set', [null], 5);
+			socket.emit('set', [undefined], 6);
+			socket.emit('set', ['a', 1], 1);
+			socket.emit('set', ['a', false], 2);
+			socket.emit('set', ['a', []], 3);
+			socket.emit('set', ['a', {}], 4);
+			socket.emit('set', ['a', null], 5);
+			socket.emit('set', ['a', undefined], 6);
 		});
 
 		socket.on('error', function(type, key, value){
-			expect(type).toBe('put');
+			expect(type).toBe('set');
 			spy();
 			if (spy.getCallCount() >= 14) this.disconnect();
 		});

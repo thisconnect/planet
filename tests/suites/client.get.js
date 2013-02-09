@@ -45,10 +45,10 @@ Tests.describe('Planet Client API: Get', function(it){
 		});
 
 		first.on('merge', function(data){
-			first.emit('put', ['a', 'b', 'c'], 321);
+			first.emit('set', ['a', 'b', 'c'], 321);
 		});
 
-		first.on('put', function(key, value){
+		first.on('set', function(key, value){
 			this.disconnect();
 		});
 

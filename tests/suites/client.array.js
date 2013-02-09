@@ -45,7 +45,7 @@ Tests.describe('Planet Client API: Array', function(it){
 	});
 
 
-	it('should `put` an element to an array', function(expect){
+	it('should `set` an element to an array', function(expect){
 		expect.perform(11);
 
 		var socket = io.connect('//:8004', {
@@ -65,12 +65,12 @@ Tests.describe('Planet Client API: Array', function(it){
 		});
 
 		socket.on('merge', function(data){
-			socket.emit('put', ['_f', 0], 'F1 (new)');
-			socket.emit('put', ['_g', 0, 0], 'G1 (new)');
-			socket.emit('put', ['_h', 'cc', 0], 'HH1 (new)');
-			socket.emit('put', ['_i', 0, 'dd'], 'II1 (new)');
-			socket.emit('put', ['_j', 0, 'ee', 0], 'JJ1 (new)');
-			socket.emit('put', ['_j', 0, 'ee', 1], 'JJ2 (new)');
+			socket.emit('set', ['_f', 0], 'F1 (new)');
+			socket.emit('set', ['_g', 0, 0], 'G1 (new)');
+			socket.emit('set', ['_h', 'cc', 0], 'HH1 (new)');
+			socket.emit('set', ['_i', 0, 'dd'], 'II1 (new)');
+			socket.emit('set', ['_j', 0, 'ee', 0], 'JJ1 (new)');
+			socket.emit('set', ['_j', 0, 'ee', 1], 'JJ2 (new)');
 
 			socket.emit('get', ['_f', 0], function(data){
 				expect(data).toBe('F1 (new)');
@@ -150,10 +150,10 @@ Tests.describe('Planet Client API: Array', function(it){
 		socket.on('connect', function(){
 			socket.emit('delete');
 			socket.emit('merge', {'a string': 'is a string'});
-			socket.emit('put', ['a string', 1], 'n');
+			socket.emit('set', ['a string', 1], 'n');
 		});
 
-		socket.on('put', function(){
+		socket.on('set', function(){
 			socket.emit('get', 'a string', function(string){
 				expect(string).toBe('in a string');
 			});
