@@ -11,7 +11,7 @@ var planet = Planet(socket);
 var maxTime = 4;
 
 planet.on('listening', function(){
-	
+
 	test()
 	.on('complete', function(){
 		var count = 0,
@@ -26,11 +26,11 @@ planet.on('listening', function(){
 			count += data.trim().split('\n').length;
 			if (count < 199) return;
 			console.log('connects 199 dummy clients');
-			
+
 			test()
 			.on('complete', function(){
 				planet.get(function(data){
-					console.log(JSON.stringify(data));
+					// console.log(JSON.stringify(data));
 					process.exit();
 				});
 			})
@@ -38,7 +38,7 @@ planet.on('listening', function(){
 		});
 	})
 	.run();
-	
+
 });
 
 
@@ -46,7 +46,7 @@ function test(){
 
 	var client = io.connect('//:8082');
 
-	return Benchmark.Suite()
+	var suite = Benchmark.Suite()
 	.on('cycle', function(cycle){
 		console.log(String(cycle.target));
 	})
@@ -99,7 +99,7 @@ function test(){
 		}
 	})
 
-	.add('Server.get (async)', {
+	.add('Server.get: complete state (async)', {
 		'maxTime': maxTime,
 		'defer': true,
 		'fn': function(deferred){
@@ -108,7 +108,7 @@ function test(){
 			});
 		}
 	})
-	.add('Server.get key (async)', {
+	.add('Server.get: key (async)', {
 		'maxTime': maxTime,
 		'defer': true,
 		'fn': function(deferred){
@@ -117,7 +117,7 @@ function test(){
 			});
 		}
 	})
-	.add('Server.get path (async)', {
+	.add('Server.get: path (async)', {
 		'maxTime': maxTime,
 		'defer': true,
 		'fn': function(deferred){
@@ -126,7 +126,7 @@ function test(){
 			});
 		}
 	})
-	.add('Server.get path array (async)', {
+	.add('Server.get: path array (async)', {
 		'maxTime': maxTime,
 		'defer': true,
 		'fn': function(deferred){
@@ -135,7 +135,7 @@ function test(){
 			});
 		}
 	})
-	
+
 	.add('Client.merge: complex object (async)', {
 		'maxTime': maxTime,
 		'defer': true,
@@ -160,7 +160,7 @@ function test(){
 			client.emit('put', ['b', 0, 0, 0, 0, 0], 3);
 		}
 	})
-	.add('Client.get path (async)', {
+	.add('Client.get: path (async)', {
 		'maxTime': maxTime,
 		'defer': true,
 		'fn': function(deferred){
@@ -169,7 +169,7 @@ function test(){
 			});
 		}
 	})
-	.add('Client.get path array (async)', {
+	.add('Client.get: path array (async)', {
 		'maxTime': maxTime,
 		'defer': true,
 		'fn': function(deferred){
@@ -179,5 +179,5 @@ function test(){
 		}
 	});
 
-
+	return suite;
 }
