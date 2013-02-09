@@ -45,7 +45,7 @@ function listen(){
 	this.set = onSet.bind(this, null);
 	this.remove = onRemove.bind(this, null);
 	this.merge = onMerge.bind(this, null);
-	this.del = onDelete.bind(this, null);
+	this.delete = onDelete.bind(this, null);
 	this.get = onGet.bind(this, null);
 
 	// this.on('get', onGet.bind(this, null));

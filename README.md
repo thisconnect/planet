@@ -308,7 +308,7 @@ earth.remove(['bag', 'eggs']);
 ### Method: delete
 
 ```js
-earth.del();
+earth.delete();
 ```
 
 

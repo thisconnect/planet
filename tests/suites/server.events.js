@@ -189,7 +189,7 @@ exports.setup = function(Tests){
 					});
 					earth.get('bag', function(data){
 						expect(data).toBeLike({'eggs': 4});
-						earth.del();
+						earth.delete();
 					});
 				});
 				earth.remove(['bag', 'milk']);
