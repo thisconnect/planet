@@ -11,7 +11,7 @@ exports.setup = function(Tests){
 
 	Tests.describe('Planet Server API: Events', function(it){
 
-		it('should receive events sent by client', function(expect){
+		it('should receive events on the server sent by client', function(expect){
 
 			var earth = planet(socket);
 			server.listen(8201, 'localhost');
@@ -48,14 +48,12 @@ exports.setup = function(Tests){
 				expect(this).toBe(earth);
 				expect(key).toBeType('array');
 				expect(key).toBeSimilar(['bag', 'eggs']);
-				setTimeout(function(){
+				
 				earth.get('bag', function(data){
-					console.log('\n\nDATA', data, '\n');
 					expect(data).toHaveProperty('milk');
 					expect(data).not.toHaveProperty('eggs');
 					expect(data).toBeSimilar({'milk': 2});
 				});
-				}, 0);
 			});
 
 			earth.on('delete', function(){
@@ -108,9 +106,9 @@ exports.setup = function(Tests){
 
 		});
 
-		it('should receive events sent by server', function(expect){
+		it('should receive events on the client sent by server', function(expect){
 
-			var earth = planet(socket, {});
+			var earth = planet(socket);
 			server.listen(8201, 'localhost');
 
 			earth.on('listening', function(){

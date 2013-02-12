@@ -62,8 +62,11 @@ function listen(){
 		this.send('merge', data);
 	});
 
-	this.delete = onDelete.bind(this, null);
-//	this.get = onGet.bind(this, null);
+	this.delete = this.emit.bind(this, 'delete');
+	this.on('delete', function(){
+		this.state = {};
+		this.send('delete');
+	});
 
 	this.get = this.emit.bind(this, 'get');
 	this.on('get', function(key, fn){
@@ -78,7 +81,6 @@ function listen(){
 		);
 	});
 
-	// this.on('get', onGet.bind(this, null));
 	this.emit('listening', location.address, location.port);
 }
 
@@ -94,8 +96,11 @@ function connect(socket){
 		return socket.disconnect();
 	}
 	socket
-		.on('disconnect',	disconnect.bind(this, socket))
-//		.on('set',			onSet.bind(this, socket))
+		.on('disconnect', function(){
+			that.count--;
+			// socket.removeAllListeners(); // check
+			that.emit('disconnect', socket);
+		})
 		.on('set', function(key, value){
 			if (value === undefined
 				|| (typeof key != 'string' && !isArray(key))
@@ -105,7 +110,6 @@ function connect(socket){
 			}
 			that.emit('set', key, value);
 		})
-//		.on('remove',		onRemove.bind(this, socket))
 		.on('remove', function(key){
 			var k = key,
 				o = that.state;
@@ -129,7 +133,6 @@ function connect(socket){
 			}
 			that.emit('remove', key);
 		})
-//		.on('merge',		onMerge.bind(this, socket))
 		.on('merge', function(data){
 			if (typeof data != 'object'
 				|| data == null
@@ -139,8 +142,9 @@ function connect(socket){
 			}
 			that.emit('merge', data);
 		})
-		.on('delete',		onDelete.bind(this))
-//		.on('get',			onGet.bind(this, socket));
+		.on('delete', function onDelete(){
+			that.emit('delete');
+		})
 		.on('get', function(key, fn){
 			if (typeof key == 'function') fn = key;
 			else if (typeof fn != 'function'
@@ -155,92 +159,5 @@ function connect(socket){
 
 	this.emit('connection', socket);
 }
-
-function disconnect(socket){
-	this.count--;
-	// socket.removeAllListeners(); // check
-	this.emit('disconnect', socket);
-}
-/*
-function onMerge(socket, data){
-	if (typeof data != 'object'
-		|| data == null
-		|| toString.call(data) != '[object Object]'
-	){
-		return socket.emit('error', 'merge', data);
-	}
-	merge(this.state, data);
-	this.send('merge', data);
-	this.emit('merge', data);
-}*/
-
-function onDelete(){
-	this.send('delete');
-	this.state = {};
-	this.emit('delete');
-}
-/*
-function onSet(socket, key, value){
-	if (value === undefined
-		|| (typeof key != 'string' && !isArray(key))
-		|| (key.length != null && key.length == 0)
-	){
-		return socket.emit('error', 'set', key, value);
-	}
-	if (typeof key == 'string') this.state[key] = value;
-	else set(this.state, key, value);
-
-	this.send('set', key, value);
-	this.emit('set', key, value);
-}
-
-function onRemove(socket, key){
-	var k, o;
-
-	if (typeof key == 'string'){
-		k = key;
-		o = this.state;
-
-	} else {
-		if (!isArray(key)
-			|| key.length == 0
-			|| key.some(function(item){
-				return typeof item != 'string';
-			})
-		){
-			return socket.emit('error', 'remove', key);
-		}
-		k = key.pop();
-		o = get(this.state, key);
-		key.push(k);
-	}
-
-	if (!(k in o)){
-		return socket.emit('error', 'remove', key);
-	}
-
-	delete o[k];
-	this.send('remove', key);
-	this.emit('remove', key);
-}
-
-function onGet(socket, key, fn){
-	if (typeof key == 'function') fn = key;
-	else if (typeof fn != 'function'
-		|| key == null
-		|| (key.length == 0 && isArray(key))
-		|| toString.call(key) == '[object Object]'
-	){
-		return socket.emit('error', 'get', key, fn);
-	}
-	if (typeof key == 'number') fn(null); // todo array
-	return (typeof key == 'string'
-		? fn(this.state[key])
-		: isArray(key)
-			? fn(get(this.state, key))
-			: fn(this.state)
-	);
-}
-*/
 
 module.exports = Planet;

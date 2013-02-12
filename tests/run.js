@@ -27,7 +27,7 @@ Tests.setCallbacks({
 var client = require('socket.io-client');
 
 // Import client api tests
-// require('./suites/test.client').setup(Tests, client);
+require('./suites/test.client').setup(Tests, client);
 
 
 // Import server api tests

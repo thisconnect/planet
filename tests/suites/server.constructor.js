@@ -141,6 +141,7 @@ exports.setup = function(Tests){
 
 		});
 
+
 		it('should start planet from cli', function(expect){
 
 			var spawn = require('child_process').spawn;
