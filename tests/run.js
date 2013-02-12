@@ -15,7 +15,7 @@ Tests.setCallbacks({
 			, 'log level': 1
 		});
 
-		new planet(socket, {});
+		new planet(socket);
 		server.listen(8004, 'localhost');
 	},
 	after: function(success, results){

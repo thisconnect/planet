@@ -33,50 +33,49 @@ Planet.prototype.destroy = function(){
 };
 
 Planet.prototype.set = function(key, value){
-		if (typeof key == 'string') this.state[key] = value;
-		else set(this.state, key, value);
-		this.send('set', key, value);
-		this.emit('set', key, value);
-	};
+	if (typeof key == 'string') this.state[key] = value;
+	else set(this.state, key, value);
+	this.send('set', key, value);
+	this.emit('set', key, value);
+};
 
 Planet.prototype.remove = function(key){
-		var k = key,
-			o = this.state;
+	var k = key,
+		o = this.state;
 
-		if (typeof key != 'string'){
-			k = key.pop();
-			o = get(this.state, key);
-			key.push(k);
-		}
-		delete o[k];
-		this.send('remove', key);
-		this.emit('remove', key);
-	};
+	if (typeof key != 'string'){
+		k = key.pop();
+		o = get(this.state, key);
+		key.push(k);
+	}
+	delete o[k];
+	this.send('remove', key);
+	this.emit('remove', key);
+};
 
 Planet.prototype.merge = function(data){
-		merge(this.state, data);
-		this.send('merge', data);
-		this.emit('merge', data);
-	};
+	merge(this.state, data);
+	this.send('merge', data);
+	this.emit('merge', data);
+};
 
 Planet.prototype.delete = function(){
-		this.state = {};
-		this.send('delete');
-		this.emit('delete');
-	};
+	this.state = {};
+	this.send('delete');
+	this.emit('delete');
+};
 
 Planet.prototype.get = function(key, fn){
-		if (typeof key == 'function') fn = key;
+	if (typeof key == 'function') fn = key;
+	else if (typeof key == 'number') fn(null); // todo array
 
-		if (typeof key == 'number') fn(null); // todo array
-		return (typeof key == 'string'
-			? fn(this.state[key])
-			: isArray(key)
-				? fn(get(this.state, key))
-				: fn(this.state)
-		);
-	};
-
+	return (typeof key == 'string'
+		? fn(this.state[key])
+		: isArray(key)
+			? fn(get(this.state, key))
+			: fn(this.state)
+	);
+};
 
 function listen(){
 	var location = this.server.address();
@@ -141,7 +140,7 @@ function connect(socket){
 			}
 			that.merge(data);
 		})
-		.on('delete', function onDelete(){
+		.on('delete', function(){
 			that.delete();
 		})
 		.on('get', function(key, fn){

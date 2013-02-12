@@ -78,7 +78,6 @@ exports.setup = function(Tests){
 				});
 
 			client.on('connect', function(){
-
 				client.emit('merge', {
 					bag: {
 						milk: 1,
