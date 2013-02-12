@@ -13,9 +13,8 @@ exports.setup = function(Tests){
 
 		it('should receive events sent by client', function(expect){
 
-			var earth = planet(socket, {});
+			var earth = planet(socket);
 			server.listen(8201, 'localhost');
-
 
 			expect(earth).toBeAnInstanceOf(require('events').EventEmitter);
 
@@ -49,10 +48,14 @@ exports.setup = function(Tests){
 				expect(this).toBe(earth);
 				expect(key).toBeType('array');
 				expect(key).toBeSimilar(['bag', 'eggs']);
-
+				setTimeout(function(){
 				earth.get('bag', function(data){
+					console.log('\n\nDATA', data, '\n');
+					expect(data).toHaveProperty('milk');
+					expect(data).not.toHaveProperty('eggs');
 					expect(data).toBeSimilar({'milk': 2});
 				});
+				}, 0);
 			});
 
 			earth.on('delete', function(){
@@ -188,6 +191,8 @@ exports.setup = function(Tests){
 						});
 					});
 					earth.get('bag', function(data){
+						expect(data).toHaveProperty('eggs');
+						expect(data).not.toHaveProperty('milk');
 						expect(data).toBeLike({'eggs': 4});
 						earth.delete();
 					});

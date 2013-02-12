@@ -19,18 +19,12 @@ function Planet(io, options){
 	this.sockets = io.sockets
 		.on('connection', connect.bind(this));
 
+	this.send = this.sockets.emit.bind(this.sockets);
 }
 
 Planet.prototype = Object.create(Emitter.prototype);
 
 Planet.prototype.version = require('./package').version;
-
-/*
-Planet.prototype.send = function(t, h, i, s){
-	this.sockets.emit(t, h, i, s);
-	//this.sockets.emit.apply(this.sockets, arguments);
-	return this;
-};*/
 
 Planet.prototype.destroy = function(){
 	this.server.removeAllListeners();
@@ -40,13 +34,49 @@ Planet.prototype.destroy = function(){
 
 function listen(){
 	var location = this.server.address();
-	this.send = this.sockets.emit.bind(this.sockets);
 
-	this.set = onSet.bind(this, null);
-	this.remove = onRemove.bind(this, null);
-	this.merge = onMerge.bind(this, null);
+	this.set = this.emit.bind(this, 'set');
+	this.on('set', function(key, value){
+		if (typeof key == 'string') this.state[key] = value;
+		else set(this.state, key, value);
+		this.send('set', key, value);
+	});
+
+	this.remove = this.emit.bind(this, 'remove');
+	this.on('remove', function(key){
+		var k = key,
+			o = this.state;
+
+		if (typeof key != 'string'){
+			k = key.pop();
+			o = get(this.state, key);
+			key.push(k);
+		}
+		delete o[k];
+		this.send('remove', key);
+	});
+
+	this.merge = this.emit.bind(this, 'merge');
+	this.on('merge', function(data){
+		merge(this.state, data);
+		this.send('merge', data);
+	});
+
 	this.delete = onDelete.bind(this, null);
-	this.get = onGet.bind(this, null);
+//	this.get = onGet.bind(this, null);
+
+	this.get = this.emit.bind(this, 'get');
+	this.on('get', function(key, fn){
+		if (typeof key == 'function') fn = key;
+
+		if (typeof key == 'number') fn(null); // todo array
+		return (typeof key == 'string'
+			? fn(this.state[key])
+			: isArray(key)
+				? fn(get(this.state, key))
+				: fn(this.state)
+		);
+	});
 
 	// this.on('get', onGet.bind(this, null));
 	this.emit('listening', location.address, location.port);
@@ -57,28 +87,83 @@ function error(error){
 }
 
 function connect(socket){
+	var that = this;
 	this.count++;
 	if (this.count > this.limit || this.server.connections > this.limit){
 		this.count--;
 		return socket.disconnect();
 	}
-	socket.on('disconnect',	disconnect.bind(this, socket))
-		.on('set',			onSet.bind(this, socket))
-		.on('remove',		onRemove.bind(this, socket))
-		.on('merge',		onMerge.bind(this, socket))
+	socket
+		.on('disconnect',	disconnect.bind(this, socket))
+//		.on('set',			onSet.bind(this, socket))
+		.on('set', function(key, value){
+			if (value === undefined
+				|| (typeof key != 'string' && !isArray(key))
+				|| (key.length != null && key.length == 0)
+			){
+				return socket.emit('error', 'set', key, value);
+			}
+			that.emit('set', key, value);
+		})
+//		.on('remove',		onRemove.bind(this, socket))
+		.on('remove', function(key){
+			var k = key,
+				o = that.state;
+
+			if (typeof key != 'string'){
+				if (!isArray(key)
+					|| key.length == 0
+					|| key.some(function(item){
+						return typeof item != 'string';
+					})
+				){
+					return socket.emit('error', 'remove', key);
+				}
+				k = key.pop();
+				o = get(that.state, key);
+				key.push(k);
+			}
+
+			if (!(k in o)){
+				return socket.emit('error', 'remove', key);
+			}
+			that.emit('remove', key);
+		})
+//		.on('merge',		onMerge.bind(this, socket))
+		.on('merge', function(data){
+			if (typeof data != 'object'
+				|| data == null
+				|| toString.call(data) != '[object Object]'
+			){
+				return socket.emit('error', 'merge', data);
+			}
+			that.emit('merge', data);
+		})
 		.on('delete',		onDelete.bind(this))
-		.on('get',			onGet.bind(this, socket));
+//		.on('get',			onGet.bind(this, socket));
+		.on('get', function(key, fn){
+			if (typeof key == 'function') fn = key;
+			else if (typeof fn != 'function'
+				|| key == null
+				|| (key.length == 0 && isArray(key))
+				|| toString.call(key) == '[object Object]'
+			){
+				return socket.emit('error', 'get', key, fn);
+			}
+			that.emit('get', key, fn);
+		});
 
 	this.emit('connection', socket);
 }
 
 function disconnect(socket){
 	this.count--;
+	// socket.removeAllListeners(); // check
 	this.emit('disconnect', socket);
 }
-
+/*
 function onMerge(socket, data){
-	if (typeof data != 'object' 
+	if (typeof data != 'object'
 		|| data == null
 		|| toString.call(data) != '[object Object]'
 	){
@@ -87,14 +172,14 @@ function onMerge(socket, data){
 	merge(this.state, data);
 	this.send('merge', data);
 	this.emit('merge', data);
-}
+}*/
 
 function onDelete(){
 	this.send('delete');
 	this.state = {};
 	this.emit('delete');
 }
-
+/*
 function onSet(socket, key, value){
 	if (value === undefined
 		|| (typeof key != 'string' && !isArray(key))
@@ -156,6 +241,6 @@ function onGet(socket, key, fn){
 			: fn(this.state)
 	);
 }
-
+*/
 
 module.exports = Planet;

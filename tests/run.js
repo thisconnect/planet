@@ -5,7 +5,7 @@ var Testigo = require('./testigo/Source/testigo').Testigo,
 
 Tests.setCallbacks({
 	before: function(){
-		var planet = require('../../planet'),
+		var planet = require('../'),
 			server = require('http').createServer(),
 			io = require('socket.io');
 
@@ -27,7 +27,7 @@ Tests.setCallbacks({
 var client = require('socket.io-client');
 
 // Import client api tests
-require('./suites/test.client').setup(Tests, client);
+// require('./suites/test.client').setup(Tests, client);
 
 
 // Import server api tests

@@ -49,7 +49,7 @@ Tests.describe('Planet Client API: Merge', function(it){
 
 
 	it('should allow reserved object properties and methods as key names', function(expect){
-		expect.perform(41);
+		expect.perform(40);
 
 		var socket = io.connect('//:8004', {
 			'force new connection': true
