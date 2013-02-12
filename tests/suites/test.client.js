@@ -1,7 +1,7 @@
 exports.setup = function(tests, io){
 
 	require('./client.connect').setup(tests, io);
-	require('./client.put').setup(tests, io);
+	require('./client.set').setup(tests, io);
 	require('./client.merge').setup(tests, io);
 	require('./client.get').setup(tests, io);
 	require('./client.delete').setup(tests, io);
