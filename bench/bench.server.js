@@ -17,22 +17,10 @@ module.exports = function(planet, options){
 			planet.set('key', 'bar');
 		}
 	})
-	.add('Server.emit.set - key string', {
-		'maxTime': maxTime,
-		'fn': function(){
-			planet.emit('set', 'key', 'bar');
-		}
-	})
 	.add('Server.set - path number', {
 		'maxTime': maxTime,
 		'fn': function(){
 			planet.set(['a', 'b', 'c', 'd', 'e'], 2);
-		}
-	})
-	.add('Server.emit.set - path number', {
-		'maxTime': maxTime,
-		'fn': function(){
-			planet.emit('set', ['a', 'b', 'c', 'd', 'e'], 2);
 		}
 	})
 	.add('Server.set - key nested array', {
@@ -41,22 +29,10 @@ module.exports = function(planet, options){
 			planet.set('b', [[[[[2]]]]]);
 		}
 	})
-	.add('Server.emit.set - key nested array', {
-		'maxTime': maxTime,
-		'fn': function(){
-			planet.emit('set', 'b', [[[[[2]]]]]);
-		}
-	})
 	.add('Server.set - array path number', {
 		'maxTime': maxTime,
 		'fn': function(){
 			planet.set(['b', 0, 0, 0, 0, 0], 3);
-		}
-	})
-	.add('Server.set - array path number', {
-		'maxTime': maxTime,
-		'fn': function(){
-			planet.emit('set', ['b', 0, 0, 0, 0, 0], 3);
 		}
 	})
 	.add('Server.merge - simple object', {
@@ -68,38 +44,16 @@ module.exports = function(planet, options){
 			planet.merge({ key: 'value'});
 		}
 	})
-	.add('Server.emit.merge - simple object', {
-		'maxTime': maxTime,
-		'fn': function(){
-			planet.emit('merge', { key: 'value'});
-		}
-	})
 	.add('Server.merge - nested object', {
 		'maxTime': maxTime,
 		'fn': function(){
 			planet.merge({ a: { b: { c: { d: { e: 0 } } } } });
 		}
 	})
-	.add('Server.emit.merge - nested object', {
-		'maxTime': maxTime,
-		'fn': function(){
-			planet.emit('merge', { a: { b: { c: { d: { e: 0 } } } } });
-		}
-	})
 	.add('Server.merge - complex object', {
 		'maxTime': maxTime,
 		'fn': function(){
 			planet.merge({
-				key: 'foo',
-				a: { b: { c: { d: { e: 1 } } } },
-				b: [[[[[1]]]]]
-			});
-		}
-	})
-	.add('Server.emit.merge - complex object', {
-		'maxTime': maxTime,
-		'fn': function(){
-			planet.emit('merge', {
 				key: 'foo',
 				a: { b: { c: { d: { e: 1 } } } },
 				b: [[[[[1]]]]]
