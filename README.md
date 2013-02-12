@@ -17,35 +17,52 @@ If you are looking for rich text editing have a look at
 
 
 
-### Terminology
+Example
+-------
 
-  - `operation` - The custom events that can be used to
-    modify the planetary shared object.
+### Server
 
-  - `value` - Can be of type string, number, object,
-    array, boolean or null.
+```javascript
+var planet = require('planet'),
+	socket = require('socket.io').listen(8080);
 
-  - `location` - Is a property specified by a key (string) 
-    or path (array).
+planet(socket);
+```
 
-  - `path` - A path is an array of strings to specify
-    a property in an object. Additinally a path can
-	contain numbers to refer to an element within an array.
+### Client
 
-  - `data` - Refers always to an object.
+```javascript
+io.connect('//:8080')
+.on('connect', function(){
+	this.emit('merge', {
+		'sugar': 1,
+		'milk': 0
+	});
 
-  - `state` - The current content of the planet
-    that can be manipulated by the operations or
-	read with `get`.
+	this.on('set', function(key, value){
+		console.log(key, value);
+		// sugar 2
+		// milk 100
+	});
+
+	this.emit('set', 'sugar', 2);
+	this.emit('set', 'milk', 100);
+
+	this.emit('get', function(data){
+		console.log(data);
+		// {'sugar': 2, 'milk': 100}
+	});
+});
+```
 
 
 
 ### Operations
 
   - `set` - Sets a value at a specific location.
-    The value will be overwritten and not be merged.
+    The value will be overwritten, not merged!
 
-  - `remove` - Deletes a value at specified location.
+  - `remove` - Deletes a value at a specified location.
 
   - `merge` - Recursively merges data into the state.
 
@@ -54,6 +71,29 @@ If you are looking for rich text editing have a look at
   - `get` - Asynchronously fetches values from the state,
     optionally at a specified location. Returns the whole
 	state if no location is passed.
+
+
+
+### Terminology
+
+  - `operation` - The custom events that is used to
+    modify the planetary shared object.
+
+  - `value` - Can be of type string, number, object,
+    array, boolean or null.
+
+  - `location` - Specifies a property of the shared object
+    by a key (string) or path (array).
+
+  - `path` - A path is an array of strings or/and numbers
+    to specify a property in an object. Numbers refer to
+	element positions of arrays.
+
+  - `data` - Refers always to an object.
+
+  - `state` - The current content of the planet
+    that can be manipulated by the operations or
+	read with `get`.
 
 
 
@@ -81,44 +121,6 @@ npm install planet
 ```
 
 
-
-Example
--------
-
-
-
-### Server
-
-```javascript
-var planet = require('planet'),
-	socket = require('socket.io').listen(8080);
-
-new planet(socket);
-```
-
-
-
-### Client
-
-```javascript
-io.connect('//:8080')
-.on('connect', function(){
-	this.emit('merge', {
-		'sugar': 1,
-		'milk': 0
-	});
-
-	this.emit('set', 'sugar', 2);
-	this.emit('set', 'milk', 100);
-
-	this.emit('get', function(data){
-		console.log(data);
-		// {'sugar': 2, 'milk': 100}
-	});
-});
-```
-
-
 Include the Client
 ------------------
 
@@ -137,6 +139,60 @@ var io = require('socket.io-client');
 
 
 
+Events
+------
+
+Planet Operations are fired as Socket.IO custom events.
+The operations can be listened on both the server and the client
+via `on` and `once`.
+
+
+
+### Event: set
+
+```js
+client.on('set', function(key, value){ });
+```
+
+##### Arguments
+
+1. Location
+2. Value
+
+
+
+### Event: remove
+
+```js
+client.on('remove', function(key){ });
+```
+
+##### Arguments
+
+1. Location
+
+
+
+### Event: merge
+
+```js
+client.on('merge', function(data){ });
+```
+
+##### Arguments
+
+1. Data
+
+
+
+### Event: delete
+
+```js
+client.on('delete', function(){ });
+```
+
+
+
 Client API
 ----------
 
@@ -151,7 +207,7 @@ var earth = io.connect('//:8004', options);
 ##### Arguments
 
 1. URI (string)
-2. Options (object) - the configuration object.
+2. Options (object) - the Socket.IO-Client configuration object.
 
 
 
@@ -163,23 +219,9 @@ earth.disconnect();
 
 
 
-### Method: on
-
-Adds a listener for planet operations: `set`, `remove`, `merge`, `delete`, `get` and
-the [Socket.IO Client Events](https://github.com/LearnBoost/socket.io-client#events).
-
-
-
-### Method: once
-
-Adds a one time listener, which is removed after 
-the first time the event is fired.
-
-
-
 ### Method: emit
 
-Emits the following Planet operations: `set`, `remove`, `merge`, `delete`, `get`.
+Emits Planet operations.
 
 
 
@@ -234,8 +276,6 @@ earth.emit('get', ['todo-list', 0], function(value){ });
 Server API
 ----------
 
-Requires a Socket.IO socket.
-
 ```js
 var Planet = require('planet'),
 	socket = require('socket.io').listen(8080, 'localhost');
@@ -253,28 +293,13 @@ The `new` keyword is optional.
 
 ##### Arguments
 
-1. Socket - socket server.
+1. Socket - Socket.IO socket server.
 2. Options (object) - the configuration object.
 
 ##### Options
 
   - `limit` - the maximum amount of concurent client connections.
   Defaults to 200.
-
-
-
-### Method: on
-
-Adds a listener for Planet operations: `set`, `remove`, `merge`, `delete`, `get`.
-See also the standard 
-[Socket.IO Server Events](https://github.com/LearnBoost/socket.io/wiki/Exposed-events).
-
-
-
-### Method: once
-
-Adds a one time listener, which is removed after 
-the first time the event is fired.
 
 
 
@@ -323,58 +348,6 @@ earth.get(['todo-list', 0], function(value){ });
 ```
 
 
-Planet Operations
------------------
-
-Operations are fired as Socket.IO custom events
-on both the server and the client side.
-
-
-
-### Event: set
-
-```js
-earth.on('set', function(key, value){ });
-```
-
-##### Arguments
-
-1. Key (string or array) - the location to set a value.
-2. Value (string, number, object, array, boolean, null).
-
-
-
-### Event: remove
-
-```js
-earth.on('remove', function(key){ });
-```
-
-##### Arguments
-
-1. Key (string or array) - the location to delete.
-
-
-
-### Event: merge
-
-```js
-earth.on('merge', function(data){ });
-```
-
-##### Arguments
-
-1. Data (object) - the object to merge into the current state.
-
-
-
-### Event: delete
-
-```js
-earth.on('delete', function(){ });
-```
-
-
 
 CLI API
 -------
@@ -401,8 +374,7 @@ or `cd bin && ./planet`.
 Tests
 -----
 
-Running tests requires the installation of 
-[Testigo](https://github.com/keeto/testigo).
+Running tests requires [Testigo](https://github.com/keeto/testigo).
 
 ```bash
 git submodule update --init --recursive
@@ -417,13 +389,7 @@ node tests/run.js
 
 
 ```bash
-node --stack_size=8192 planet # prevents exceeding maximum call stack size
-```
-
-Set `ulimit -n 1024` if you want to connect with more than 200 clients.
-
-```bash
-node bench/run.js 127.0.0.1:8004
+node bench/run.js
 ```
 
 
