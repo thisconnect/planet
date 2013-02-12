@@ -32,18 +32,14 @@ Planet.prototype.destroy = function(){
 	this.removeAllListeners();
 };
 
-function listen(){
-	var location = this.server.address();
-
-	this.set = this.emit.bind(this, 'set');
-	this.on('set', function(key, value){
+Planet.prototype.set = function(key, value){
 		if (typeof key == 'string') this.state[key] = value;
 		else set(this.state, key, value);
 		this.send('set', key, value);
-	});
+		this.emit('set', key, value);
+	};
 
-	this.remove = this.emit.bind(this, 'remove');
-	this.on('remove', function(key){
+Planet.prototype.remove = function(key){
 		var k = key,
 			o = this.state;
 
@@ -54,22 +50,22 @@ function listen(){
 		}
 		delete o[k];
 		this.send('remove', key);
-	});
+		this.emit('remove', key);
+	};
 
-	this.merge = this.emit.bind(this, 'merge');
-	this.on('merge', function(data){
+Planet.prototype.merge = function(data){
 		merge(this.state, data);
 		this.send('merge', data);
-	});
+		this.emit('merge', data);
+	};
 
-	this.delete = this.emit.bind(this, 'delete');
-	this.on('delete', function(){
+Planet.prototype.delete = function(){
 		this.state = {};
 		this.send('delete');
-	});
+		this.emit('delete');
+	};
 
-	this.get = this.emit.bind(this, 'get');
-	this.on('get', function(key, fn){
+Planet.prototype.get = function(key, fn){
 		if (typeof key == 'function') fn = key;
 
 		if (typeof key == 'number') fn(null); // todo array
@@ -79,8 +75,11 @@ function listen(){
 				? fn(get(this.state, key))
 				: fn(this.state)
 		);
-	});
+	};
 
+
+function listen(){
+	var location = this.server.address();
 	this.emit('listening', location.address, location.port);
 }
 
@@ -108,7 +107,7 @@ function connect(socket){
 			){
 				return socket.emit('error', 'set', key, value);
 			}
-			that.emit('set', key, value);
+			that.set(key, value);
 		})
 		.on('remove', function(key){
 			var k = key,
@@ -131,7 +130,7 @@ function connect(socket){
 			if (!(k in o)){
 				return socket.emit('error', 'remove', key);
 			}
-			that.emit('remove', key);
+			that.remove(key);
 		})
 		.on('merge', function(data){
 			if (typeof data != 'object'
@@ -140,10 +139,10 @@ function connect(socket){
 			){
 				return socket.emit('error', 'merge', data);
 			}
-			that.emit('merge', data);
+			that.merge(data);
 		})
 		.on('delete', function onDelete(){
-			that.emit('delete');
+			that.delete();
 		})
 		.on('get', function(key, fn){
 			if (typeof key == 'function') fn = key;
@@ -154,7 +153,7 @@ function connect(socket){
 			){
 				return socket.emit('error', 'get', key, fn);
 			}
-			that.emit('get', key, fn);
+			that.get(key, fn);
 		});
 
 	this.emit('connection', socket);
