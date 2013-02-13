@@ -151,25 +151,16 @@ via `on` and `once`.
 ### Event: set
 
 ```js
-client.on('set', function(key, value){ });
+client.on('set', function(location, value){ });
 ```
-
-##### Arguments
-
-1. Location
-2. Value
 
 
 
 ### Event: remove
 
 ```js
-client.on('remove', function(key){ });
+client.on('remove', function(location){ });
 ```
-
-##### Arguments
-
-1. Location
 
 
 
@@ -178,10 +169,6 @@ client.on('remove', function(key){ });
 ```js
 client.on('merge', function(data){ });
 ```
-
-##### Arguments
-
-1. Data
 
 
 
@@ -203,11 +190,6 @@ Client API
 ```js
 var earth = io.connect('//:8004', options);
 ```
-
-##### Arguments
-
-1. URI (string)
-2. Options (object) - the Socket.IO-Client configuration object.
 
 
 
