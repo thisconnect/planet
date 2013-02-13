@@ -13,6 +13,7 @@ exports.setup = function(Tests){
 				socket = io.listen(server, {'log level': 1});
 
 			var mercury = new planet(socket);
+			expect(mercury.version).toBeType('string');
 
 			server.listen(8101, '127.0.0.1');
 
