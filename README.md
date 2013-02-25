@@ -57,6 +57,13 @@ io.connect('//:8080')
 
 
 
+Or
+
+```bash
+node examples/server.js
+```
+
+
 ### Operations
 
   - `set` - Sets a value at a specific location.
@@ -366,9 +373,8 @@ node tests/run.js
 
 
 
-### Benchmarks
-
-
+Benchmarks
+----------
 
 ```bash
 node bench/run.js
