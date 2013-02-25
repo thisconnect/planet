@@ -280,7 +280,7 @@ The `new` keyword is optional.
 
 ##### Options
 
-  - `limit` - the maximum amount of concurent client connections.
+  - `limit` - the maximum amount of concurrent client connections.
   Defaults to 200.
 
 
