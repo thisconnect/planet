@@ -57,7 +57,7 @@ io.connect('//:8080')
 
 
 
-Or
+Or run the example with:
 
 ```bash
 node examples/server.js
