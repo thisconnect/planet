@@ -12,11 +12,11 @@ function Planet(io, options){
 	this.state = {};
 	this.count = 0;
 
-	this.server = (io.server || io.manager.server)
+	this.server = (!!io.manager ? io.manager.server : io.server)
 		.on('listening', listen.bind(this))
 		.on('clientError', error.bind(this));
 
-	this.sockets = (!!io.manager ? io.manager.sockets : io.sockets)
+	this.sockets = (!!io.manager ? io : io.sockets)
 		.on('connection', connect.bind(this));
 
 }

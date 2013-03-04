@@ -164,45 +164,58 @@ exports.setup = function(Tests){
 
 
 		it('should start 2 namespaced planets', function(expect){
+			expect.perform(12);
+
+			var client = require('socket.io-client');
 
 			var socket = io.listen(8106, {
 				'log level': 1
 			});
-
-			var foo = planet(socket.of('/foo'))
-				.on('listening', function(location, port){
-					expect(port).toBe(8106);
-
-					require('socket.io-client')
-						.connect('//:8106/foo')
-						.on('connect', function(){
-							this.disconnect();
-						});
-				})
-				//.on('disconnect', function(socket){
-					//expect(socket).toBeType('object');
-					//this.destroy();
-				//})
-				.on('connection', function(socket){
-					expect(socket).toBeType('object');
+			
+			planet(socket.of('/foo'))
+				.on('connection', function(){})
+				.on('set', function(key, value){
+					expect(value).toBe('foo');
+				});
+			
+			planet(socket.of('/bar'))
+				.on('connection', function(){})
+				.on('set', function(key, value){
+					expect(value).toBe('bar');
 				});
 
-			var bar = planet(socket.of('/bar'))
-				.on('listening', function(location, port){
-					expect(port).toBe(8106);
+			client.connect(':8106/foo')
+				.on('connect', function(){
+					this.emit('get', function(data){
+						expect(data).toBeType('object');
+						expect(Object.keys(data).length).toBe(0);
+					});
+					this.on('set', function(key, value){
+						expect(value).toBe('foo');
+					});
+					this.emit('set', 'i am', 'foo');
+					this.emit('get', function(data){
+						expect(data).toBeType('object');
+						expect(data).toBeSimilar({'i am': 'foo'});
+					});
+					this.disconnect();
+				});
 
-					require('socket.io-client')
-						.connect('//:8106/bar')
-						.on('connect', function(){
-							this.disconnect();
-						});
-				})
-				//.on('disconnect', function(socket){
-					//expect(socket).toBeType('object');
-					//this.destroy();
-				//})
-				.on('connection', function(socket){
-					expect(socket).toBeType('object');
+			client.connect(':8106/bar')
+				.on('connect', function(){
+					this.emit('get', function(data){
+						expect(data).toBeType('object');
+						expect(Object.keys(data).length).toBe(0);
+					});
+					this.on('set', function(key, value){
+						expect(value).toBe('bar');
+					});
+					this.emit('set', 'i am', 'bar');
+					this.emit('get', function(data){
+						expect(data).toBeType('object');
+						expect(data).toBeSimilar({'i am': 'bar'});
+					});
+					this.disconnect();
 				});
 
 		});
