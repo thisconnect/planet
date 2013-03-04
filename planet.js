@@ -12,11 +12,11 @@ function Planet(io, options){
 	this.state = {};
 	this.count = 0;
 
-	this.server = io.server
+	this.server = (io.server || io.manager.server)
 		.on('listening', listen.bind(this))
 		.on('clientError', error.bind(this));
 
-	this.sockets = io.sockets
+	this.sockets = (!!io.manager ? io.manager.sockets : io.sockets)
 		.on('connection', connect.bind(this));
 
 }
@@ -24,13 +24,6 @@ function Planet(io, options){
 Planet.prototype = Object.create(Emitter.prototype);
 
 Planet.prototype.version = require('./package').version;
-
-/*
-Planet.prototype.send = function(t, h, i, s){
-	this.sockets.emit(t, h, i, s);
-	//this.sockets.emit.apply(this.sockets, arguments);
-	return this;
-};*/
 
 Planet.prototype.destroy = function(){
 	this.server.removeAllListeners();

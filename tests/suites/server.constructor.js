@@ -142,6 +142,7 @@ exports.setup = function(Tests){
 
 		});
 
+
 		it('should start planet from cli', function(expect){
 
 			var spawn = require('child_process').spawn;
@@ -158,6 +159,51 @@ exports.setup = function(Tests){
 			child.stderr.on('data', function(error){
 				console.log('error', error.toString());
 			});
+
+		});
+
+
+		it('should start 2 namespaced planets', function(expect){
+
+			var socket = io.listen(8106, {
+				'log level': 1
+			});
+
+			var foo = planet(socket.of('/foo'))
+				.on('listening', function(location, port){
+					expect(port).toBe(8106);
+
+					require('socket.io-client')
+						.connect('//:8106/foo')
+						.on('connect', function(){
+							this.disconnect();
+						});
+				})
+				//.on('disconnect', function(socket){
+					//expect(socket).toBeType('object');
+					//this.destroy();
+				//})
+				.on('connection', function(socket){
+					expect(socket).toBeType('object');
+				});
+
+			var bar = planet(socket.of('/bar'))
+				.on('listening', function(location, port){
+					expect(port).toBe(8106);
+
+					require('socket.io-client')
+						.connect('//:8106/bar')
+						.on('connect', function(){
+							this.disconnect();
+						});
+				})
+				//.on('disconnect', function(socket){
+					//expect(socket).toBeType('object');
+					//this.destroy();
+				//})
+				.on('connection', function(socket){
+					expect(socket).toBeType('object');
+				});
 
 		});
 
