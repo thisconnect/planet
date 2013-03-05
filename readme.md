@@ -29,6 +29,13 @@ var planet = require('planet'),
 planet(socket);
 ```
 
+### CLI
+
+```bash
+planet --host localhost --port 8080
+```
+
+
 ### Client
 
 ```javascript
