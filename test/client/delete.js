@@ -1,13 +1,11 @@
-exports.setup = function(Tests, io){
+var expect = require('expect.js');
 
-var Spy = require('../testigo/Source/lib/spy').Spy;
-
-
-Tests.describe('Planet Client API: Delete', function(it){
+var io = require('socket.io-client');
 
 
-	it('should delete everything', function(expect){
-		expect.perform(4);
+describe('Planet Client API: Delete', function(){
+
+	it('should delete everything', function(done){
 
 		var first = io.connect('//:8004', {
 			'force new connection': true
@@ -35,16 +33,15 @@ Tests.describe('Planet Client API: Delete', function(it){
 			});
 
 			second.emit('get', function(data){
-				expect(data).toBeType('object');
-				expect(data).not.toHaveProperty('key-a');
-				expect(data).not.toHaveProperty('key-b');
-				expect(Object.keys(data).length).toBe(0);
+				expect(data).to.be.an('object');
+				expect(data).not.to.have.property('key-a');
+				expect(data).not.to.have.property('key-b');
+				expect(data).to.be.empty();
+				expect(Object.keys(data)).to.have.length(0);
 				second.disconnect();
+				done();
 			});
 		});
 	});
 
-
 });
-
-};

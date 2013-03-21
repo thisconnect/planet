@@ -1,13 +1,12 @@
-exports.setup = function(Tests, io){
+var expect = require('expect.js');
 
-var Spy = require('../testigo/Source/lib/spy').Spy;
-
-
-Tests.describe('Planet Client API: Array', function(it){
+var io = require('socket.io-client');
 
 
-	it('should `get` an element from an array', function(expect){
-		expect.perform(4);
+describe('Planet Client API: Array', function(){
+
+
+	it('should `get` an element from an array', function(done){
 
 		var socket = io.connect('//:8004', {
 			'force new connection': true
@@ -28,25 +27,25 @@ Tests.describe('Planet Client API: Array', function(it){
 
 		socket.on('merge', function(){
 			socket.emit('get', ['_a', 0], function(data){
-				expect(data).toBe('a0');
+				expect(data).to.be('a0');
 			});
 			socket.emit('get', ['_b', 'bb', 1], function(data){
-				expect(data).toBe('b1');
+				expect(data).to.be('b1');
 			});
 			socket.emit('get', ['_c', 0, 2], function(data){
-				expect(data).toBe('c2');
+				expect(data).to.be('c2');
 			});
 			socket.emit('get', ['_d', 0, 'dd', 0], function(data){
-				expect(data).toBe('d0');
+				expect(data).to.be('d0');
 				socket.disconnect();
+				done();
 			});
 		});
 		
 	});
 
 
-	it('should `set` an element to an array', function(expect){
-		expect.perform(11);
+	it('should `set` an element to an array', function(done){
 
 		var socket = io.connect('//:8004', {
 			'force new connection': true
@@ -73,49 +72,44 @@ Tests.describe('Planet Client API: Array', function(it){
 			socket.emit('set', ['_j', 0, 'ee', 1], 'JJ2 (new)');
 
 			socket.emit('get', ['_f', 0], function(data){
-				expect(data).toBe('F1 (new)');
+				expect(data).to.be('F1 (new)');
 			});
 			socket.emit('get', '_g', function(data){
-				expect(data[0][0]).toBe('G1 (new)');
+				expect(data[0][0]).to.be('G1 (new)');
 			});
 			socket.emit('get', '_g', function(data){
-				expect(data[0][0]).toBe('G1 (new)');
-				expect(data[0][1]).toBe('b2');
-				expect(data[1][0]).toBe('b3');
-				expect(data[1][1]).toBe('b4');
+				expect(data[0][0]).to.be('G1 (new)');
+				expect(data[0][1]).to.be('b2');
+				expect(data[1][0]).to.be('b3');
+				expect(data[1][1]).to.be('b4');
 			});
 			socket.emit('get', ['_h', 'cc'], function(data){
-				expect(data[0]).toBe('HH1 (new)');
+				expect(data[0]).to.be('HH1 (new)');
 			});
 			socket.emit('get', ['_i', 0, 'dd'], function(data){
-				expect(data).toBe('II1 (new)');
+				expect(data).to.be('II1 (new)');
 			});
 			socket.emit('get', ['_i', 1, 'ddd'], function(data){
-				expect(data).toBe('dd2');
+				expect(data).to.be('dd2');
 			});
 			socket.emit('get', ['_j', 0, 'ee', 0], function(data){
-				expect(data).toBe('JJ1 (new)');
+				expect(data).to.be('JJ1 (new)');
 			});
 			socket.emit('get', ['_j', 0, 'ee', 1], function(data){
-				expect(data).toBe('JJ2 (new)');
+				expect(data).to.be('JJ2 (new)');
 				socket.disconnect();
+				done();
 			});
 		});
 
 		socket.on('error', function(type, key, value){
 			console.log('\nerror', type, key, value);
-			// spy();
-			// if (spy.getCallCount() >= 14) this.disconnect();
 		});
 
-		socket.on('disconnect', function(){
-			
-		});
 	});
 
 
-	it('should `get` a single char from a string', function(expect){
-		expect.perform(2);
+	it('should `get` a single char from a string', function(done){
 
 		var socket = io.connect('//:8004', {
 			'force new connection': true
@@ -129,19 +123,19 @@ Tests.describe('Planet Client API: Array', function(it){
 
 		socket.on('merge', function(){
 			socket.emit('get', ['a string', 0], function(data){
-				expect(data).toBe('%');
+				expect(data).to.be('%');
 			});
 			socket.emit('get', ['a string', 1], function(data){
-				expect(data).toBe('i');
+				expect(data).to.be('i');
 				socket.disconnect();
+				done();
 			});
 		});
 		
 	});
 
 
-	it('should `set` a single char of a string', function(expect){
-		expect.perform(3);
+	it('should `set` a single char of a string', function(done){
 
 		var socket = io.connect('//:8004', {
 			'force new connection': true
@@ -155,21 +149,19 @@ Tests.describe('Planet Client API: Array', function(it){
 
 		socket.on('set', function(){
 			socket.emit('get', 'a string', function(string){
-				expect(string).toBe('in a string');
+				expect(string).to.be('in a string');
 			});
 			socket.emit('get', ['a string', 1], function(data){
-				expect(data).toBe('n');
+				expect(data).to.be('n');
 			});
 			socket.emit('get', function(data){
-				expect(Object.keys(data).length).toBe(1);
+				expect(Object.keys(data)).to.have.length(1);
 				socket.disconnect();
+				done();
 			});
 		});
 		
 	});
 
 
-
 });
-
-};

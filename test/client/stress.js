@@ -1,12 +1,13 @@
-exports.setup = function(Tests, io){
+var expect = require('expect.js');
 
-var Spy = require('../testigo/Source/lib/spy').Spy;
+var io = require('socket.io-client');
 
 
-Tests.describe('Planet: Stress Test', function(it){
+describe('Planet: Stress Test', function(){
 
-	it('should `merge` and `get` get a big object', function(expect){
-		expect.perform(2);
+	this.timeout(10000);
+
+	it('should `merge` and `get` get a big object', function(done){
 
 		var first = io.connect('//:8004', {
 			'force new connection': true
@@ -35,20 +36,20 @@ Tests.describe('Planet: Stress Test', function(it){
 			});
 
 			second.emit('get', function(data){
-				expect(Object.keys(local).length <= Object.keys(data).length).toBe(true);
-				expect(data).toBeType('object');
+				expect(Object.keys(local).length).to.be(Object.keys(data).length);
+				expect(data).to.be.an('object');
 				second.emit('delete');
 			});
 
 			second.on('delete', function(data){
 				second.disconnect();
+				done();
 			});
 		});
 	});
 
 
-	it('should `set` many keys/values and `get` them all', function(expect){
-		expect.perform(3);
+	it('should `set` many keys/values and `get` them all', function(done){
 
 		var first = io.connect('//:8004', {
 			'force new connection': true
@@ -78,43 +79,43 @@ Tests.describe('Planet: Stress Test', function(it){
 		first.on('disconnect', function(){
 			var l = Object.keys(local).length;
 
-			expect(Object.keys(returned).length).toBe(l);
+			expect(Object.keys(returned)).to.have.length(l);
 
 			var second = io.connect('//:8004', {
 				'force new connection': true
 			});
 
 			second.emit('get', function(data){
-				expect(l <= Object.keys(data).length).toBe(true);
-				expect(data).toBeType('object');
+				expect(Object.keys(data).length).to.be(l);
+				expect(data).to.be.an('object');
 				second.emit('delete');
 			});
 
 			second.on('delete', function(data){
 				second.disconnect();
+				done();
 			});
 		});
 	});
 
 
-[32, 64].forEach(function(amount){
+[64, 128].forEach(function(amount){
 
-	it('should `connect` ' + amount + ' clients then `disconnect`', function(expect){
-		expect.perform(2);
+	it('should `connect` ' + amount + ' clients then `disconnect`', function(done){
 
 		var sockets = [],
 			count = 0;
 		
 		(function connect(){
+
 			var socket = io.connect('//:8004', {
 				'force new connection': true,
 				'try multiple transports': false,
 				'reconnect': false
 			});
 
-			socket.on('connect', function(whot){
+			socket.on('connect', function(){
 				if (++count == amount){
-					expect(count).toBe(amount);
 					for (var i = 0; i < amount; ++i){
 						sockets[i].disconnect();
 					};
@@ -123,7 +124,7 @@ Tests.describe('Planet: Stress Test', function(it){
 
 			socket.on('disconnect', function(){
 				if (--count == 0){
-					expect(count).toBe(0);
+					done();
 				}
 			});
 
@@ -136,6 +137,7 @@ Tests.describe('Planet: Stress Test', function(it){
 			setTimeout(function(){
 				if (sockets.length < amount) connect();
 			}, 0);
+
 		})();
 
 	});
@@ -145,4 +147,3 @@ Tests.describe('Planet: Stress Test', function(it){
 
 });
 
-};
