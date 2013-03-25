@@ -1,7 +1,5 @@
 var expect = require('expect.js');
 
-var io = require('socket.io-client');
-
 
 describe('Planet Client API: Get', function(){
 
@@ -14,6 +12,7 @@ describe('Planet Client API: Get', function(){
 
 		socket.on('connect', function(){
 
+			socket.emit('delete');
 			socket.emit('get', function(data){
 				expect(data).to.be.an('object');
 				expect(data).to.be.empty();

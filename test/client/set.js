@@ -1,7 +1,5 @@
 var expect = require('expect.js');
 
-var io = require('socket.io-client');
-
 
 describe('Planet Client API: Set', function(){
 

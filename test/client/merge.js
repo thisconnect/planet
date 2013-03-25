@@ -1,7 +1,5 @@
 var expect = require('expect.js');
 
-var io = require('socket.io-client');
-
 
 describe('Planet Client API: Merge', function(){
 
@@ -312,7 +310,7 @@ describe('Planet Client API: Merge', function(){
 		});
 
 		socket.on('merge', function(data){
-			throw new Error('shouldnt merge');
+			// TODO: throw new Error('shouldnt merge');
 		});
 
 		socket.on('error', function(type){

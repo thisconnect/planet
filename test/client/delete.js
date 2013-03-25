@@ -1,7 +1,5 @@
 var expect = require('expect.js');
 
-var io = require('socket.io-client');
-
 
 describe('Planet Client API: Delete', function(){
 
@@ -16,15 +14,10 @@ describe('Planet Client API: Delete', function(){
 				'key-a': null,
 				'key-b': ''
 			});
-		});
-
-		first.on('merge', function(data){
 			first.emit('delete');
-		});
-
-		first.on('delete', function(){
 			first.disconnect();
 		});
+
 
 		first.on('disconnect', function(){
 
