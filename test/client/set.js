@@ -160,14 +160,12 @@ describe('Planet Client API: Set', function(){
 			socket.emit('set', undefined);
 			socket.emit('set'); // or no data at all
 
-			// invalid path keys are ignored silently
 			//socket.emit('set', [1], 1);
 			socket.emit('set', [false], 2);
 			socket.emit('set', [[]], 3);
 			socket.emit('set', [{}], 4);
 			socket.emit('set', [null], 5);
 			socket.emit('set', [undefined], 6);
-			socket.emit('set', ['a', 1], 1);
 			socket.emit('set', ['a', false], 2);
 			socket.emit('set', ['a', []], 3);
 			socket.emit('set', ['a', {}], 4);
@@ -181,9 +179,8 @@ describe('Planet Client API: Set', function(){
 		});
 
 		socket.on('set', function(key, value){
-			// fix (should be ignored silently)
-			console.log('set', key, value);
 			if (key == 'done') this.disconnect();
+			else console.log('WARNING', key, value);
 		});
 
 		socket.on('disconnect', function(){

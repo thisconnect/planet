@@ -99,7 +99,7 @@ function onSet(socket, key, value){
 		return socket.emit('error', 'set', key, value);
 	}
 	if (typeof key == 'string') this.state[key] = value;
-	else set(this.state, key, value);
+	else if (!set(this.state, key, value)) return;
 
 	this.send('set', key, value);
 	this.emit('set', key, value);

@@ -953,10 +953,6 @@ var public;
                     socket.emit('set', [undefined], 6);
                     socket.emit('set', [
                         'a',
-                        1
-                    ], 1);
-                    socket.emit('set', [
-                        'a',
                         false
                     ], 2);
                     socket.emit('set', [
@@ -981,9 +977,10 @@ var public;
                     expect(type).to.be('set');
                 });
                 socket.on('set', function (key, value) {
-                    console.log('set', key, value);
                     if (key == 'done')
                         this.disconnect();
+                    else
+                        console.log('WARNING', key, value);
                 });
                 socket.on('disconnect', function () {
                     done();
