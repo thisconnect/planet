@@ -50,19 +50,22 @@ function error(error){
 }
 
 function connect(socket){
-	this.count++;
-	if (this.count > this.limit || this.server.connections > this.limit){
-		this.count--;
-		return socket.disconnect();
-	}
-	socket.on('disconnect',	disconnect.bind(this, socket))
-		.on('set',			onSet.bind(this, socket))
-		.on('remove',		onRemove.bind(this, socket))
-		.on('merge',		onMerge.bind(this, socket))
-		.on('delete',		onDelete.bind(this))
-		.on('get',			onGet.bind(this, socket));
+	var that = this;
+	this.server.getConnections(function(error, count){
+		that.count++;
+		if (that.count > that.limit || count > that.limit){
+			that.count--;
+			return socket.disconnect();
+		}
+		socket.on('disconnect',	disconnect.bind(that, socket))
+			.on('set',			onSet.bind(that, socket))
+			.on('remove',		onRemove.bind(that, socket))
+			.on('merge',		onMerge.bind(that, socket))
+			.on('delete',		onDelete.bind(that))
+			.on('get',			onGet.bind(that, socket));
 
-	this.emit('connection', socket);
+		that.emit('connection', socket);
+	});
 }
 
 function disconnect(socket){
