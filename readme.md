@@ -370,12 +370,8 @@ or `cd bin && ./planet`.
 Tests
 -----
 
-Running tests requires [Testigo](https://github.com/keeto/testigo).
-
 ```bash
-git submodule update --init --recursive
-
-node tests/run.js
+make test
 ```
 
 
@@ -406,12 +402,4 @@ TODO
 
 - [Socket.IO](http://socket.io/) 0.9.x
 - Optparse-js 1.0.x
-
-
-
-#### Dev Dependencies
-
-- [Benchmark.js](http://benchmarkjs.com/)
-- [Testigo](https://github.com/keeto/testigo)
-
 
