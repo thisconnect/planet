@@ -67,7 +67,7 @@ io.connect('//:8080')
 Or run the example with:
 
 ```bash
-node examples/server.js
+node test/examples
 ```
 
 
@@ -400,7 +400,7 @@ Benchmarks
 ----------
 
 ```bash
-node bench/run.js
+node test/benchmark
 ```
 
 

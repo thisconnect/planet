@@ -1,4 +1,4 @@
-var Planet = require('../'),
+var Planet = require('../../'),
 	socket = require('socket.io').listen(8082, {
 		'log level': 1
 	}),
