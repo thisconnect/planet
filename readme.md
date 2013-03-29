@@ -358,12 +358,18 @@ or `cd bin && ./planet`.
 
   - `-p`, `--port [NUMBER]` - The port to bind to (default: 8004).
 
-  - `--host [STRING]` - The host to connect to (default: 127.0.0.1).
+  - `-h`, `--host [STRING]` - The host to connect to (default: 127.0.0.1).
 
   - `-l`,  `--limit [NUMBER]` - Maximum concurrent client connections,
     a number lower than your ulimit (default: 200).
 
-  - `-h`, `--help` - Shows this help message.
+  - `--io.<configuration>` - 
+  [Socket.IO configuration](https://github.com/LearnBoost/Socket.IO/wiki/Configuring-Socket.IO)
+  for example: `--io.transports=websocket,htmlfile` or
+  `--no-io.browser-client-cache`. Note the dot notation. Dashes after 
+  io. will be replaced by whitespace. 
+
+  - `--help` - Shows this help message.
 
 
 
@@ -371,7 +377,17 @@ Tests
 -----
 
 ```bash
-make test
+#test server api
+make test-server
+
+#test client api
+make test-client
+
+#build browser test
+make test-browser
+
+#run test server
+node test/server
 ```
 
 
@@ -393,7 +409,6 @@ TODO
   and disalow merging/setting inexistent keys)
 - Latency optimization
 - Cleanup error messages
-- Eventually use https://github.com/isaacs/nopt instead of optparse
 - Eventually provide a client side script for merge, get and set manipulation
 
 

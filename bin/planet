@@ -2,53 +2,62 @@
 
 var http = require('http'),
 	io = require('socket.io'),
-	optparse = require('optparse').OptionParser,
-	Planet = require('../planet');
+	optimist = require('optimist'),
+	Planet = require('../');
 
-var port = 8004,
-	host = '127.0.0.1',
-	options = {};
-
-var parser = new optparse([
-	['-p', '--port PORT', 'The port to bind to (default: 8004)']
-	, ['', '--host HOST', 'The host to connect to (default: 127.0.0.1)']
-	, ['-l', '--limit [NUMBER]', 'Maximum concurrent client connections, a number lower than your ulimit (default: 200)']
-	, ['-h', '--help', 'Shows this help message']
-]);
-
-parser.banner = 'Usage: planet [--port PORT] [--host HOST]';
-
-parser.on('*', function(opt, value){
-	switch (opt){
-		case 'port': port = value || port; break;
-		case 'host': host = value || host; break;
-		case 'limit': options.limit = parseInt(value); break;
-		case 'help':
-			console.log(this.toString());
-			parser.halt();
-			process.exit(0);
-		break;
-	}
-});
-
-parser.parse(process.argv);
-
-
-var server = http.createServer();
-
-var socket = io.listen(server, {
+var ioOptions = {
 	'transports': ['websocket']
 	, 'flash policy server': false
 	, 'log level': 1
-	//, 'browser client': false
-	//, 'browser client cache': true
-	//, 'browser client minification': true
-	//, 'browser client gzip': true
-});
+	, 'browser client': true
+	, 'browser client cache': false
+	, 'browser client minification': false
+	, 'browser client gzip': false
+};
 
-new Planet(socket, options)
+var argv = optimist
+    .usage('Start the Planet.\nUsage: ./planet')
+    .describe('help', 'Show this help message')
+	.options('l', {
+		alias: 'limit'
+		, describe: 'Maximum concurrent connections'
+		, default: 200
+	
+	})
+	.options('h', {
+		alias: 'host'
+		, describe: 'The host to connect to'
+		, default: '127.0.0.1'
+	
+	})
+	.options('p', {
+		alias: 'port'
+		, describe: 'The port to bind to'
+		, default: 8004
+	
+	})
+	.options('io', {
+		alias: 'io'
+		, describe: 'The Socket.IO options see also the readme CLI Options section'
+	})
+	.argv
+
+if (argv.help) return optimist.showHelp();
+
+for (var p in argv.io){
+	if (p == 'transports') argv.io[p] = argv.io[p].split(',');
+	ioOptions[p.replace(/-/g, ' ')] = argv.io[p];
+}
+
+var server = http.createServer();
+
+var socket = io.listen(server, ioOptions);
+
+new Planet(socket, {
+		limit: argv.limit
+	})
 	.on('listening', function(location, port){
-		console.log('Planet started at ' + [location, port].join(':'));
+		console.log('Planet started at %s', [location, port].join(':'));
 	});
 
-server.listen(port, host);
+server.listen(argv.port, argv.host);

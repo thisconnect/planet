@@ -23,7 +23,7 @@
 	]
 	, "dependencies": {
 		"socket.io": "= 0.9.13"
-		, "optparse": ">= 1.0.3"
+		, "optimist": ">= 0.3.5"
 	}
 	, "devDependencies": {
 		"socket.io-client": "= 0.9.11"
