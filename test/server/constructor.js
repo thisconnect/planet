@@ -137,8 +137,8 @@ describe('Planet Server API: Constructor', function(){
 
 		exec(__dirname + '/../../bin/planet --help', function(error, stdout, stderr){
 			expect(error).to.be(null);
-			expect(stdout).to.match(/Usage:/);
-			expect(stdout).to.match(/Available options:/);
+			expect(stderr).to.match(/Usage:/);
+			expect(stderr).to.match(/Options:/);
 			done();
 		});
 
