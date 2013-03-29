@@ -365,9 +365,11 @@ or `cd bin && ./planet`.
 
   - `--io.<configuration>` - 
   [Socket.IO configuration](https://github.com/LearnBoost/Socket.IO/wiki/Configuring-Socket.IO)
-  for example: `--io.transports=websocket,htmlfile` or
-  `--no-io.browser-client-cache`. Note the dot notation. Dashes after 
-  io. will be replaced by whitespace.
+  for example:
+    `--io.transports=websocket,htmlfile`
+    `--no-io.browser-client-cache`
+  Note the dot notation and that dashes after --io. will 
+  be replaced by whitespace to match Socket.IO configs.
 
   - `-v`, `--version` - Prints the current version.
 
@@ -378,7 +380,7 @@ or `cd bin && ./planet`.
 Tests
 -----
 
-```bash
+```make
 #test server api
 make test-server
 
@@ -418,5 +420,5 @@ TODO
 #### Dependencies
 
 - [Socket.IO](http://socket.io/) 0.9.x
-- Optparse-js 1.0.x
+- Optimist 0.3.5
 
