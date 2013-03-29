@@ -367,7 +367,9 @@ or `cd bin && ./planet`.
   [Socket.IO configuration](https://github.com/LearnBoost/Socket.IO/wiki/Configuring-Socket.IO)
   for example: `--io.transports=websocket,htmlfile` or
   `--no-io.browser-client-cache`. Note the dot notation. Dashes after 
-  io. will be replaced by whitespace. 
+  io. will be replaced by whitespace.
+
+  - `-v`, `--version` - Prints the current version.
 
   - `--help` - Shows this help message.
 

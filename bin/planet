@@ -18,6 +18,11 @@ var ioOptions = {
 var argv = optimist
     .usage('Start the Planet.\nUsage: ./planet')
     .describe('help', 'Show this help message')
+	.options('v', {
+		alias: 'version'
+		, describe: 'Prints the current version'
+	
+	})
 	.options('l', {
 		alias: 'limit'
 		, describe: 'Maximum concurrent connections'
@@ -41,6 +46,8 @@ var argv = optimist
 		, describe: 'The Socket.IO options see also the readme CLI Options section'
 	})
 	.argv
+
+if (argv.version) return console.log(require('../package').version);
 
 if (argv.help) return optimist.showHelp();
 
