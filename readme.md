@@ -67,7 +67,7 @@ io.connect('//:8080')
 Or run the example with:
 
 ```bash
-node test/examples
+node test/example
 ```
 
 
