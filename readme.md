@@ -420,5 +420,5 @@ TODO
 #### Dependencies
 
 - [Socket.IO](http://socket.io/) 0.9.x
-- Optimist 0.3.5
+- Optimist 0.4.x
 
