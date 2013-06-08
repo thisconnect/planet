@@ -53,18 +53,51 @@ describe('Planet Server API: Constructor', function(){
 		});
 	});
 
-	it('should start planet without a http server', function(done){
+	it('should start planet and connect with a client', function(done){
 
-		var socket = io.listen(8103, {
-			'log level': 1
+		var server = http.createServer(),
+			socket = io.listen(server, {'log level': 1});
+
+		var mars = planet(socket);
+
+		expect(mars).to.be.a(planet);
+
+		mars.on('listening', function(location, port){
+
+			expect(port).to.be(8102);
+
+			require('socket.io-client')
+			.connect('//:8102', {
+				'force new connection': true
+			})
+			.on('connect_failed', function(){
+				console.log('connect_failed');
+			})
+			.on('connect', function(){
+				this.disconnect();
+			})
+			.on('disconnect', function(){
+				mars.destroy();
+				server.close();
+				done();
+			});
+
 		});
+
+		server.listen(8102, 'localhost');
+	});
+
+	it('should start planet without a http server and  connect with a client', function(done){
+
+		var socket = io.listen(8103, {'log level': 1});
 
 		planet(socket)
 			.on('listening', function(location, port){
 				expect(port).to.be(8103);
-
 				require('socket.io-client')
-					.connect('//:8103')
+					.connect('//:8103', {
+						'force new connection': true
+					})
 					.on('connect', function(){
 						this.disconnect();
 					});
