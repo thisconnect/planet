@@ -22,11 +22,11 @@
 		{"name": "Enrique Erne"}
 	]
 	, "dependencies": {
-		"socket.io": "= 0.9.14"
-		, "optimist": ">= 0.4.0"
+		"socket.io": "= 0.9.16"
+		, "optimist": ">= 0.5.2"
 	}
 	, "devDependencies": {
-		"socket.io-client": "= 0.9.11"
+		"socket.io-client": "= 0.9.16"
 		, "mocha": ">= 1.9.0"
 		, "expect.js": "0.2.0"
 		, "wrapup": "0.12.0"
