@@ -348,7 +348,7 @@ earth.get(['todo-list', 0], function(value){ });
 CLI API
 -------
 
-To run Planet form a command-line interface install
+To run `planet` form a command-line interface install
 Planet globally `npm install planet -g`
 or `cd bin && ./planet`.
 
