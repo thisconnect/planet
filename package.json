@@ -24,6 +24,7 @@
 	, "dependencies": {
 		"socket.io": "= 0.9.16"
 		, "optimist": ">= 0.6.0"
+		, "tool": "1.0.0"
 	}
 	, "devDependencies": {
 		"socket.io-client": "= 0.9.16"

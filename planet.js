@@ -1,8 +1,8 @@
 var Emitter = require('events').EventEmitter,
-	set = require('./lib/util').set,
-	get = require('./lib/util').get,
-	merge = require('./lib/util').merge,
-	isArray = require('./lib/util').isArray;
+	set = require('tool').set,
+	get = require('tool').get,
+	merge = require('tool').merge,
+	isArray = require('tool').isArray;
 
 
 function Planet(io, options){
