@@ -87,7 +87,7 @@ describe('Planet Server API: Constructor', function(){
 		server.listen(8102, 'localhost');
 	});
 
-	it('should start planet without a http server and  connect with a client', function(done){
+	it('should start planet without a http server and connect with a client', function(done){
 
 		var socket = io.listen(8103, {'log level': 1});
 
@@ -115,7 +115,7 @@ describe('Planet Server API: Constructor', function(){
 
 	it('should run the readme.md example', function(done){
 		// server
-		var planet = require('planet'),
+		var planet = require('../../'),
 			socket = require('socket.io').listen(8104, {
 				'log level': 1
 			});
