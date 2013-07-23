@@ -5,14 +5,16 @@ var http = require('http'),
 	optimist = require('optimist'),
 	Planet = require('../');
 
+var isProduction = process.env.NODE_ENV != 'development';
+
 var ioOptions = {
 	'transports': ['websocket']
 	, 'flash policy server': false
-	, 'log level': 1
+	, 'log level': isProduction ? 1 : 3
 	, 'browser client': true
-	, 'browser client cache': false
-	, 'browser client minification': false
-	, 'browser client gzip': false
+	, 'browser client cache': isProduction
+	, 'browser client minification': isProduction
+	, 'browser client gzip': isProduction
 };
 
 var argv = optimist
