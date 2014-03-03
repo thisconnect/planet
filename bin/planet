@@ -2,7 +2,7 @@
 
 var http = require('http'),
 	io = require('socket.io'),
-	argv = require('yargs'),
+	yargs = require('yargs'),
 	Planet = require('../');
 
 var isProduction = process.env.NODE_ENV != 'development';
@@ -17,7 +17,8 @@ var ioOptions = {
 	, 'browser client gzip': isProduction
 };
 
-argv.usage('Start the Planet.\nUsage: ./planet')
+var argv = yargs
+	.usage('Start the Planet.\nUsage: ./planet')
     .describe('help', 'Show this help message')
 	.options('v', {
 		alias: 'version'
@@ -46,11 +47,12 @@ argv.usage('Start the Planet.\nUsage: ./planet')
 		alias: 'io'
 		, describe: 'The Socket.IO options see also the readme CLI Options section'
 	})
-	.argv
+	.argv;
+
 
 if (argv.version) return console.log(require('../package').version);
 
-if (argv.help) return argv.showHelp();
+if (argv.help) return yargs.showHelp();
 
 for (var p in argv.io){
 	if (p == 'transports') argv.io[p] = argv.io[p].split(',');
