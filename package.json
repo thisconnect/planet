@@ -24,7 +24,7 @@
 	, "dependencies": {
 		"socket.io": "= 0.9.16"
 		, "minimist": "0.0.8"
-		, "tool": "1.0.0"
+		, "tool": "1.0.1"
 	}
 	, "devDependencies": {
 		"mocha": "1.17.1"
