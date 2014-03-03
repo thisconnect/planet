@@ -420,6 +420,6 @@ TODO
 #### Dependencies
 
 - [Socket.IO](http://socket.io/) 0.9.x
-- [Optimist](https://npmjs.org/package/optimist) 0.6.x
-- [Tool](https://github.com/thisconnect/tool) 1.0.0
+- [Yargs](https://npmjs.org/package/yargs) 1.1.3
+- [Tool](https://github.com/thisconnect/tool) 1.0.1
 
