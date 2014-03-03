@@ -2,7 +2,7 @@
 
 var http = require('http'),
 	io = require('socket.io'),
-	optimist = require('optimist'),
+	argv = require('yargs'),
 	Planet = require('../');
 
 var isProduction = process.env.NODE_ENV != 'development';
@@ -17,8 +17,7 @@ var ioOptions = {
 	, 'browser client gzip': isProduction
 };
 
-var argv = optimist
-    .usage('Start the Planet.\nUsage: ./planet')
+argv.usage('Start the Planet.\nUsage: ./planet')
     .describe('help', 'Show this help message')
 	.options('v', {
 		alias: 'version'
