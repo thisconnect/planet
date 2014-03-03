@@ -419,7 +419,7 @@ TODO
 
 #### Dependencies
 
-- [Socket.IO](http://socket.io/) 0.9.x
-- [Yargs](https://npmjs.org/package/yargs) 1.1.3
-- [Tool](https://github.com/thisconnect/tool) 1.0.1
+- [Socket.IO](http://socket.io/)
+- [Yargs](https://npmjs.org/package/yargs)
+- [Tool](https://github.com/thisconnect/tool)
 
