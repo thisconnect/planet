@@ -22,7 +22,7 @@
 		{"name": "Enrique Erne"}
 	]
 	, "dependencies": {
-		"socket.io": "= 0.9.16"
+		"socket.io": "0.9.16"
 		, "yargs": "1.2.1"
 		, "tool": "1.0.1"
 	}
@@ -31,7 +31,7 @@
 		, "expect.js": "0.3.1"
 		, "wrapup": "1.0.5"
 		, "benchmark": ">= 1.0.0"
-		, "socket.io-client": "= 0.9.16"
+		, "socket.io-client": "0.9.16"
 	}
 	, "licenses": [{
 		"type": "MIT"
