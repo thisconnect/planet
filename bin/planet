@@ -50,7 +50,7 @@ argv.usage('Start the Planet.\nUsage: ./planet')
 
 if (argv.version) return console.log(require('../package').version);
 
-if (argv.help) return optimist.showHelp();
+if (argv.help) return argv.showHelp();
 
 for (var p in argv.io){
 	if (p == 'transports') argv.io[p] = argv.io[p].split(',');
