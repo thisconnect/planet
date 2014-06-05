@@ -23,11 +23,11 @@
 	]
 	, "dependencies": {
 		"socket.io": "0.9.16"
-		, "yargs": "1.2.1"
+		, "yargs": "1.2.2"
 		, "tool": "1.0.1"
 	}
 	, "devDependencies": {
-		"mocha": "1.17.1"
+		"mocha": "1.20.1"
 		, "expect.js": "0.3.1"
 		, "wrapup": "1.0.5"
 		, "benchmark": ">= 1.0.0"
