@@ -42,6 +42,31 @@ describe('Planet Client API: Array', function(){
 		
 	});
 
+	it('should `set` an element at the end of an array', function(done){
+
+		var socket = io.connect('//:8004', {
+			'force new connection': true
+		});
+
+		socket.once('connect', function(){
+			socket.emit('set', '_add_array', ['a0', 'a1', 'a2']);
+		});
+
+		socket.once('set', function(){
+			socket.once('set', function(){
+				socket.emit('get', '_add_array', function(data){
+					expect(data).to.be.an('array');
+					expect(data[3]).to.be(null);
+					expect(data[4]).to.be('a4');
+					socket.disconnect();
+					done();
+				});
+			});
+			socket.emit('set', ['_add_array', 4], 'a4');
+		});
+		
+	});
+
 
 	it('should `set` an element to an array', function(done){
 
